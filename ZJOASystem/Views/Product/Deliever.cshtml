@@ -1,0 +1,306 @@
+﻿@{
+    ViewBag.Title = "Deliever";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER")</h2>
+
+<p>
+    <span> @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_CREATE"), "Create") </span>
+    <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
+    <span>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("BACKTO_PRODUCTLIST"), "Index")</span>
+</p>
+<form id="formid" method='post'>
+
+    @Html.Hidden("jsondata", ViewData["jsondata"], new { id = "hiddenjsondata" })
+    @Html.Hidden("operation", ViewData["operation"], new { id = "hiddenoperation" })
+    @Html.Hidden("operator", ViewData["operator"], new { id = "hiddenoperator" })
+    <div id="treeGrid">
+    </div>
+</form>
+
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
+
+<script type="text/javascript">
+    var that = this;
+    $(document).ready(function () {
+        var newRowID = null;
+        // prepare the data
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'NameEncode', type: 'string' },
+                { name: 'Encode', type: 'string' },
+                { name: 'ParentGuid', type: 'string' },
+                { name: 'ProductGuid', type: 'string' },
+                { name: 'ActionEmployee', type: 'string' },
+                { name: 'ActionTime', type: 'date' },
+                { name: 'Status', type: 'int' },
+                { name: 'TrackNumber', type: 'string' },
+                { name: 'Sender', type: 'string' },
+                { name: 'SenderTelephone', type: 'string' },
+                { name: 'Receiver', type: 'string' },
+                { name: 'ReceiverTelephone', type: 'string' },
+                { name: 'Departure', type: 'string' },
+                { name: 'Destination', type: 'string' },
+                { name: 'ActionComments', type: 'string' },
+                { name: 'AdditionGuid', type: 'string' }
+            ],
+            hierarchy:
+            {
+                keyDataField: { name: 'ProductGuid' },
+                parentDataField: { name: 'ParentGuid' }
+            },
+            id: 'ProductGuid',
+            url: 'GetNeedDelieverProducts'
+        };
+
+        // prepare the data
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        this.editrow = -1;
+
+        // create Tree Grid
+        $("#treeGrid").jqxTreeGrid(
+        {
+            width: 800,
+            source: dataAdapter,
+            pageable: true,
+            editable: true,
+            ready: function () {
+                var rows = $("#treeGrid").jqxTreeGrid('getRows');
+                var traverseTree = function (rows) {
+
+                    for (var i = 0; i < rows.length; i++) {
+                        if (rows[i].level > 0) {
+                            $("#treeGrid").jqxTreeGrid('lockRow', rows[i].ProductGuid);
+                        }
+
+                        if (rows[i].records)
+                        {
+                           traverseTree(rows[i].records);
+                        }
+                    }
+                };
+                traverseTree(rows);
+            },
+            editSettings: {
+                saveOnPageChange: true,
+                saveOnBlur: true,
+                saveOnSelectionChange: false,
+                cancelOnEsc: true,
+                saveOnEnter: true,
+                editOnDoubleClick: false,
+                editOnF2: false
+            },
+            pagerButtonsCount: 8,
+            showToolbar: true,
+            toolbarHeight: 35,
+            renderToolbar: function (toolBar) {
+                var toTheme = function (className) {
+                    return className;
+                }
+                var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
+                var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
+                var editButton = $(buttonTemplate);
+                var updateButton = $(buttonTemplate);
+                var cancelButton = $(buttonTemplate);
+                container.append(editButton);
+                container.append(updateButton);
+                container.append(cancelButton);
+                toolBar.append(container);
+                editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
+                editButton.jqxTooltip({ position: 'bottom', content: "Edit" });
+                updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
+                updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes" });
+                cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
+                cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel" });
+
+                var updateButtons = function (action) {
+                    switch (action) {
+                        case "Select":
+                            editButton.jqxButton({ disabled: false });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                        case "Unselect":
+                            editButton.jqxButton({ disabled: true });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                        case "Edit":
+                            editButton.jqxButton({ disabled: true });
+                            updateButton.jqxButton({ disabled: false });
+                            cancelButton.jqxButton({ disabled: false });
+                            break;
+                        case "End Edit":
+                            editButton.jqxButton({ disabled: false });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                    }
+                }
+                var rowKey = null;
+                var rowChanged = false;
+                $("#treeGrid").on('rowSelect', function (event) {
+                    var args = event.args;
+                    rowKey = args.key;
+                    updateButtons('Select');
+
+                });
+                $("#treeGrid").on('rowUnselect', function (event) {
+                    updateButtons('Unselect');
+                });
+                $("#treeGrid").on('rowEndEdit', function (event) {
+                    updateButtons('End Edit');
+
+                    if (rowChanged) {
+                        var args = event.args;
+                        // row key
+                        var rowKey = args.key;
+                        // row's data.
+                        var row = args.row;
+                        document.getElementById("hiddenjsondata").value =
+                            "{'NameEncode':'" + row.NameEncode +
+                            "', 'ProductGuid':'" + row.ProductGuid +
+                            "', 'Status':" + row.Status +
+                            ", 'ActionEmployee':'" + row.ActionEmployee +
+                            "', 'TrackNumber':'" + row.TrackNumber +
+                            "', 'Sender':'" + row.Sender +
+                            "', 'SenderTelephone':'" + row.SenderTelephone +
+                            "', 'Departure':'" + row.Departure +
+                            "', 'Receiver':'" + row.Receiver +
+                            "', 'ReceiverTelephone':'" + row.ReceiverTelephone +
+                            "', 'Destination':'" + row.Destination +
+                            "', 'AdditionGuid':'" + row.AdditionGuid +
+                            "', 'ActionComments':'" + row.ActionComments +
+                            "'}";
+                    }
+                });
+                $("#treeGrid").on('rowBeginEdit', function (event) {
+                    updateButtons('Edit');
+                });
+
+                updateButton.click(function (event) {
+                    if (!updateButton.jqxButton('disabled')) {
+                        // save changes.
+                        rowChanged = true;
+                        $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, false);
+                        document.getElementById("formid").submit();
+                    }
+                });
+
+                cancelButton.click(function (event) {
+                    if (!cancelButton.jqxButton('disabled')) {
+                        rowChanged = false;
+                        // cancel changes.
+                        $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
+                    }
+                });
+                editButton.click(function () {
+                    if (!editButton.jqxButton('disabled')) {
+                        $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
+                        updateButtons('edit');
+                    }
+                });
+            },
+            columns: [
+                {
+                    text: 'ProductGuid', dataField: 'ProductGuid', hidden:true
+                },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_NAME")', dataField: 'NameEncode', width: 120, editable: false
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_STATUS")', dataField: 'Status', width: 50,
+                  columnType: "custom",
+                  createEditor: function (row, cellvalue, editor, cellText, width, height) {
+                      var dataValue;
+                      var namesource = ["已发货", "未发货"];
+                      editor.jqxDropDownList({
+                          autoDropDownHeight: true, source: namesource, width: '100%', height: '100%'
+                      });
+                  },
+                  initEditor: function (row, cellvalue, editor, celltext, width, height) {
+                      // set the editor's current value. The callback is called each time the editor is displayed.
+                      var textValue = "未发货";
+                      if (cellvalue == 5) {
+                          textValue = "已发货";
+                      }
+                      editor.jqxDropDownList('selectItem', textValue);
+                  },
+                  getEditorValue: function (row, cellvalue, editor) {
+                      // return the editor's value.
+                      var editorValue = editor.val();
+                      var result = 0;
+                      if (editorValue == "已发货") {
+                          result = 5;
+                      }
+                      return result;
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ACTION_EMPLOYEE")', dataField: 'ActionEmployee', width: 100,
+                  columnType: "custom",
+                  createEditor: function (row, cellvalue, editor, cellText, width, height) {
+                      var dataValue;
+                      var namesource = {
+                          dataType: "json",
+                          dataFields: [
+                             { name: 'NameEncode', type: 'string' },
+                             { name: 'Encode', type: 'string' }
+                          ],
+                          url: 'GetActionEmployees'
+                      };
+                      var namedataAdapter = new $.jqx.dataAdapter(namesource);
+                      editor.jqxDropDownList({
+                          autoDropDownHeight: true, source: namedataAdapter, width: '100%', height: '100%',
+                          displayMember: 'NameEncode',
+                          valueMember: 'NameEncode'
+                      });
+                  },
+                  initEditor: function (row, cellvalue, editor, celltext, width, height) {
+                      // set the editor's current value. The callback is called each time the editor is displayed.
+                      editor.jqxDropDownList('selectItem', cellvalue);
+                  },
+                  getEditorValue: function (row, cellvalue, editor) {
+                      // return the editor's value.
+                      return editor.val();
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_TRACKNUMBER")', dataField: 'TrackNumber'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_SENDER")', dataField: 'Sender'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_SENDERTELEPHONE")', dataField: 'SenderTelephone'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_DEPARTURE")', dataField: 'Departure'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_RECEIVER")', dataField: 'Receiver'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_RECEIVERTELEPHONE")', dataField: 'ReceiverTelephone'
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ADDITION_DESTINATION")', dataField: 'Destination'
+              },
+              {
+                  text: 'AdditionGuid', dataField: 'AdditionGuid', hidden:true
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("ACTION_COMMENTS")', dataField: 'ActionComments'
+              }
+            ]
+        });
+    });
+</script>
+

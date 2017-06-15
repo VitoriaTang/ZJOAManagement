@@ -1,0 +1,65 @@
+﻿@model ZJOASystem.Models.Employee
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("DETAIL")</h2>
+
+<div>
+    <h4>@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE")</h4>
+	<hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Encode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Encode)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Telephone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Telephone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENTLIST")
+        </dt>
+
+        <dd>
+            @ZJOASystem.Controllers.EmployeeController.RenderDepartmentText(this.Model)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EDIT"), "Edit", new { id = Model.Id }) |
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "Index")
+</p>

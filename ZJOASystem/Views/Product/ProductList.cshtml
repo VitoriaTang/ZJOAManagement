@@ -1,0 +1,290 @@
+﻿
+@{
+    ViewBag.Title = "ProductList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")</h2>
+
+
+<!--Upload product list-->
+<div id="customWindow">
+    <div id="customWindowHeader">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT") </span>
+    </div>
+    <div id="customWindowContent" style="overflow: hidden">
+        <div style="margin: 10px">
+            @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT_UPLOAD"):
+            <div id="jqxFileUpload" style="float: left">
+            </div>
+            <div style="float: right">
+                <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="float:left;">
+    <button id="importButton">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT")</button>
+    <span>&nbsp;&nbsp;&nbsp;&nbsp;</span>
+</div>
+<!--Search form and tree grid-->
+<form  name="searchform" action="@Url.Action("ProductList", new {index="1" })" method="post" style="width:400px;">
+   
+    <div class=" input-group">
+    <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />
+    <span class="btn input-group-addon" onclick="document.searchform.submit();">
+        <span class="glyphicon  glyphicon-search"></span>
+    </span>
+        @Html.Hidden("hiddensearchkey", ViewData["hiddensearchkey"])
+        @Html.Hidden("jsondata", ViewData["jsondata"], new { id = "hiddenjsondata" })
+        @Html.Hidden("operation", ViewData["operation"], new { id = "hiddenoperation" })
+    </div>
+</form>
+<p>
+    <div id="treeGrid">
+    </div>
+</p>
+@Scripts.Render("~/bundles/jqwidgets/dialog")
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#customWindow').jqxWindow({
+            width: 420,
+            height: 200,
+            resizable: true,
+            autoOpen: false,
+            cancelButton: $('#closeButton'),
+            position: { x: 280, y: 190 },
+            initContent: function () {
+                $('#closeButton').jqxButton({ width: '80px' });
+                $('#jqxFileUpload').jqxFileUpload({ width: 300, uploadUrl: 'Import', fileInputName: 'fileToUpload', multipleFilesUpload: false });
+            }
+        });
+
+        $("#importButton").jqxButton();
+
+        $("#importButton").on('click', function () {
+            var isOpen = $('#customWindow').jqxWindow('isOpen');
+            if (!isOpen) {
+                $('#customWindow').jqxWindow('open');
+            }
+        });
+        $('#jqxFileUpload').on('uploadEnd', function (event) {
+            document.searchform.submit();
+        });
+
+        var newRowID = null;
+        // prepare the data
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Number', type: 'string' },
+                { name: 'Name', type: 'string' },
+                { name: 'ParentNumber', type: 'string' }
+           ],
+            hierarchy:
+            {
+                keyDataField: { name: 'Number' },
+                parentDataField: { name: 'ParentNumber' }
+            },
+            id: 'Number',
+            url: 'GetProductBases'
+        };
+
+        // prepare the data
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        // create Tree Grid
+        $("#treeGrid").jqxTreeGrid(
+        {
+            width: 800,
+            source: dataAdapter,
+            pageable: true,
+            editable: true,
+            showToolbar: true,
+            editSettings: {
+                saveOnPageChange: true,
+                saveOnBlur: true,
+                saveOnSelectionChange: true,
+                cancelOnEsc: true,
+                saveOnEnter: true,
+                editOnDoubleClick: true,
+                editOnF2: false
+            },
+            pagerButtonsCount: 20,
+            toolbarHeight: 35,
+            renderToolbar: function (toolBar) {
+                var toTheme = function (className) {
+                    return className;
+                }
+                // appends buttons to the status bar.
+                var container = $("<div style='overflow: hidden; position: relative; height: 100%; width: 100%;'></div>");
+                var buttonTemplate = "<div style='float: left; padding: 3px; margin: 2px;'><div style='margin: 4px; width: 16px; height: 16px;'></div></div>";
+                var addButton = $(buttonTemplate);
+                var editButton = $(buttonTemplate);
+                var deleteButton = $(buttonTemplate);
+                var updateButton = $(buttonTemplate);
+                var cancelButton = $(buttonTemplate);
+                container.append(addButton);
+                container.append(editButton);
+                container.append(deleteButton);
+                container.append(updateButton);
+                container.append(cancelButton);
+                toolBar.append(container);
+                addButton.jqxButton({ cursor: "pointer", enableDefault: false, disabled: false, height: 25, width: 25 });
+                addButton.find('div:first').addClass(toTheme('jqx-icon-plus'));
+                addButton.jqxTooltip({ position: 'bottom', content: "Add" });
+                editButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                editButton.find('div:first').addClass(toTheme('jqx-icon-edit'));
+                editButton.jqxTooltip({ position: 'bottom', content: "Edit" });
+                deleteButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                deleteButton.find('div:first').addClass(toTheme('jqx-icon-delete'));
+                deleteButton.jqxTooltip({ position: 'bottom', content: "Delete" });
+                updateButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                updateButton.find('div:first').addClass(toTheme('jqx-icon-save'));
+                updateButton.jqxTooltip({ position: 'bottom', content: "Save Changes" });
+                cancelButton.jqxButton({ cursor: "pointer", disabled: true, enableDefault: false, height: 25, width: 25 });
+                cancelButton.find('div:first').addClass(toTheme('jqx-icon-cancel'));
+                cancelButton.jqxTooltip({ position: 'bottom', content: "Cancel" });
+
+                var updateButtons = function (action) {
+                    switch (action) {
+                        case "Select":
+                            addButton.jqxButton({ disabled: false });
+                            deleteButton.jqxButton({ disabled: false });
+                            editButton.jqxButton({ disabled: false });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                        case "Unselect":
+                            deleteButton.jqxButton({ disabled: true });
+                            editButton.jqxButton({ disabled: true });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                        case "Edit":
+                            addButton.jqxButton({ disabled: true });
+                            deleteButton.jqxButton({ disabled: true });
+                            editButton.jqxButton({ disabled: true });
+                            updateButton.jqxButton({ disabled: false });
+                            cancelButton.jqxButton({ disabled: false });
+                            break;
+                        case "End Edit":
+                            addButton.jqxButton({ disabled: false });
+                            deleteButton.jqxButton({ disabled: false });
+                            editButton.jqxButton({ disabled: false });
+                            updateButton.jqxButton({ disabled: true });
+                            cancelButton.jqxButton({ disabled: true });
+                            break;
+                    }
+                }
+                var rowKey = null;
+                $("#treeGrid").on('rowSelect', function (event) {
+                    var args = event.args;
+                    rowKey = args.key;
+                    updateButtons('Select');
+
+                });
+                $("#treeGrid").on('rowUnselect', function (event) {
+                    updateButtons('Unselect');
+                });
+                $("#treeGrid").on('rowEndEdit', function (event) {
+                    updateButtons('End Edit');
+
+                    var args = event.args;
+                    // row key
+                    var rowKey = args.key;
+                    // row's data.
+                    var row = args.row;
+
+                    saveData(row);
+                    
+
+                });
+                $("#treeGrid").on('rowBeginEdit', function (event) {
+                    updateButtons('Edit');
+                });
+
+                saveData = function (row) {
+                    if (row.parent) {
+                        document.getElementById("hiddenjsondata").value = "{'Number':" + row.Number +", 'Name':'"+row.Name +"', 'ParentNumber':" + row.parent.Number + "}";
+                    }
+                    else {
+                        document.getElementById("hiddenjsondata").value = "{'Number':" + row.Number + ", 'Name':'" + row.Name + "', 'ParentNumber':0}";
+                    }
+                }
+                addButton.click(function (event) {
+                    if (!addButton.jqxButton('disabled')) {
+                        var d = new Date();
+                        newRowID = "";//"#temp_"+d.getTime();
+                        $("#treeGrid").jqxTreeGrid('expandRow', rowKey);
+                        // add new empty row.
+                        $("#treeGrid").jqxTreeGrid('addRow', "", {}, 'first', rowKey);
+                        // select the first row and clear the selection.
+                        $("#treeGrid").jqxTreeGrid('clearSelection');
+                        $("#treeGrid").jqxTreeGrid('selectRow', newRowID);
+                        // edit the new row.
+                        $("#treeGrid").jqxTreeGrid('beginRowEdit', newRowID);
+                        updateButtons('add');
+                    }
+                });
+                updateButton.click(function (event) {
+                    if (!updateButton.jqxButton('disabled')) {
+                        // save changes.
+                        $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, false);
+                        document.searchform.submit();
+                    }
+                });
+
+                cancelButton.click(function (event) {
+                    if (!cancelButton.jqxButton('disabled')) {
+                        // cancel changes.
+                        $("#treeGrid").jqxTreeGrid('endRowEdit', rowKey, true);
+                    }
+                });
+                editButton.click(function () {
+                    if (!editButton.jqxButton('disabled')) {
+                        $("#treeGrid").jqxTreeGrid('beginRowEdit', rowKey);
+                        updateButtons('edit');
+                    }
+                });
+                deleteButton.click(function () {
+                    if (!deleteButton.jqxButton('disabled')) {
+                        var selection = $("#treeGrid").jqxTreeGrid('getSelection');
+                        if (selection.length > 1) {
+                            var keys = new Array();
+                            for (var i = 0; i < selection.length; i++) {
+                                keys.push($("#treeGrid").jqxTreeGrid('getKey', selection[i]));
+                            }
+                            $("#treeGrid").jqxTreeGrid('deleteRow', keys);
+                        }
+                        else {
+                            $("#treeGrid").jqxTreeGrid('deleteRow', rowKey);
+
+                            var row = selection[0];
+                            if (row.Number && row.Number != "") {
+                                saveData(row);
+                            }
+                            document.getElementById("hiddenoperation").value = "Delete";
+                            document.searchform.submit();
+                        }
+                        updateButtons('delete');
+
+                        
+                    }
+                });
+            },
+            columns: [
+                {
+                    text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_NUMBER")', dataField: 'Number', width: 100
+                },
+                {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_NAME")', dataField: 'Name'
+                }
+            ]
+        });
+    });
+</script>

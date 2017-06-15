@@ -1,0 +1,314 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")</h2>
+
+<p>
+    <div>
+        <button id="createButton">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_CREATE")</button>
+        <button id="setupButton">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP")</button>
+        <button id="testButton">@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TEST"), "Test")</button>
+        <button id="fixButton">@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_FIX"), "Fix")</button>
+        <button id="packageButton">@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE"), "Package")</button>
+        <button id="delieverButton">@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER"), "Deliever")</button>
+        <button id="printButton">@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PRINT"), "Deliever")</button>
+
+    </div>
+
+</p>
+
+<div id="customWindow_create">
+    <div id="customWindowHeader">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_CREATE") </span>
+    </div>
+    <div id="customWindowContent" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCTBASE_LIST")</td>
+                <td><div id="jqxComboBox_productbase"></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_YEARNUMBER")</td>
+                <td><div id='dateInput_year'></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_BATCH")</td>
+                <td><div><input type="text" id="input_batch" style="width: 200px;"/></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_SERIAL")</td>
+                <td><div><input type="text" id="input_serial" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_NAME")</td>
+                <td><div><input type="text" id="input_name" style="width: 200px;" /></div></td>
+            </tr>
+
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_DESCRIPTION")</td>
+                <td><div><textarea id="input_description" style="width:200px;height:50px"></textarea></div></td>
+            </tr>
+
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_ACTIONERS")</td>
+                <td><div id="listBoxA" style="float:left"></div></td>
+            </tr>
+        </table>
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("OK")" id="okButton" />
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton" />
+        </div>
+    </div>
+</div>
+
+<div id="customWindow_setup">
+    <div id="customWindowHeader_setup">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP") </span>
+    </div>
+    <div id="customWindowContent_setup" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_SETUP")</td>
+                <td></td>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP")</td>
+            </tr>
+            <tr>
+                <td><div id="listBoxSetupLeft"></div></td>
+                <td>
+                    <div>
+                        <br />
+                        <button id="moveLeftButton">@ZJOASystem.Controllers.ResourceReader.GetString("BUTTON_MOVELEFT")</button><br /><br />
+                        <button id="moveRightButton">@ZJOASystem.Controllers.ResourceReader.GetString("BUTTON_MOVERIGHT")</button>
+                    </div>
+                </td>
+                <td><div id="listBoxSetupRight"></div></td>
+
+            </tr>
+
+        </table>
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("OK")" id="okButton_setup" />
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton_setup" />
+        </div>
+    </div>
+</div>
+
+<form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index", new {index="1" })" method="post">
+    <div class="input-group">
+        <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />
+        <span class="btn input-group-addon" onclick="document.searchform.submit();">
+            <span class="glyphicon  glyphicon-search"></span>
+        </span>
+        @Html.Hidden("hiddensearchkey", ViewData["hiddensearchkey"])
+        @Html.Hidden("product_create", ViewData["product_create"], new { id = "product_create" })
+
+
+    </div>
+</form>
+<div id="jqxgrid">
+</div>
+
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
+@Scripts.Render("~/bundles/jqwidgets/dialog")
+@Scripts.Render("~/bundles/jqwidgets/editor")
+<script type="text/javascript">
+    $(document).ready(function () {
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Number', type: 'string' },
+                { name: 'Name', type: 'string' }
+            ],
+            id: 'Number',
+            url: 'Product/GetProductBases'
+        };
+
+        var source_employees =
+                {
+                    dataType: "json",
+                    dataFields: [
+                        { name: 'Encode', type: 'string' },
+                        { name: 'Name', type: 'string' }
+                    ],
+                    id: 'Encode',
+                    url: 'Product/GetEmployeeList'
+                };
+        
+        var sourcelist =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Number', type: 'string' },
+                { name: 'Name', type: 'string' },
+                { name: 'Description', type: 'string' },
+                { name: 'Status', type: 'string' },
+                { name: 'ProductGuid', type: 'string' }
+            ],
+            hierarchy:
+                {
+                    keyDataField: { name: 'ProductGuid' },
+                    parentDataField: { name: 'ParentGuid' }
+                },
+            id: 'ProductGuid',
+            url: 'Product/GetProducts'
+        };
+
+        var dataAdapterlist = new $.jqx.dataAdapter(sourcelist);
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        var dataAdapter_employee = new $.jqx.dataAdapter(source_employees);
+
+       
+
+        $('#customWindow_create').jqxWindow({
+            width: 420,
+            height: 320,
+            resizable: true,
+            autoOpen: false,
+            okButton: $('#okButton'),
+            cancelButton: $('#closeButton'),
+            position: { x: 280, y: 190 },
+            initContent: function () {
+                $('#closeButton').jqxButton({ width: '80px' });
+                $('#okButton').jqxButton({ width: '80px' });
+                $("#dateInput_year").jqxDateTimeInput({ width: '200px', height: '25px' });
+
+                $("#jqxComboBox_productbase").jqxComboBox({ displayMember: "Name", valueMember: "Number", source: dataAdapter, width: '200px', height: '25px' });
+
+                // Create a jqxListBox
+                $("#listBoxA").jqxListBox({
+                    source: dataAdapter_employee, width: 200, height: 90, displayMember: "Name", valueMember: "Encode", multiple: true, itemHeight: 18
+                });
+                
+            }
+        });
+
+        $('#customWindow_setup').jqxWindow({
+            width: 440,
+            height: 300,
+            resizable: true,
+            autoOpen: false,
+            okButton: $('#okButton_setup'),
+            cancelButton: $('#closeButton_setup'),
+            position: { x: 280, y: 190 },
+            initContent: function () {
+                $('#closeButton_setup').jqxButton({ width: '80px' });
+                $('#okButton_setup').jqxButton({ width: '80px' });
+                $('#moveLeftButton').jqxButton({ width: '80px' });
+                $('#moveRightButton').jqxButton({ width: '80px' });
+
+                // Create a jqxListBox
+                $("#listBoxSetupLeft").jqxListBox({
+                    source: dataAdapterlist, width: 150, height: 200, displayMember: "Name", valueMember: "ProductGuid", multiple: true, itemHeight: 18
+                });
+                var rightsource = [];
+
+                $("#listBoxSetupRight").jqxTreeGrid(
+                {
+                    width: 150,
+                    source: dataAdapterlist,
+                    pageable: true,
+                    sortable: true,
+                    altRows: true,
+                    editable: false,
+                    selectionMode: 'singleRow',
+                    columns: [
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_ENCODE")', datafield: 'Number', width: 250 },
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_NAME")', datafield: 'Name', width: 200 }
+                ]
+            });
+
+
+
+                $("#listBoxSetupRight").jqxListBox({
+                    source: rightsource, width: 150, height: 200, displayMember: "Name", valueMember: "ProductGuid", multiple: true, itemHeight: 18
+                });
+            }
+        });
+        $("#createButton").jqxLinkButton();
+        $("#setupButton").jqxLinkButton();
+        $("#testButton").jqxLinkButton();
+        $("#fixButton").jqxLinkButton();
+        $("#packageButton").jqxLinkButton();
+        $("#delieverButton").jqxLinkButton();
+        $("#printButton").jqxLinkButton();
+
+        $("#createButton").on('click', function () {
+            var isOpen = $('#customWindow_create').jqxWindow('isOpen');
+            if (!isOpen) {
+                $('#customWindow_create').jqxWindow('open');
+            }
+        });
+
+        $("#setupButton").on('click', function () {
+            var isOpen = $('#customWindow_setup').jqxWindow('isOpen');
+            if (!isOpen) {
+                $('#customWindow_setup').jqxWindow('open');
+            }
+        });
+
+        $("#okButton").on('click', function () {
+            saveCreate();
+        });
+
+        $("#jqxgrid").jqxTreeGrid(
+            {
+                width: 800,
+                source: dataAdapterlist,
+                pageable: true,
+                sortable: true,
+                altRows:true,
+                editable: false,
+                selectionMode: 'singleRow',
+                columns: [
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_ENCODE")', datafield: 'Number', width: 250 },
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_NAME")', datafield: 'Name', width: 200 },
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DESCRIPTION")', datafield: 'Description' },
+                    { text: '@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_STATUS")', datafield: 'Status' }
+                ]
+            });
+
+       
+
+    });
+
+    function saveCreate() {
+        var items = $("#listBoxA").jqxListBox('getSelectedItems');
+        var selection = "";
+        for (var i = 0; i < items.length; i++) {
+            selection += items[i].value + (i < items.length - 1 ? ", " : "");
+        }
+
+        var proItem = $("#jqxComboBox_productbase").jqxComboBox('getSelectedItem');
+        if (proItem == null) {
+            alert("请选择产品名类");
+        }
+        var yearItem = $("#dateInput_year").jqxDateTimeInput('getDate');
+        var year = yearItem.getFullYear().toString();
+        var month = yearItem.getMonth().toString();
+        var day = yearItem.getDay().toString();
+        if (month.length == 1) {
+            month = "0" + month;
+        }
+        if (day.length == 1) {
+            day = "0" + day;
+        }
+        var yearValue = year + month + day;
+        var batchValue = document.getElementById("input_batch").value;
+        var serValue = document.getElementById("input_serial").value;
+        var numberValue = proItem.value + yearValue + batchValue + serValue;
+
+        var value = "{'Number':'" + numberValue + "',";
+        value += "'Name':'" + document.getElementById("input_name").value + "',";
+        value += "'Description':'" + document.getElementById("input_description").value + "',";
+        value += "'ActionType':1,";
+        value += "'ActionEmployees':'" + selection + "'}";
+
+        document.getElementById("product_create").value = value;
+
+        document.searchform.submit();
+    }
+</script>

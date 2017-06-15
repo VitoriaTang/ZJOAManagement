@@ -1,0 +1,65 @@
+﻿@model ZJOASystem.Models.Department
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("EDIT")</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT")</h4>
+        <hr />
+        @Html.ValidationSummary(true)
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Name)
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Telephone, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Telephone)
+                @Html.ValidationMessageFor(model => model.Telephone)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_PARENT_NAME")</label>
+            <div class="col-md-10">
+                @ZJOASystem.Controllers.EmployeeController.RenderDepartmentsCombo(this.Model)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_MANAGER")</label>
+            <div class="col-md-10">
+                @ZJOASystem.Controllers.EmployeeController.RenderEmployeesCombo(this.Model, "manager", true, true)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="@ZJOASystem.Controllers.ResourceReader.GetString("SUBMIT")" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

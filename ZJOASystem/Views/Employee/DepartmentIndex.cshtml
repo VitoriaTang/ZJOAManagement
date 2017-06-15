@@ -1,0 +1,15 @@
+﻿@model IEnumerable<ZJOASystem.Models.Department>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_TITLE")</h2>
+
+<p>
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_CREATE"), "CreateDepartment")
+</p>
+<div>
+    @ZJOASystem.Controllers.EmployeeController.RenderDepartmentTree()
+</div>

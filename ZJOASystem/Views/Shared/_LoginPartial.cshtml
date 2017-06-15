@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNet.Identity
+@if (Request.IsAuthenticated)
+{
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+    {
+    @Html.AntiForgeryToken()
+
+    <ul class="nav navbar-nav navbar-right">
+        <li class="bannerlink">
+            @Html.ActionLink("你好 " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "bannerlink" })
+        </li>
+        <li class="bannerlink">
+            <a href="javascript:document.getElementById('logoutForm').submit()"><i class="glyphicon glyphicon-log-out"></i>@ZJOASystem.Controllers.ResourceReader.GetString("LOGOFF")</a>
+        </li>
+    </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li class="bannerlink">
+            <a id="registerLink" href="~/Account/Register"> @ZJOASystem.Controllers.ResourceReader.GetString("REGISTER")</a>
+        </li>
+        <li class="bannerlink">
+            <a id="loginLink" href="~/Account/Login"><i class="glyphicon glyphicon-log-in"></i> @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")</a>
+        </li>
+    </ul>
+}

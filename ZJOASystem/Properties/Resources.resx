@@ -1,0 +1,378 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ACTION_BATCHNUMBER" xml:space="preserve">
+    <value>批号</value>
+  </data>
+  <data name="ACTION_COMMENTS" xml:space="preserve">
+    <value>操作说明</value>
+  </data>
+  <data name="ACTION_EMPLOYEE" xml:space="preserve">
+    <value>操作员工</value>
+  </data>
+  <data name="ACTION_NUMBER" xml:space="preserve">
+    <value>产品编号</value>
+  </data>
+  <data name="ACTION_SERIALNUMBER" xml:space="preserve">
+    <value>辨识码</value>
+  </data>
+  <data name="ACTION_TIME" xml:space="preserve">
+    <value>操作时间</value>
+  </data>
+  <data name="ACTION_TYPE" xml:space="preserve">
+    <value>操作类型</value>
+  </data>
+  <data name="ACTION_YEAR" xml:space="preserve">
+    <value>年份</value>
+  </data>
+  <data name="ADDITION_DEPARTURE" xml:space="preserve">
+    <value>发货地址</value>
+  </data>
+  <data name="ADDITION_DESTINATION" xml:space="preserve">
+    <value>收货地址</value>
+  </data>
+  <data name="ADDITION_RECEIVER" xml:space="preserve">
+    <value>收货人</value>
+  </data>
+  <data name="ADDITION_RECEIVERTELEPHONE" xml:space="preserve">
+    <value>收货人电话</value>
+  </data>
+  <data name="ADDITION_SENDER" xml:space="preserve">
+    <value>发货人</value>
+  </data>
+  <data name="ADDITION_SENDERTELEPHONE" xml:space="preserve">
+    <value>发货人电话</value>
+  </data>
+  <data name="ADDITION_TRACKNUMBER" xml:space="preserve">
+    <value>运单号</value>
+  </data>
+  <data name="ApplicationName" xml:space="preserve">
+    <value>紫珺办公系统</value>
+  </data>
+  <data name="BACKTO_PRODUCTLIST" xml:space="preserve">
+    <value>返回产品清单</value>
+  </data>
+  <data name="BROWSEFILE" xml:space="preserve">
+    <value>浏览</value>
+  </data>
+  <data name="BUTTON_MOVELEFT" xml:space="preserve">
+    <value>-&gt;</value>
+  </data>
+  <data name="BUTTON_MOVERIGHT" xml:space="preserve">
+    <value>&lt;-</value>
+  </data>
+  <data name="CANCEL" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="CANCELUPLOAD" xml:space="preserve">
+    <value>取消上传</value>
+  </data>
+  <data name="CHOOSE_PRODUCTBASE_LIST" xml:space="preserve">
+    <value>请选择要制造的产品名类：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_ACTIONERS" xml:space="preserve">
+    <value>请从列表中选择操作员工（可多选）：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_BATCH" xml:space="preserve">
+    <value>请输入产品批号：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_DESCRIPTION" xml:space="preserve">
+    <value>请输入产品描述信息（非必需）：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_NAME" xml:space="preserve">
+    <value>请输入产品名称：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_SERIAL" xml:space="preserve">
+    <value>请输入产品标识码：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_SETUP" xml:space="preserve">
+    <value>选择要组装的产品</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_YEARNUMBER" xml:space="preserve">
+    <value>请选择产品年份：</value>
+  </data>
+  <data name="CLOSE" xml:space="preserve">
+    <value>关闭</value>
+  </data>
+  <data name="COMMENTS" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="CREATE" xml:space="preserve">
+    <value>创建</value>
+  </data>
+  <data name="DELETE" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="DELETE_CONFIRM" xml:space="preserve">
+    <value>确认删除？</value>
+  </data>
+  <data name="DEPARTMENT" xml:space="preserve">
+    <value>部门</value>
+  </data>
+  <data name="DEPARTMENTLIST" xml:space="preserve">
+    <value>所属部门</value>
+  </data>
+  <data name="DEPARTMENT_CREATE" xml:space="preserve">
+    <value>新建部门记录</value>
+  </data>
+  <data name="DEPARTMENT_MANAGER" xml:space="preserve">
+    <value>部门经理</value>
+  </data>
+  <data name="DEPARTMENT_NAME" xml:space="preserve">
+    <value>部门名称</value>
+  </data>
+  <data name="DEPARTMENT_NONE" xml:space="preserve">
+    <value>(无)</value>
+  </data>
+  <data name="DEPARTMENT_PARENT_NAME" xml:space="preserve">
+    <value>上级部门</value>
+  </data>
+  <data name="DEPARTMENT_RETURNLIST" xml:space="preserve">
+    <value>返回部门列表</value>
+  </data>
+  <data name="DEPARTMENT_TITLE" xml:space="preserve">
+    <value>部门管理</value>
+  </data>
+  <data name="DETAIL" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="EDIT" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="EMPLOYEE" xml:space="preserve">
+    <value>员工</value>
+  </data>
+  <data name="EMPLOYEE_CREATE" xml:space="preserve">
+    <value>新建员工记录</value>
+  </data>
+  <data name="EMPLOYEE_EMAIL" xml:space="preserve">
+    <value>电子邮件</value>
+  </data>
+  <data name="EMPLOYEE_NAME" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="EMPLOYEE_RETURNLIST" xml:space="preserve">
+    <value>返回员工列表</value>
+  </data>
+  <data name="EMPLOYEE_TELEPHONE" xml:space="preserve">
+    <value>联系电话</value>
+  </data>
+  <data name="EMPLOYEE_TITLE" xml:space="preserve">
+    <value>员工管理</value>
+  </data>
+  <data name="HOME_TITLE" xml:space="preserve">
+    <value>主页</value>
+  </data>
+  <data name="LOGIN" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="LOGOFF" xml:space="preserve">
+    <value>退出系统</value>
+  </data>
+  <data name="OK" xml:space="preserve">
+    <value>确定</value>
+  </data>
+  <data name="PRODUCTBASE_LIST" xml:space="preserve">
+    <value>产品目录</value>
+  </data>
+  <data name="PRODUCT_ACTIONLIST" xml:space="preserve">
+    <value>产品操作记录</value>
+  </data>
+  <data name="PRODUCT_CREATE" xml:space="preserve">
+    <value>制造</value>
+  </data>
+  <data name="PRODUCT_DELIEVER" xml:space="preserve">
+    <value>发货</value>
+  </data>
+  <data name="PRODUCT_DESCRIPTION" xml:space="preserve">
+    <value>描述</value>
+  </data>
+  <data name="PRODUCT_DETAIL_LIST" xml:space="preserve">
+    <value>产品明细</value>
+  </data>
+  <data name="PRODUCT_ENCODE" xml:space="preserve">
+    <value>编码</value>
+  </data>
+  <data name="PRODUCT_EXPORT" xml:space="preserve">
+    <value>导出产品清单</value>
+  </data>
+  <data name="PRODUCT_FIX" xml:space="preserve">
+    <value>维修</value>
+  </data>
+  <data name="PRODUCT_IMPORT" xml:space="preserve">
+    <value>导入产品清单</value>
+  </data>
+  <data name="PRODUCT_IMPORT_UPLOAD" xml:space="preserve">
+    <value>上传产品清单文件</value>
+  </data>
+  <data name="PRODUCT_LIST" xml:space="preserve">
+    <value>清单</value>
+  </data>
+  <data name="PRODUCT_NAME" xml:space="preserve">
+    <value>产品名称</value>
+  </data>
+  <data name="PRODUCT_NUMBER" xml:space="preserve">
+    <value>编号</value>
+  </data>
+  <data name="PRODUCT_PACKAGE" xml:space="preserve">
+    <value>装箱</value>
+  </data>
+  <data name="PRODUCT_PRINT" xml:space="preserve">
+    <value>打印产品</value>
+  </data>
+  <data name="PRODUCT_SETUP" xml:space="preserve">
+    <value>组装</value>
+  </data>
+  <data name="PRODUCT_STATUS" xml:space="preserve">
+    <value>状态</value>
+  </data>
+  <data name="PRODUCT_TEST" xml:space="preserve">
+    <value>检测</value>
+  </data>
+  <data name="PRODUCT_TITLE" xml:space="preserve">
+    <value>产品管理</value>
+  </data>
+  <data name="REGISTER" xml:space="preserve">
+    <value>注册</value>
+  </data>
+  <data name="STATUS_DELIEVERED" xml:space="preserve">
+    <value>已发货</value>
+  </data>
+  <data name="STATUS_DISABLED" xml:space="preserve">
+    <value>不可用</value>
+  </data>
+  <data name="STATUS_FIXED" xml:space="preserve">
+    <value>已修复</value>
+  </data>
+  <data name="STATUS_PACKAGE" xml:space="preserve">
+    <value>已装箱</value>
+  </data>
+  <data name="STATUS_QUALIFIED" xml:space="preserve">
+    <value>检测通过</value>
+  </data>
+  <data name="STATUS_UNQUALIFIED" xml:space="preserve">
+    <value>检测未通过</value>
+  </data>
+  <data name="SUBMIT" xml:space="preserve">
+    <value>提交</value>
+  </data>
+  <data name="UPLOADFILE" xml:space="preserve">
+    <value>上传</value>
+  </data>
+</root>

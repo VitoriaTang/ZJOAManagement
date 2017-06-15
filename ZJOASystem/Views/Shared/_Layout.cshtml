@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/zjoa")
+
+</head>
+<body>
+
+    <div class="header">
+        <div class="container" style="margin-left:25px;">
+            <div class="row">
+                <div class="col-md-5">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <h1>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName"), "Index", "Home", null, new { @class = "logo" })</h1>
+                    </div>
+
+                </div>
+                <div>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="sidebar content-box" style="display: block;">
+                    <ul class="nav">
+                        <!-- Main menu -->
+                        <li>
+                            <a href="~/HOME/Index"><i class="glyphicon glyphicon-home"></i> @ZJOASystem.Controllers.ResourceReader.GetString("HOME_TITLE")</a>
+                        </li>
+                        <li>
+                            <a href="~/Employee/DepartmentIndex"><i class="glyphicon glyphicon-globe"></i> @ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_TITLE")</a>
+                        </li>
+                        <li>
+                            <a href="~/Employee/Index"><i class="glyphicon glyphicon-user"></i> @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TITLE")</a>
+                        </li>
+                        <li class="submenu">
+                            <a href="#">
+                                <i class="glyphicon glyphicon-barcode"></i> @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")
+                                <span class="caret pull-right"></span>
+                            </a>
+                            <ul>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCTBASE_LIST"), "ProductList", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DETAIL_LIST"), "Index", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TEST"), "Test", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_FIX"), "Fix", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE"), "Package", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER"), "Deliever", "Product")
+                                </li>
+                            </ul>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-10">
+                <div class="row" style="padding-left:10px">
+                    <div class="col-md-10">
+                        @RenderBody()
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+
+            <div class="copy text-center">
+                Copyright 2017 @ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName")
+            </div>
+
+        </div>
+    </footer>
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
