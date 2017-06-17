@@ -322,6 +322,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 请选择需要查看的产品：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_DETAILS {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_DETAILS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 选择要修复的产品：.
         /// </summary>
         internal static string CHOOSE_PRODUCT_FIX {
@@ -345,6 +354,24 @@ namespace ZJOASystem.Properties {
         internal static string CHOOSE_PRODUCT_PACKAGE {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCT_PACKAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 打印预览.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_PRINT {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_PRINT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请选择打印模板：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_PRINT_TEMPLATE {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_PRINT_TEMPLATE", resourceCulture);
             }
         }
         
@@ -813,6 +840,15 @@ namespace ZJOASystem.Properties {
         internal static string PRODUCT_DETAIL_LIST {
             get {
                 return ResourceManager.GetString("PRODUCT_DETAIL_LIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 产品详情.
+        /// </summary>
+        internal static string PRODUCT_DETAILS {
+            get {
+                return ResourceManager.GetString("PRODUCT_DETAILS", resourceCulture);
             }
         }
         

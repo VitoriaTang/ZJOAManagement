@@ -252,6 +252,36 @@
     </div>
 </div>
 
+<div id="customWindow_print">
+    <div id="customWindowHeader_print">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DETAILS") </span>
+    </div>
+    <div id="customWindowContent_print" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_DETAILS")</td>
+                <td><div id="jqxComboBox_products_print"></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div id="productdetail"></div></td>
+            </tr>
+            <tr>
+                <td colspan="2"><div id="actiondetail"></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_PRINT_TEMPLATE")</td>
+                <td><div id="jqxComboBox_products_printtemplate"></div></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right"><button id="printPreview">@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_PRINT")</button></td>
+            </tr>
+        </table>
+        <br />
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton_details" />&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
 <form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index", new {index="1" })" method="post">
     <div class="input-group">
         <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />

@@ -1,1 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8" ?> 
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<template>
+  <content>
+    <![CDATA[<script type="text/javascript" src="/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="/Scripts/jquery-barcode.js"></script>
+    <div id="barCodeDiv_{Product.Number}" style="margin: 10px 0px" barcodevalue="{Product.Number}"></div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            barcode128("barCodeDiv_{Product.Number}");
+        });
+
+        function barcode128(divName) {
+            var divDom = document.getElementById(divName);
+            var barcode = "";
+            if (divDom) {
+                barcode = divDom.getAttribute('barcodeValue');
+            }
+            $("div[id='" + domTemp + "']").empty().barcode(barcode, "code128", { barWidth: 2, barHeight: 90, showHRI: false });
+
+
+        }
+    </script>
+  ]]></content>
+</template>

@@ -185,6 +185,7 @@
     <Compile Include="Models\GridModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MySqlInitializer.cs" />
+    <Compile Include="Models\PrintTemplateModels.cs" />
     <Compile Include="Models\ProductDBContext.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -192,6 +193,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Service References\OAService\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -1508,6 +1514,10 @@
     <Content Include="Content\jqwidgets\styles\images\sunny\Thumbs.db" />
     <Content Include="Content\jqwidgets\styles\images\Thumbs.db" />
     <Content Include="Content\jqwidgets\styles\Thumbs.db" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\calendar.js" />
     <Content Include="Scripts\custom.js" />
@@ -1516,6 +1526,7 @@
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery-barcode.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />

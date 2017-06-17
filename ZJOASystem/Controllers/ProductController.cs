@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.Entity;
 using System.IO;
@@ -46,12 +47,13 @@ namespace ZJOASystem.Controllers
                 {
                     string attributeValue = "";
                     bool isDelete = false;
-                    string operation="";
+                    string operation = "";
                     try
                     {
                         attributeValue = Request.Form.GetValues("jsondata")[0];
                     }
-                    catch{
+                    catch
+                    {
                         attributeValue = "";
                     }
                     try
@@ -61,10 +63,11 @@ namespace ZJOASystem.Controllers
                     }
                     catch
                     {
-                        isDelete = false; 
+                        isDelete = false;
                     }
 
-                    try{
+                    try
+                    {
                         JavaScriptSerializer Serializer = new JavaScriptSerializer();
                         InnerProductBase innerObj = Serializer.Deserialize<InnerProductBase>(attributeValue);
 
@@ -72,7 +75,7 @@ namespace ZJOASystem.Controllers
 
                         this.db.SaveProductBase(newItem, isDelete);
                     }
-                    catch 
+                    catch
                     {
 
                     }
@@ -83,7 +86,7 @@ namespace ZJOASystem.Controllers
             {
                 return Redirect("../Account/Login");
             }
-       }
+        }
         /// <summary>
         /// Get: Product/GetProductBases
         /// </summary>
@@ -168,7 +171,8 @@ namespace ZJOASystem.Controllers
                 {
                     createValue = Request.Form.GetValues("product_create")[0];
                 }
-                catch{
+                catch
+                {
                     createValue = string.Empty;
                 }
 
@@ -215,9 +219,9 @@ namespace ZJOASystem.Controllers
                 }
 
                 SaveProjectStatus("product_test");
-                
+
                 SaveProjectStatus("product_fix");
-                
+
                 SaveProjectStatus("product_package");
 
                 string delieverValue = "";
@@ -235,10 +239,10 @@ namespace ZJOASystem.Controllers
                     JavaScriptSerializer Serializer = new JavaScriptSerializer();
                     InnerProductDelieverInfo innerObj = Serializer.Deserialize<InnerProductDelieverInfo>(delieverValue);
 
-                    this.db.SaveProductStatus(innerObj.Number,innerObj.ProductGuid, innerObj.Status, 
-                        ActionType.Deliever, innerObj.Operators, innerObj.ActionComments );
+                    this.db.SaveProductStatus(innerObj.Number, innerObj.ProductGuid, innerObj.Status,
+                        ActionType.Deliever, innerObj.Operators, innerObj.ActionComments);
 
-                    ProductAddition addition = new ProductAddition ();
+                    ProductAddition addition = new ProductAddition();
                     addition.AdditionGuid = Guid.NewGuid();
                     addition.Departure = innerObj.Departure;
                     addition.Destination = innerObj.Destination;
@@ -295,7 +299,7 @@ namespace ZJOASystem.Controllers
                         });
             return Json(list, JsonRequestBehavior.AllowGet);
         }
-       
+
         #endregion
 
         #region Setup
@@ -304,17 +308,17 @@ namespace ZJOASystem.Controllers
             List<string> productStatus = null;
             try
             {
-               string  productStatusText = Request.QueryString["status"];
-               if (!string.IsNullOrEmpty(productStatusText))
-               {
-                   productStatus = new List<string>(productStatusText.Split(','));
-               }
+                string productStatusText = Request.QueryString["status"];
+                if (!string.IsNullOrEmpty(productStatusText))
+                {
+                    productStatus = new List<string>(productStatusText.Split(','));
+                }
             }
             catch
             {
                 productStatus = null;
             }
-           
+
 
             string sqlQuery = string.Format(ProductDBContext.GET_TOP_PRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled));
             if (productStatus != null && productStatus.Count > 0)
@@ -389,7 +393,7 @@ namespace ZJOASystem.Controllers
 
         private void GetChildProductsByNumber(string baseId, Guid productGuid, ref List<InnerProduct> resultList)
         {
-            string sqlQuery =string.Format( ProductDBContext.GET_PRODUCTBASE_TOP_SQL, baseId);
+            string sqlQuery = string.Format(ProductDBContext.GET_PRODUCTBASE_TOP_SQL, baseId);
             List<string> result = this.db.Database.SqlQuery<string>(sqlQuery).ToList<string>();
 
             foreach (string item in result)
@@ -406,745 +410,63 @@ namespace ZJOASystem.Controllers
                     pItem.Name, pItem.Description, pItem.Status, pItem.ProductGuid, productGuid);
                     resultList.Add(innerObj);
 
-                    GetChildProductsByNumber(pItem.ProductBaseNumber,pItem.ProductGuid, ref resultList);
+                    GetChildProductsByNumber(pItem.ProductBaseNumber, pItem.ProductGuid, ref resultList);
                 }
-                
+
             }
         }
         #endregion
 
-
-        #region Others, TODO, Need modify
-
-        // GET: /Product/
-        /*
-        
-        */
-        // GET: /Product/Details/5
-        public ActionResult Details(int? id)
+        #region Print
+        public JsonResult GetProductDetailByGuid()
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.FindProduct(id, true);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
+            string productGuid = Request.QueryString["baseguid"];
+            string sql = string.Format("SELECT Id, Name, Description, ProductBaseNumber,YearNumber, BatchNumber, SerialNumber, Status,ProductGuid FROM Products WHERE ProductGuid='{0}'",
+                productGuid);
+            List<Product> result = this.db.Database.SqlQuery<Product>(sql).ToList<Product>();
+
+            var jsonResults = (from item in result
+                             select new
+                             {
+                                 item.Number,
+                                 item.Name,
+                                 item.Description,
+                                 item.Status,
+                                 item.ProductGuid
+                             });
+            return Json(jsonResults, JsonRequestBehavior.AllowGet);
         }
-
-       
-        // GET: /Product/Edit/5
-        public ActionResult Edit(int? id)
+        public JsonResult GetProductPrintTemplate() 
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.FindProduct(id, false);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
+            List<PrintTemplate> result = new List<PrintTemplate>();
 
-        // POST: /Product/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include="Id,Name,Description,Encode")] Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                db.UpdateProduct(product);
-                return RedirectToAction("Index");
-            }
-            return View(product);
-        }
+            string filepath = ConfigurationManager.AppSettings["printTemplateFolder"];
 
-        // GET: /Product/Delete/5
-        public ActionResult Delete(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Product product = db.FindProduct(id, true);
-            if (product == null)
-            {
-                return HttpNotFound();
-            }
-            return View(product);
-        }
+            string[] files = Directory.GetFiles(filepath, "*.xml");
 
-        // POST: /Product/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(int id)
-        {
-            //Product product = db.FindProduct(id, false);
-            //db.Products.Remove(product);
-            //db.DeleteProduct(product.ProductGuid, product.Status, false);
-            return RedirectToAction("Index");
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
+            if (files != null && files.Length > 0)
             {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
-
-        // GET: /Product/Create
-        public ActionResult Setup()
-        {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        public JsonResult GetTestProducts()
-        {
-            //string sqlQuery = string.Format(ProductDBContext.GETPRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled)) + " " + ProductDBContext.WHERETEXT;
-            //List<ProductAction> result = this.db.Database.SqlQuery<ProductAction>(sqlQuery).ToList<ProductAction>();
-            //List<ProductAction> products = new List<ProductAction>();
-            //foreach (ProductAction item in result)
-            //{
-            //    Guid guid = item.ProductGuid;
+                for(int i=0;i<files.Length;i++){
+                    string fullPath = files[i];
+                    FileInfo fileinfo = new FileInfo(fullPath);
+                    if (fileinfo.Exists)
+                    {
+                        PrintTemplate item = new PrintTemplate();
+                        item.Name = fileinfo.Name;
+                        item.Path = fileinfo.FullName;
+                        result.Add(item);
+                    }
+                }
                 
-            //    if (item.ParentGuid.Equals(guid))
-            //    {
-            //        item.ParentGuid = Guid.Empty;
-            //    }
-            //    string actionSqlQuery = string.Format(ProductDBContext.GETACTIONS_STATUS_SQL, item.ProductGuid, Convert.ToInt32(ActionType.Test));
-            //    List<Models.Action> actionDS = this.db.Database.SqlQuery<Models.Action>(actionSqlQuery).ToList<Models.Action>();
-
-            //    if (actionDS != null && actionDS.Count > 0)
-            //    {
-            //        item.ActionTime = actionDS[0].ActionTime;
-            //        item.ActionType = ActionType.Test;
-            //        EmployeeDBContext employeeDb = new EmployeeDBContext();
-            //        Employee employee = employeeDb.Employees.Find(actionDS[0].ActionEmployeeId);
-            //        if (employee != null )
-            //        {
-            //            item.ActionEmployee = string.Join("_",employee.Name,employee.Encode);
-
-            //        }
-            //    }
-
-            //    products.Add(item);
-            //}
-            //var productList = (from item in products
-            //                   select new
-            //                   {
-            //                       item.ProductGuid,
-            //                       item.NameEncode,
-            //                       item.Encode,
-            //                       item.ParentGuid,
-            //                       item.ActionEmployee,
-            //                       item.ActionTime,
-            //                       item.Status
-            //                   });
-            //return Json(productList, JsonRequestBehavior.AllowGet);
-            return null; 
-        }
-
-      
-
-        
-        /*
-        public JsonResult GetUnassignProducts()
-        {
-            string sqlQuery = string.Format(ProductDBContext.GETUNASSIGNEDPRODUCTS_SQL, Guid.Empty, Convert.ToInt32(ProductStatus.Disabled));
-            List<Product> result = this.db.Database.SqlQuery<Product>(sqlQuery).ToList<Product>();
-            var products = (from product in result
-                            select new
-                            {
-                                product.Name,
-                                product.Encode,
-                                product.ProductGuid
-                            });
-            
-            return Json(products, JsonRequestBehavior.AllowGet);
-        }
-
-        public JsonResult GetActionEmployees()
-        {
-            EmployeeDBContext employeeDb = new EmployeeDBContext();
-            List<InnerEmployee> employees = employeeDb.GetInnerEmployees(null);
-
-            var result = (from item in employees
-                            select new
-                            {
-                                item.Name,
-                                item.Encode,
-                                item.NameEncode
-                            });
-            return Json(result, JsonRequestBehavior.AllowGet);
-        }
-        private string GetProductJson(Guid productGuid, bool isTopLevel)
-        {
-            StringBuilder builder = new StringBuilder();
-            Product product = this.db.GetProducts(productGuid);
-            builder.Append("{");
-
-            List<Guid> children = this.db.GetChildrenProducts(productGuid);
-
-            if (!isTopLevel || (children!= null &&children.Count >0))
-            {
-                if (product != null)
-                {
-                    builder.Append(product.ToJSONString());
-                }
-            }
-            if (children != null && children.Count > 0)
-            {
-                builder.Append("children:[");
-
-                for (int i = 0; i < children.Count; i++)
-                {
-                    string childJson = GetProductJson(children[i], false);
-
-                    if (!string.IsNullOrEmpty(childJson))
-                    {
-                        builder.Append(childJson);
-                    }
-                    if (i < children.Count - 1)
-                    {
-                        builder.Append(",");
-                    }
-                }
-               
-                builder.Append("]");
-            }
-            builder.Append("}");
-
-            return builder.ToString();
-        }
-        */
-        // POST: /Product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Setup(string attribute)
-        {
-            if (Request.IsAuthenticated)
-            {
-                /*
-              if (ModelState.IsValid)
-              {
-                  
-                  Product newProduct = null;
-                  ZJOASystem.Models.Action action = new Models.Action();
-                  int employeeId = 0;
-                  foreach (var key in Request.Form.Keys)
-                  {
-                      if (key is String)
-                      {
-                          string keyText = Convert.ToString(key);
-                          if (keyText.Equals("jsondata", StringComparison.CurrentCultureIgnoreCase))
-                          {
-                              string value = Request.Form.GetValues(keyText)[0];
-                              JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                              InnerProduct innerObj = Serializer.Deserialize<InnerProduct>(value);
-
-                              newProduct = db.GetProducts(innerObj.ProductGuid);
-                              if (newProduct != null)
-                              {
-                                  newProduct.ParentGuid = innerObj.ParentGuid;
-                              }
-                          }
-                          else if (keyText.Equals("operation"))
-                          {
-                              string operation = Request.Form.GetValues(keyText)[0];
-                              if (operation.Equals("Setup", StringComparison.CurrentCultureIgnoreCase))
-                              {
-                                  action.ActionType = ActionType.Setup;
-                              }
-                              else if (operation.Equals("UnSetup", StringComparison.CurrentCultureIgnoreCase))
-                              {
-                                  action.ActionType = ActionType.UnSetup;
-                              }
-                                
-                          }
-                          else if (keyText.StartsWith("operator"))
-                          {
-                              string employeeEncode = Convert.ToString(Request.Form.GetValues(keyText)[0]).Split('_')[1];
-
-                              EmployeeDBContext employeeDb = new EmployeeDBContext();
-                              employeeId = employeeDb.GetEmployeeId(employeeEncode);
-                          }
-                      }
-
-                  }
-
-                  if (newProduct != null)
-                  {
-
-                      action.ActionEmployeeId = employeeId;
-                      action.ActionTime = DateTime.Now;
-                        
-                      db.SaveProduct(newProduct, action);
-                  }
-                   
-              }
-*/
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
             }
 
-
-        }
-
-        [HttpPost]
-        public ActionResult Import()
-        {
-            if (Request.IsAuthenticated)
-            {
-                if (Request.Files != null && Request.Files.Count > 0)
-                {
-                    var file = Request.Files[0];
-                    using (var inputStream = file.InputStream)
-                    {
-                        StreamReader reader = new StreamReader(inputStream);
-                        string allText = reader.ReadToEnd();
-                        reader.Close();
-
-                        List<ProductBase> items = CSVHelper.OpenCSV(allText, false);
-                        foreach (ProductBase item in items)
-                        {
-                            db.SaveProductBase(item, false);
-                        }
-                    }
-                }
-                return RedirectToAction("../Product/ProductList");
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-
-        
-
-        }
-
-        // GET: /Product/Create
-        public ActionResult Test()
-        {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        // POST: /Product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Test(string attribute)
-        {
-            if (Request.IsAuthenticated)
-            {
-                if (ModelState.IsValid)
-                {
-                    UpdateProjectStatus( ActionType.Test);
-                }
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-
-
-        }
-
-
-        private void UpdateProjectStatus( ActionType actionType)
-        {
-            /*
-            Product newProduct = null;
-            ZJOASystem.Models.Action action = new Models.Action();
-            string employeeEncode = "";
-            foreach (var key in Request.Form.Keys)
-            {
-                if (key is String)
-                {
-                    string keyText = Convert.ToString(key);
-                    if (keyText.Equals("jsondata", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        string value = Request.Form.GetValues(keyText)[0];
-                        JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                        InnerTestProduct innerObj = Serializer.Deserialize<InnerTestProduct>(value);
-
-                        newProduct = db.GetProducts(innerObj.ProductGuid);
-
-
-                        if (newProduct != null)
-                        {
-                            employeeEncode = innerObj.ActionEmployee.Split('_')[1];
-                            EmployeeDBContext employeeDb = new EmployeeDBContext();
-
-                            action.ActionEmployeeId = employeeDb.GetEmployeeId(employeeEncode);
-                            action.ActionTime = DateTime.Now;
-                            action.ActionType = actionType;
-                            action.Comments = innerObj.ActionComments;
-                            newProduct.Status = innerObj.Status;
-                            db.SaveProduct(newProduct, action);
-                        }
-
-
-                        break;
-                    }
-
-                }
-
-            }*/
-        }
-
-        // GET: /Product/Create
-        public ActionResult Fix()
-        {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        // POST: /Product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Fix(string attribute)
-        {
-            if (Request.IsAuthenticated)
-            {
-                if (ModelState.IsValid)
-                {
-                    UpdateProjectStatus(ActionType.Fix);
-                }
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-
-        public JsonResult GetNeedFixProducts()
-        {
-            //string sqlQuery = string.Format(ProductDBContext.GETPRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled)) 
-            //    + " " + ProductDBContext.WHERETEXT + string.Format(" and (Status={0} or Status={1})", Convert.ToInt32(ProductStatus.Unqualified),Convert.ToInt32(ProductStatus.Fixed));
-            //List<ProductAction> result = this.db.Database.SqlQuery<ProductAction>(sqlQuery).ToList<ProductAction>();
-            //List<ProductAction> products = new List<ProductAction>();
-            //foreach (ProductAction item in result)
-            //{
-            //    Guid guid = item.ProductGuid;
-
-            //    if (item.ParentGuid.Equals(guid))
-            //    {
-            //        item.ParentGuid = Guid.Empty;
-            //    }
-            //    string actionSqlQuery = string.Format(ProductDBContext.GETACTIONS_STATUS_SQL, item.ProductGuid, Convert.ToInt32(ActionType.Fix));
-            //    List<Models.Action> actionDS = this.db.Database.SqlQuery<Models.Action>(actionSqlQuery).ToList<Models.Action>();
-
-            //    if (actionDS != null && actionDS.Count > 0)
-            //    {
-            //        item.ActionTime = actionDS[0].ActionTime;
-            //        item.ActionType = ActionType.Fix;
-            //        EmployeeDBContext employeeDb = new EmployeeDBContext();
-            //        Employee employee = employeeDb.Employees.Find(actionDS[0].ActionEmployeeId);
-            //        if (employee != null)
-            //        {
-            //            item.ActionEmployee = string.Join("_", employee.Name, employee.Encode);
-
-            //        }
-            //    }
-
-            //    products.Add(item);
-            //}
-            //var productList = (from item in products
-            //                   select new
-            //                   {
-            //                       item.ProductGuid,
-            //                       item.NameEncode,
-            //                       item.Encode,
-            //                       item.ParentGuid,
-            //                       item.ActionEmployee,
-            //                       item.ActionTime,
-            //                       item.Status
-            //                   });
-            //return Json(productList, JsonRequestBehavior.AllowGet);
-            return null;
-        }
-
-        // GET: /Product/Create
-        public ActionResult Package()
-        {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        // POST: /Product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Package(string attribute)
-        {
-            if (Request.IsAuthenticated)
-            {
-                if (ModelState.IsValid)
-                {
-                    UpdateProjectStatus(ActionType.Package);
-                }
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        public JsonResult GetNeedPackageProducts()
-        {
-            //string sqlQuery = string.Format(ProductDBContext.GETPRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled))
-            //    + " " + ProductDBContext.WHERETEXT + string.Format(" and (Status={0} or Status={1})", Convert.ToInt32(ProductStatus.Qualified), Convert.ToInt32(ProductStatus.Packaged));
-            //List<ProductAction> result = this.db.Database.SqlQuery<ProductAction>(sqlQuery).ToList<ProductAction>();
-            //List<ProductAction> products = new List<ProductAction>();
-            //foreach (ProductAction item in result)
-            //{
-            //    Guid guid = item.ProductGuid;
-
-            //    if (item.ParentGuid.Equals(guid))
-            //    {
-            //        item.ParentGuid = Guid.Empty;
-            //    }
-            //    string actionSqlQuery = string.Format(ProductDBContext.GETACTIONS_STATUS_SQL, item.ProductGuid, Convert.ToInt32(ActionType.Package));
-            //    List<Models.Action> actionDS = this.db.Database.SqlQuery<Models.Action>(actionSqlQuery).ToList<Models.Action>();
-
-            //    if (actionDS != null && actionDS.Count > 0)
-            //    {
-            //        item.ActionTime = actionDS[0].ActionTime;
-            //        item.ActionType = ActionType.Package;
-            //        EmployeeDBContext employeeDb = new EmployeeDBContext();
-            //        Employee employee = employeeDb.Employees.Find(actionDS[0].ActionEmployeeId);
-            //        if (employee != null)
-            //        {
-            //            item.ActionEmployee = string.Join("_", employee.Name, employee.Encode);
-
-            //        }
-            //        item.Comments = actionDS[0].Comments;
-            //    }
-
-            //    products.Add(item);
-            //}
-            //var productList = (from item in products
-            //                   select new
-            //                   {
-            //                       item.ProductGuid,
-            //                       item.NameEncode,
-            //                       item.Encode,
-            //                       item.ParentGuid,
-            //                       item.ActionEmployee,
-            //                       item.ActionTime,
-            //                       item.Status,
-            //                       item.Comments
-            //                   });
-            //return Json(productList, JsonRequestBehavior.AllowGet);
-            return null;
-        }
-
-
-        // GET: /Product/Create
-        public ActionResult Deliever()
-        {
-            if (Request.IsAuthenticated)
-            {
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        // POST: /Product/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        public ActionResult Deliever(string attribute)
-        {
-            if (Request.IsAuthenticated)
-            {
-                /*
-                if (ModelState.IsValid)
-                {
-                    Product newProduct = null;
-                    ZJOASystem.Models.Action action = new Models.Action();
-                    string employeeEncode = "";
-                    foreach (var key in Request.Form.Keys)
-                    {
-                        if (key is String)
-                        {
-                            string keyText = Convert.ToString(key);
-                            if (keyText.Equals("jsondata", StringComparison.CurrentCultureIgnoreCase))
-                            {
-                                string value = Request.Form.GetValues(keyText)[0];
-                                JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                                InnerProductDelieverInfo innerObj = Serializer.Deserialize<InnerProductDelieverInfo>(value);
-
-                                newProduct = db.GetProducts(innerObj.ProductGuid);
-
-
-                                if (newProduct != null)
-                                {
-                                    employeeEncode = innerObj.ActionEmployee.Split('_')[1];
-                                    EmployeeDBContext employeeDb = new EmployeeDBContext();
-
-                                    action.ActionEmployeeId = employeeDb.GetEmployeeId(employeeEncode);
-                                    action.ActionTime = DateTime.Now;
-                                    action.ActionType = ActionType.Deliever;
-                                    action.Comments = innerObj.ActionComments;
-                                    newProduct.Status = innerObj.Status;
-                                    db.SaveProduct(newProduct, action);
-
-                                    ProductAddition additionInfo = new ProductAddition();
-                                    additionInfo.ProductGuid = innerObj.ProductGuid;
-                                    additionInfo.Receiver = innerObj.Receiver;
-                                    additionInfo.ReceiverTelephone = innerObj.ReceiverTelephone;
-                                    additionInfo.Sender = innerObj.Sender;
-                                    additionInfo.SenderTelephone = innerObj.SenderTelephone;
-                                    additionInfo.TrackNumber = innerObj.TrackNumber;
-                                    additionInfo.Departure = innerObj.Departure;
-                                    additionInfo.Destination = innerObj.Destination;
-                                    db.SaveProductAddition(additionInfo);
-                                }
-
-
-                                break;
-                            }
-
-                        }
-
-                    } 
-                }*/
-                return View();
-            }
-            else
-            {
-                return Redirect("../Account/Login");
-            }
-        }
-
-        public JsonResult GetNeedDelieverProducts()
-        {
-            //string sqlQuery = string.Format(ProductDBContext.GETPRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled))
-            //    + " " + ProductDBContext.WHERETEXT + string.Format(" and (Status={0} or Status={1})", Convert.ToInt32(ProductStatus.Packaged), Convert.ToInt32(ProductStatus.Delievered));
-            //List<ProductAction> result = this.db.Database.SqlQuery<ProductAction>(sqlQuery).ToList<ProductAction>();
-            //List<InnerProductDelieverInfo> products = new List<InnerProductDelieverInfo>();
-
-            //EmployeeDBContext employeeDb = new EmployeeDBContext();
-                    
-            //foreach (ProductAction item in result)
-            //{
-            //    Guid guid = item.ProductGuid;
-
-            //    InnerProductDelieverInfo pItem= new InnerProductDelieverInfo();
-            //    pItem.ProductGuid = guid;
-            //    if (item.ParentGuid.Equals(guid))
-            //    {
-            //        pItem.ParentGuid = Guid.Empty;
-            //    }
-            //    else{
-            //        pItem.ParentGuid = item.ParentGuid;
-            //    }
-
-            //    pItem.Encode = item.Encode;
-            //    pItem.Name = item.Name;
-            //    pItem.Status = item.Status;
-
-            //    List<ProductAddition> additions = this.db.GetProductAddition(guid);
-            //    if (additions != null && additions.Count >0)
-            //    {
-            //        ProductAddition additionItem = additions[0];
-            //        pItem.AdditionGuid = additionItem.AdditionGuid;
-            //        pItem.Comments = additionItem.Comments;
-            //        pItem.Departure = additionItem.Departure;
-            //        pItem.Destination = additionItem.Destination;
-            //        pItem.Receiver = additionItem.Receiver;
-            //        pItem.ReceiverTelephone = additionItem.ReceiverTelephone;
-            //        pItem.Sender = additionItem.Sender;
-            //        pItem.SenderTelephone = additionItem.SenderTelephone;
-            //        pItem.TrackNumber = additionItem.TrackNumber;
-            //    }
-            //    string actionSqlQuery = string.Format(ProductDBContext.GETACTIONS_STATUS_SQL, item.ProductGuid, Convert.ToInt32(ActionType.Deliever));
-            //    List<Models.Action> actionDS = this.db.Database.SqlQuery<Models.Action>(actionSqlQuery).ToList<Models.Action>();
-
-            //    if (actionDS != null && actionDS.Count > 0)
-            //    {
-            //        Employee employee = employeeDb.Employees.Find(actionDS[0].ActionEmployeeId);
-            //        if (employee != null)
-            //        {
-            //            pItem.ActionEmployee = string.Join("_", employee.Name, employee.Encode);
-            //        }
-            //        pItem.ActionComments = actionDS[0].Comments;
-            //        pItem.ActionTime = actionDS[0].ActionTime;
-            //    }
-
-            //    products.Add(pItem);
-            //}
-            //var productList = (from item in products
-            //                   select new
-            //                   {
-            //                       item.Name,
-            //                       item.Encode,
-            //                       item.NameEncode,
-            //                       item.ProductGuid,
-            //                       item.ParentGuid,
-            //                       item.ActionEmployee,
-            //                       item.ActionTime,
-            //                       item.Status,
-            //                       item.TrackNumber,
-            //                       item.Sender,
-            //                       item.SenderTelephone,
-            //                       item.Receiver,
-            //                       item.ReceiverTelephone,
-            //                       item.Departure,
-            //                       item.Destination,
-            //                       item.ActionComments,
-            //                       item.AdditionGuid
-            //                   });
-            //return Json(productList, JsonRequestBehavior.AllowGet);
-            return null;
+            var templates = (from item in result
+                               select new
+                               {
+                                   item.Name,
+                                   item.Path
+                               });
+            return Json(templates, JsonRequestBehavior.AllowGet);
         }
         #endregion
     }

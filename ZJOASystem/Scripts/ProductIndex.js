@@ -114,6 +114,30 @@
         url: 'Product/GetTopProducts?status=5'
     };
 
+    var toplist_print =
+    {
+        dataType: "json",
+        dataFields: [
+            { name: 'Number', type: 'string' },
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'string' },
+            { name: 'Status', type: 'string' },
+            { name: 'ProductGuid', type: 'string' }
+        ],
+        id: 'ProductGuid',
+        url: 'Product/GetTopProducts'
+    };
+
+    var printTemplateSource = {
+        dataType: "json",
+        dataFields: [
+            { name: 'Name', type: 'string' },
+            { name: 'Path', type: 'string' }
+        ],
+        id: 'Name',
+        url: 'Product/GetProductPrintTemplate'
+    };
+
     var dataAdapterlist = new $.jqx.dataAdapter(sourcelist);
     var dataAdapterToplist_setup = new $.jqx.dataAdapter(toplist_setup);
     var dataAdapter = new $.jqx.dataAdapter(source);
@@ -122,7 +146,8 @@
     var dataAdapterToplist_fix = new $.jqx.dataAdapter(toplist_fix);
     var dataAdapterToplist_package = new $.jqx.dataAdapter(toplist_package);
     var dataAdapterToplist_deliever = new $.jqx.dataAdapter(toplist_deliever);
-
+    var dataAdapterToplist_print = new $.jqx.dataAdapter(toplist_print);
+    var dataAdapterPrintTemplate = new $.jqx.dataAdapter(printTemplateSource);
 
     // Create window
     $('#customWindow_create').jqxWindow({
@@ -364,6 +389,57 @@
         }
     });
 
+    $('#customWindow_print').jqxWindow({
+        width: 420,
+        height: 450,
+        resizable: true,
+        autoOpen: false,
+        cancelButton: $('#closeButton_details'),
+        position: { x: 280, y: 190 },
+        initContent: function () {
+            $('#closeButton_details').jqxButton({ width: '80px' });
+            $('#printPreview').jqxButton({ width: '80px' });
+
+            $("#jqxComboBox_products_print").jqxComboBox(
+                {
+                    displayMember: "Name", valueMember: "ProductGuid",
+                    source: dataAdapterToplist_print, width: '150px', height: '25px'
+                });
+
+            $("#jqxComboBox_products_printtemplate").jqxComboBox(
+               {
+                   displayMember: "Name", valueMember: "Path",
+                   source: dataAdapterPrintTemplate, width: '150px', height: '25px'
+               });
+
+            $('#jqxComboBox_products_print').on('select', function (event) {
+                var args = event.args;
+                if (args != undefined) {
+                    var item = event.args.item;
+                    if (item != null) {
+
+                        
+                        var currentlist =
+                        {
+                            dataType: "json",
+                            dataFields: [
+                             { name: 'Number', type: 'string' },
+                             { name: 'Name', type: 'string' },
+                             { name: 'Description', type: 'string' },
+                             { name: 'Status', type: 'string' },
+                             { name: 'ProductGuid', type: 'string' }
+                            ],
+                            id: 'ProductGuid',
+                            url: 'Product/GetProductDetailByGuid?baseguid=' + item.value
+                        };
+
+                        
+                    }
+                }
+            });
+        }
+    });
+
     // buttons
     $("#createButton").jqxLinkButton();
     $("#setupButton").jqxLinkButton();
@@ -424,6 +500,15 @@
         if (!isOpen) {
             $("#jqxComboBox_products_deliever").jqxComboBox('selectIndex', -1);
             $('#customWindow_deliever').jqxWindow('open');
+        }
+    });
+
+    // package button click
+    $("#printButton").on('click', function () {
+        var isOpen = $('#customWindow_print').jqxWindow('isOpen');
+        if (!isOpen) {
+            $("#jqxComboBox_products_print").jqxComboBox('selectIndex', -1);
+            $('#customWindow_print').jqxWindow('open');
         }
     });
 

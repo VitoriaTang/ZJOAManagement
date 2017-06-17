@@ -207,6 +207,9 @@
   <data name="CHOOSE_PRODUCT_DESTINATION" xml:space="preserve">
     <value>收货地址：</value>
   </data>
+  <data name="CHOOSE_PRODUCT_DETAILS" xml:space="preserve">
+    <value>请选择需要查看的产品：</value>
+  </data>
   <data name="CHOOSE_PRODUCT_FIX" xml:space="preserve">
     <value>选择要修复的产品：</value>
   </data>
@@ -215,6 +218,12 @@
   </data>
   <data name="CHOOSE_PRODUCT_PACKAGE" xml:space="preserve">
     <value>选择要装箱的产品：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_PRINT" xml:space="preserve">
+    <value>打印预览</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_PRINT_TEMPLATE" xml:space="preserve">
+    <value>请选择打印模板：</value>
   </data>
   <data name="CHOOSE_PRODUCT_RECEIVER" xml:space="preserve">
     <value>收货人姓名：</value>
@@ -368,6 +377,9 @@
   </data>
   <data name="PRODUCT_DESCRIPTION" xml:space="preserve">
     <value>描述</value>
+  </data>
+  <data name="PRODUCT_DETAILS" xml:space="preserve">
+    <value>产品详情</value>
   </data>
   <data name="PRODUCT_DETAIL_LIST" xml:space="preserve">
     <value>产品明细</value>
