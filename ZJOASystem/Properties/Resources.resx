@@ -195,14 +195,38 @@
   <data name="CHOOSE_PRODUCT_BATCH" xml:space="preserve">
     <value>请输入产品批号：</value>
   </data>
+  <data name="CHOOSE_PRODUCT_DELIEVER" xml:space="preserve">
+    <value>选择要发货的产品：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_DEPARTURE" xml:space="preserve">
+    <value>发货地址：</value>
+  </data>
   <data name="CHOOSE_PRODUCT_DESCRIPTION" xml:space="preserve">
     <value>请输入产品描述信息（非必需）：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_DESTINATION" xml:space="preserve">
+    <value>收货地址：</value>
   </data>
   <data name="CHOOSE_PRODUCT_FIX" xml:space="preserve">
     <value>选择要修复的产品：</value>
   </data>
   <data name="CHOOSE_PRODUCT_NAME" xml:space="preserve">
     <value>请输入产品名称：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_PACKAGE" xml:space="preserve">
+    <value>选择要装箱的产品：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_RECEIVER" xml:space="preserve">
+    <value>收货人姓名：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_RECEIVERTELEPHONE" xml:space="preserve">
+    <value>收货人联系方式：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_SENDER" xml:space="preserve">
+    <value>发货人姓名：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_SENDERTELEPHONE" xml:space="preserve">
+    <value>发货人联系方式：</value>
   </data>
   <data name="CHOOSE_PRODUCT_SERIAL" xml:space="preserve">
     <value>请输入产品标识码：</value>
@@ -212,6 +236,9 @@
   </data>
   <data name="CHOOSE_PRODUCT_TEST" xml:space="preserve">
     <value>选择要测试的产品：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_TRACKNUMBER" xml:space="preserve">
+    <value>货运单号：</value>
   </data>
   <data name="CHOOSE_PRODUCT_YEARNUMBER" xml:space="preserve">
     <value>请选择产品年份：</value>
@@ -349,7 +376,7 @@
     <value>装箱</value>
   </data>
   <data name="PRODUCT_PRINT" xml:space="preserve">
-    <value>打印产品</value>
+    <value>查看产品并打印</value>
   </data>
   <data name="PRODUCT_SETUP" xml:space="preserve">
     <value>组装</value>

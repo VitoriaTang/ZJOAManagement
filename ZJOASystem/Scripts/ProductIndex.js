@@ -86,12 +86,42 @@
         url: 'Product/GetTopProducts?status=2'
     };
 
+    var toplist_package =
+    {
+        dataType: "json",
+        dataFields: [
+            { name: 'Number', type: 'string' },
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'string' },
+            { name: 'Status', type: 'string' },
+            { name: 'ProductGuid', type: 'string' }
+        ],
+        id: 'ProductGuid',
+        url: 'Product/GetTopProducts?status=3'
+    };
+
+    var toplist_deliever =
+    {
+        dataType: "json",
+        dataFields: [
+            { name: 'Number', type: 'string' },
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'string' },
+            { name: 'Status', type: 'string' },
+            { name: 'ProductGuid', type: 'string' }
+        ],
+        id: 'ProductGuid',
+        url: 'Product/GetTopProducts?status=5'
+    };
+
     var dataAdapterlist = new $.jqx.dataAdapter(sourcelist);
     var dataAdapterToplist_setup = new $.jqx.dataAdapter(toplist_setup);
     var dataAdapter = new $.jqx.dataAdapter(source);
     var dataAdapter_employee = new $.jqx.dataAdapter(source_employees);
     var dataAdapterToplist_test = new $.jqx.dataAdapter(toplist_test);
     var dataAdapterToplist_fix = new $.jqx.dataAdapter(toplist_fix);
+    var dataAdapterToplist_package = new $.jqx.dataAdapter(toplist_package);
+    var dataAdapterToplist_deliever = new $.jqx.dataAdapter(toplist_deliever);
 
 
     // Create window
@@ -283,6 +313,57 @@
 
         }
     });
+
+    $('#customWindow_package').jqxWindow({
+        width: 420,
+        height: 290,
+        resizable: true,
+        autoOpen: false,
+        okButton: $('#okButton_package'),
+        cancelButton: $('#closeButton_package'),
+        position: { x: 280, y: 190 },
+        initContent: function () {
+            $('#closeButton_package').jqxButton({ width: '80px' });
+            $('#okButton_package').jqxButton({ width: '80px' });
+
+            $("#jqxComboBox_products_package").jqxComboBox(
+                {
+                    displayMember: "Name", valueMember: "ProductGuid",
+                    source: dataAdapterToplist_package, width: '150px', height: '25px'
+                });
+            // Create a jqxListBox
+            $("#listBoxA_package").jqxListBox({
+                source: dataAdapter_employee, width: 200, height: 90, displayMember: "Name", valueMember: "Encode", multiple: true, itemHeight: 18
+            });
+
+        }
+    });
+
+    $('#customWindow_deliever').jqxWindow({
+        width: 420,
+        height: 450,
+        resizable: true,
+        autoOpen: false,
+        okButton: $('#okButton_deliever'),
+        cancelButton: $('#closeButton_deliever'),
+        position: { x: 280, y: 190 },
+        initContent: function () {
+            $('#closeButton_deliever').jqxButton({ width: '80px' });
+            $('#okButton_deliever').jqxButton({ width: '80px' });
+
+            $("#jqxComboBox_products_deliever").jqxComboBox(
+                {
+                    displayMember: "Name", valueMember: "ProductGuid",
+                    source: dataAdapterToplist_deliever, width: '150px', height: '25px'
+                });
+            // Create a jqxListBox
+            $("#listBoxA_deliever").jqxListBox({
+                source: dataAdapter_employee, width: 200, height: 90, displayMember: "Name", valueMember: "Encode", multiple: true, itemHeight: 18
+            });
+
+        }
+    });
+
     // buttons
     $("#createButton").jqxLinkButton();
     $("#setupButton").jqxLinkButton();
@@ -328,6 +409,24 @@
         }
     });
 
+    // package button click
+    $("#packageButton").on('click', function () {
+        var isOpen = $('#customWindow_package').jqxWindow('isOpen');
+        if (!isOpen) {
+            $("#jqxComboBox_products_package").jqxComboBox('selectIndex', -1);
+            $('#customWindow_package').jqxWindow('open');
+        }
+    });
+
+    // package button click
+    $("#delieverButton").on('click', function () {
+        var isOpen = $('#customWindow_deliever').jqxWindow('isOpen');
+        if (!isOpen) {
+            $("#jqxComboBox_products_deliever").jqxComboBox('selectIndex', -1);
+            $('#customWindow_deliever').jqxWindow('open');
+        }
+    });
+
     $("#okButton").on('click', function () {
         saveCreate();
     });
@@ -342,6 +441,14 @@
 
     $("#okButton_fix").on('click', function () {
         saveFix();
+    });
+
+    $("#okButton_package").on('click', function () {
+        savePackage();
+    });
+
+    $("#okButton_deliever").on('click', function () {
+        saveDeliever();
     });
 
     // grid
@@ -490,6 +597,69 @@ function saveFix() {
     value += "'ActionEmployees':'" + selection + "'}";
 
     document.getElementById("product_fix").value = value;
+
+    document.searchform.submit();
+}
+
+function savePackage() {
+    var items = $("#listBoxA_package").jqxListBox('getSelectedItems');
+    var selection = "";
+    for (var i = 0; i < items.length; i++) {
+        selection += items[i].value + (i < items.length - 1 ? ", " : "");
+    }
+
+    var selectIndex = $("#jqxComboBox_products_package").jqxComboBox('getSelectedIndex');
+
+    if (selectIndex == null || selectIndex == -1) {
+        return;
+    }
+    var sourceItem = $("#jqxComboBox_products_package").jqxComboBox('source').records[selectIndex];
+
+    var status = 4;
+
+    var value = "{'Number':'" + sourceItem.Number + "',";
+    value += "'ProductGuid':'" + sourceItem.ProductGuid + "',";
+    value += "'Status':5,";
+    value += "'ActionComments':'" + document.getElementById("package_comments").value + "',";
+    value += "'ActionType':5,";
+    value += "'ActionEmployees':'" + selection + "'}";
+
+    document.getElementById("product_package").value = value;
+
+    document.searchform.submit();
+}
+
+function saveDeliever() {
+    var items = $("#listBoxA_deliever").jqxListBox('getSelectedItems');
+    var selection = "";
+    for (var i = 0; i < items.length; i++) {
+        selection += items[i].value + (i < items.length - 1 ? ", " : "");
+    }
+
+    var selectIndex = $("#jqxComboBox_products_deliever").jqxComboBox('getSelectedIndex');
+
+    if (selectIndex == null || selectIndex == -1) {
+        return;
+    }
+    var sourceItem = $("#jqxComboBox_products_deliever").jqxComboBox('source').records[selectIndex];
+
+    var status = 4;
+
+    var value = "{'Number':'" + sourceItem.Number + "',";
+    value += "'ProductGuid':'" + sourceItem.ProductGuid + "',";
+    value += "'Status':6,";
+    value += "'ActionComments':'" + document.getElementById("package_comments").value + "',";
+    value += "'ActionType':6,";
+    value += "'ActionEmployees':'" + selection + "',";
+    value += "'TrackNumber':'" + document.getElementById("input_tracknumber").value + "',";
+    value += "'Sender':'" + document.getElementById("input_sender").value + "',";
+    value += "'SenderTelephone':'" + document.getElementById("input_sendertelephone").value + "',";
+    value += "'Departure':'" + document.getElementById("input_departure").value + "',";
+    value += "'Receiver':'" + document.getElementById("input_receiver").value + "',";
+    value += "'ReceiverTelephone':'" + document.getElementById("input_receivertelephone").value + "',";
+    value += "'Destination':'" + document.getElementById("input_destination").value + "'}";
+
+    document.getElementById("product_deliever").value = value;
 
     document.searchform.submit();
 }

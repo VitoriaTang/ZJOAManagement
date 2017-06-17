@@ -171,6 +171,89 @@
     </div>
 </div>
 
+<div id="customWindow_package">
+    <div id="customWindowHeader_package">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE") </span>
+    </div>
+    <div id="customWindowContent_package" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_PACKAGE")</td>
+                <td><div id="jqxComboBox_products_package"></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_TEST_COMMENTS")</td>
+                <td><div><textarea id="package_comments" style="width:200px;height:50px"></textarea></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_ACTIONERS")</td>
+                <td><div id="listBoxA_package"></div></td>
+            </tr>
+        </table>
+        <br />
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("OK")" id="okButton_package" />
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton_package" />&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+
+
+<div id="customWindow_deliever">
+    <div id="customWindowHeader_deliever">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER") </span>
+    </div>
+    <div id="customWindowContent_deliever" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_DELIEVER")</td>
+                <td><div id="jqxComboBox_products_deliever"></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_TRACKNUMBER")</td>
+                <td><div><input type="text" id="input_tracknumber" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_SENDER")</td>
+                <td><div><input type="text" id="input_sender" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_SENDERTELEPHONE")</td>
+                <td><div><input type="text" id="input_sendertelephone" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_DEPARTURE")</td>
+                <td><div><input type="text" id="input_departure" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_RECEIVER")</td>
+                <td><div><input type="text" id="input_receiver" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_RECEIVERTELEPHONE")</td>
+                <td><div><input type="text" id="input_receivertelephone" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_DESTINATION")</td>
+                <td><div><input type="text" id="input_destination" style="width: 200px;" /></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_TEST_COMMENTS")</td>
+                <td><div><textarea id="deliever_comments" style="width:200px;height:50px"></textarea></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_ACTIONERS")</td>
+                <td><div id="listBoxA_deliever"></div></td>
+            </tr>
+        </table>
+        <br />
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("OK")" id="okButton_deliever" />
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton_deliever" />&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+
 <form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index", new {index="1" })" method="post">
     <div class="input-group">
         <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />
@@ -182,6 +265,8 @@
         @Html.Hidden("product_setup", ViewData["product_setup"], new { id = "product_setup" })
         @Html.Hidden("product_test", ViewData["product_test"], new { id = "product_test" })
         @Html.Hidden("product_fix", ViewData["product_fix"], new { id = "product_fix" })
+        @Html.Hidden("product_package", ViewData["product_package"], new { id = "product_package" })
+        @Html.Hidden("product_deliever", ViewData["product_deliever"], new { id = "product_deliever" })
     </div>
 </form>
 <div id="jqxgrid">

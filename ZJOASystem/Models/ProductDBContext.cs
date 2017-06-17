@@ -95,8 +95,8 @@ namespace ZJOASystem.Models
 
         public static string DELETEADDITION_SQL = @"DELETE FROM ProductAdditions WHERE ProductGuid='{0}'";
         public static string INSERTADDITION_SQL = @"INSERT INTO ProductAdditions(AdditionGuid, TrackNumber, Sender, Receiver, 
-            SenderTelephone, ReceiverTelephone, Departure, Destination, Comments, ProductGuid) 
-            VALUES ('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}', '{7}','{8}','{9}')";
+            SenderTelephone, ReceiverTelephone, Departure, Destination, ProductGuid) 
+            VALUES ('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}', '{7}','{8}')";
         public ProductDBContext()
             : base("name=DefaultConnection")
         {
@@ -381,13 +381,10 @@ namespace ZJOASystem.Models
 
         public void SaveProductAddition(ProductAddition additionInfo)
         {
-            string sqlcmd = string.Format(DELETE_PRODUCTACTIONS, additionInfo.ProductGuid);
-            this.Database.ExecuteSqlCommand(sqlcmd);
-
-            sqlcmd = string.Format(INSERTADDITION_SQL, 
-                Guid.NewGuid(), additionInfo.TrackNumber, additionInfo.Sender, additionInfo.Receiver,
+             string sqlcmd = string.Format(INSERTADDITION_SQL, 
+                additionInfo.AdditionGuid, additionInfo.TrackNumber, additionInfo.Sender, additionInfo.Receiver,
                 additionInfo.SenderTelephone, additionInfo.ReceiverTelephone, additionInfo.Departure, additionInfo.Destination, 
-                additionInfo.Comments, additionInfo.ProductGuid);
+                 additionInfo.ProductGuid);
             this.Database.ExecuteSqlCommand(sqlcmd);
         }
 

@@ -345,7 +345,6 @@ namespace ZJOASystem.Models
 
     public class ProductAddition
     {
-        public int Id { get; set; }
         public Guid AdditionGuid { get; set; }
         public string TrackNumber { get; set; }
         public string Sender { get; set; }
@@ -354,21 +353,14 @@ namespace ZJOASystem.Models
         public string ReceiverTelephone { get; set; }
         public string Departure { get; set; }
         public string Destination { get; set; }
-        public string Comments { get; set; }
         public Guid ProductGuid { get; set; }
     }
     public class InnerProductDelieverInfo
     {
-        public string Name { get; set; }
-        public string Encode { get; set; }
+        public string Number { get; set; }
         public ProductStatus Status { get; set; }
         public string ActionEmployee { get; set; }
-        public DateTime ActionTime { get; set; }
         public string ActionComments { get; set; }
-        
-        public Guid AdditionGuid { get; set; }
-        public Guid ProductGuid { get; set; }
-        public Guid ParentGuid { get; set; }
         
         public string TrackNumber { get; set; }
         public string Sender { get; set; }
@@ -377,12 +369,22 @@ namespace ZJOASystem.Models
         public string ReceiverTelephone { get; set; }
         public string Departure { get; set; }
         public string Destination { get; set; }
-        public string Comments { get; set; }
-        public string NameEncode
+        public Guid ProductGuid { get; set; }
+
+        private List<string> _operators = null;
+        public List<string> Operators
         {
             get
             {
-                return string.Join("_", Name, Encode);
+                if (_operators == null)
+                {
+                    _operators = new List<string>();
+                }
+                return _operators;
+            }
+            set
+            {
+                _operators = value;
             }
         }
     }

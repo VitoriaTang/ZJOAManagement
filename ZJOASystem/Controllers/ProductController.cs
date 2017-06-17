@@ -214,49 +214,69 @@ namespace ZJOASystem.Controllers
                     this.db.SaveProductList(innerObj.ProductGuid, innerObj.GetChildrenGuidList(), innerObj.GetOperators(), ProductStatus.Setup);
                 }
 
-                string testValue = "";
+                SaveProjectStatus("product_test");
+                
+                SaveProjectStatus("product_fix");
+                
+                SaveProjectStatus("product_package");
+
+                string delieverValue = "";
                 try
                 {
-                    testValue = Request.Form.GetValues("product_test")[0];
+                    delieverValue = Request.Form.GetValues("product_deliever")[0];
                 }
                 catch
                 {
-                    testValue = string.Empty;
+                    delieverValue = string.Empty;
                 }
 
-                if (!string.IsNullOrEmpty(testValue))
+                if (!string.IsNullOrEmpty(delieverValue))
                 {
                     JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                    InnerProductAction innerObj = Serializer.Deserialize<InnerProductAction>(testValue);
+                    InnerProductDelieverInfo innerObj = Serializer.Deserialize<InnerProductDelieverInfo>(delieverValue);
 
+                    this.db.SaveProductStatus(innerObj.Number,innerObj.ProductGuid, innerObj.Status, 
+                        ActionType.Deliever, innerObj.Operators, innerObj.ActionComments );
 
-                    this.db.SaveProductStatus(innerObj.Number,innerObj.ProductGuid, 
-                        innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
-                }
-
-                string fixValue = "";
-                try
-                {
-                    fixValue = Request.Form.GetValues("product_fix")[0];
-                }
-                catch
-                {
-                    fixValue = string.Empty;
-                }
-
-                if (!string.IsNullOrEmpty(fixValue))
-                {
-                    JavaScriptSerializer Serializer = new JavaScriptSerializer();
-                    InnerProductAction innerObj = Serializer.Deserialize<InnerProductAction>(fixValue);
-
-                    this.db.SaveProductStatus(innerObj.Number, innerObj.ProductGuid,
-                        innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
+                    ProductAddition addition = new ProductAddition ();
+                    addition.AdditionGuid = Guid.NewGuid();
+                    addition.Departure = innerObj.Departure;
+                    addition.Destination = innerObj.Destination;
+                    addition.ProductGuid = innerObj.ProductGuid;
+                    addition.Receiver = innerObj.Receiver;
+                    addition.ReceiverTelephone = innerObj.ReceiverTelephone;
+                    addition.Sender = innerObj.Sender;
+                    addition.SenderTelephone = innerObj.SenderTelephone;
+                    addition.TrackNumber = innerObj.TrackNumber;
+                    this.db.SaveProductAddition(addition);
                 }
                 return View();
             }
             else
             {
                 return Redirect("../Account/Login");
+            }
+        }
+
+        private void SaveProjectStatus(string requestKey)
+        {
+            string value = "";
+            try
+            {
+                value = Request.Form.GetValues(requestKey)[0];
+            }
+            catch
+            {
+                value = string.Empty;
+            }
+
+            if (!string.IsNullOrEmpty(value))
+            {
+                JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                InnerProductAction innerObj = Serializer.Deserialize<InnerProductAction>(value);
+
+                this.db.SaveProductStatus(innerObj.Number, innerObj.ProductGuid,
+                    innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
             }
         }
         #endregion

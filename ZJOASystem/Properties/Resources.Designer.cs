@@ -286,11 +286,38 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 选择要发货的产品：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_DELIEVER {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_DELIEVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 发货地址：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_DEPARTURE {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_DEPARTURE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 请输入产品描述信息（非必需）：.
         /// </summary>
         internal static string CHOOSE_PRODUCT_DESCRIPTION {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCT_DESCRIPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 收货地址：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_DESTINATION {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_DESTINATION", resourceCulture);
             }
         }
         
@@ -309,6 +336,51 @@ namespace ZJOASystem.Properties {
         internal static string CHOOSE_PRODUCT_NAME {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCT_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择要装箱的产品：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_PACKAGE {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_PACKAGE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 收货人姓名：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_RECEIVER {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_RECEIVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 收货人联系方式：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_RECEIVERTELEPHONE {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_RECEIVERTELEPHONE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 发货人姓名：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_SENDER {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_SENDER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 发货人联系方式：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_SENDERTELEPHONE {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_SENDERTELEPHONE", resourceCulture);
             }
         }
         
@@ -336,6 +408,15 @@ namespace ZJOASystem.Properties {
         internal static string CHOOSE_PRODUCT_TEST {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCT_TEST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 货运单号：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_TRACKNUMBER {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_TRACKNUMBER", resourceCulture);
             }
         }
         
@@ -745,7 +826,7 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 打印产品.
+        ///   Looks up a localized string similar to 查看产品并打印.
         /// </summary>
         internal static string PRODUCT_PRINT {
             get {
