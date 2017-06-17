@@ -295,6 +295,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 选择要修复的产品：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_FIX {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_FIX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 请输入产品名称：.
         /// </summary>
         internal static string CHOOSE_PRODUCT_NAME {

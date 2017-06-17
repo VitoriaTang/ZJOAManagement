@@ -233,6 +233,25 @@ namespace ZJOASystem.Controllers
                     this.db.SaveProductStatus(innerObj.Number,innerObj.ProductGuid, 
                         innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
                 }
+
+                string fixValue = "";
+                try
+                {
+                    fixValue = Request.Form.GetValues("product_fix")[0];
+                }
+                catch
+                {
+                    fixValue = string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(fixValue))
+                {
+                    JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                    InnerProductAction innerObj = Serializer.Deserialize<InnerProductAction>(fixValue);
+
+                    this.db.SaveProductStatus(innerObj.Number, innerObj.ProductGuid,
+                        innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
+                }
                 return View();
             }
             else

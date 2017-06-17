@@ -198,6 +198,9 @@
   <data name="CHOOSE_PRODUCT_DESCRIPTION" xml:space="preserve">
     <value>请输入产品描述信息（非必需）：</value>
   </data>
+  <data name="CHOOSE_PRODUCT_FIX" xml:space="preserve">
+    <value>选择要修复的产品：</value>
+  </data>
   <data name="CHOOSE_PRODUCT_NAME" xml:space="preserve">
     <value>请输入产品名称：</value>
   </data>

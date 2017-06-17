@@ -144,6 +144,33 @@
     </div>
 </div>
 
+<div id="customWindow_fix">
+    <div id="customWindowHeader_fix">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_FIX") </span>
+    </div>
+    <div id="customWindowContent_fix" style="overflow: hidden">
+        <table>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_FIX")</td>
+                <td><div id="jqxComboBox_products_fix"></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_TEST_COMMENTS")</td>
+                <td><div><textarea id="fix_comments" style="width:200px;height:50px"></textarea></div></td>
+            </tr>
+            <tr>
+                <td>@ZJOASystem.Controllers.ResourceReader.GetString("CHOOSE_PRODUCT_ACTIONERS")</td>
+                <td><div id="listBoxA_fix"></div></td>
+            </tr>
+        </table>
+        <br />
+        <div style="float: right">
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("OK")" id="okButton_fix" />
+            <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton_fix" />&nbsp;&nbsp;
+        </div>
+    </div>
+</div>
+
 <form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index", new {index="1" })" method="post">
     <div class="input-group">
         <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />
@@ -154,6 +181,7 @@
         @Html.Hidden("product_create", ViewData["product_create"], new { id = "product_create" })
         @Html.Hidden("product_setup", ViewData["product_setup"], new { id = "product_setup" })
         @Html.Hidden("product_test", ViewData["product_test"], new { id = "product_test" })
+        @Html.Hidden("product_fix", ViewData["product_fix"], new { id = "product_fix" })
     </div>
 </form>
 <div id="jqxgrid">

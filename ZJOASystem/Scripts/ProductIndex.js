@@ -72,11 +72,26 @@
         url: 'Product/GetTopProducts?status=1,4'
     };
 
+    var toplist_fix =
+    {
+        dataType: "json",
+        dataFields: [
+            { name: 'Number', type: 'string' },
+            { name: 'Name', type: 'string' },
+            { name: 'Description', type: 'string' },
+            { name: 'Status', type: 'string' },
+            { name: 'ProductGuid', type: 'string' }
+        ],
+        id: 'ProductGuid',
+        url: 'Product/GetTopProducts?status=2'
+    };
+
     var dataAdapterlist = new $.jqx.dataAdapter(sourcelist);
     var dataAdapterToplist_setup = new $.jqx.dataAdapter(toplist_setup);
     var dataAdapter = new $.jqx.dataAdapter(source);
     var dataAdapter_employee = new $.jqx.dataAdapter(source_employees);
     var dataAdapterToplist_test = new $.jqx.dataAdapter(toplist_test);
+    var dataAdapterToplist_fix = new $.jqx.dataAdapter(toplist_fix);
 
 
     // Create window
@@ -243,6 +258,31 @@
             $("#jqxRadioButton_unqualified").jqxRadioButton({ width: 250, height: 25 });
         }
     });
+
+    $('#customWindow_fix').jqxWindow({
+        width: 420,
+        height: 290,
+        resizable: true,
+        autoOpen: false,
+        okButton: $('#okButton_fix'),
+        cancelButton: $('#closeButton_fix'),
+        position: { x: 280, y: 190 },
+        initContent: function () {
+            $('#closeButton_fix').jqxButton({ width: '80px' });
+            $('#okButton_fix').jqxButton({ width: '80px' });
+
+            $("#jqxComboBox_products_fix").jqxComboBox(
+                {
+                    displayMember: "Name", valueMember: "ProductGuid",
+                    source: dataAdapterToplist_fix, width: '150px', height: '25px'
+                });
+            // Create a jqxListBox
+            $("#listBoxA_fix").jqxListBox({
+                source: dataAdapter_employee, width: 200, height: 90, displayMember: "Name", valueMember: "Encode", multiple: true, itemHeight: 18
+            });
+
+        }
+    });
     // buttons
     $("#createButton").jqxLinkButton();
     $("#setupButton").jqxLinkButton();
@@ -279,6 +319,15 @@
         }
     });
 
+    // fix button click
+    $("#fixButton").on('click', function () {
+        var isOpen = $('#customWindow_fix').jqxWindow('isOpen');
+        if (!isOpen) {
+            $("#jqxComboBox_products_fix").jqxComboBox('selectIndex', -1);
+            $('#customWindow_fix').jqxWindow('open');
+        }
+    });
+
     $("#okButton").on('click', function () {
         saveCreate();
     });
@@ -289,6 +338,10 @@
 
     $("#okButton_test").on('click', function () {
         saveTest();
+    });
+
+    $("#okButton_fix").on('click', function () {
+        saveFix();
     });
 
     // grid
@@ -400,7 +453,7 @@ function saveTest() {
     if (!qualifiedChecked) {
         status = 2;
     }
-    debugger;
+
     var value = "{'Number':'" + sourceItem.Number + "',";
     value += "'ProductGuid':'" + sourceItem.ProductGuid + "',";
     value += "'Status':" + status + ",";
@@ -409,6 +462,34 @@ function saveTest() {
     value += "'ActionEmployees':'" + selection + "'}";
 
     document.getElementById("product_test").value = value;
+
+    document.searchform.submit();
+}
+
+function saveFix() {
+    var items = $("#listBoxA_fix").jqxListBox('getSelectedItems');
+    var selection = "";
+    for (var i = 0; i < items.length; i++) {
+        selection += items[i].value + (i < items.length - 1 ? ", " : "");
+    }
+
+    var selectIndex = $("#jqxComboBox_products_fix").jqxComboBox('getSelectedIndex');
+
+    if (selectIndex == null || selectIndex == -1) {
+        return;
+    }
+    var sourceItem = $("#jqxComboBox_products_fix").jqxComboBox('source').records[selectIndex];
+
+    var status = 4;
+    
+    var value = "{'Number':'" + sourceItem.Number + "',";
+    value += "'ProductGuid':'" + sourceItem.ProductGuid + "',";
+    value += "'Status':4,";
+    value += "'ActionComments':'" + document.getElementById("fix_comments").value + "',";
+    value += "'ActionType':4,";
+    value += "'ActionEmployees':'" + selection + "'}";
+
+    document.getElementById("product_fix").value = value;
 
     document.searchform.submit();
 }
