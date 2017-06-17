@@ -34,6 +34,9 @@ namespace ZJOASystem
                         "~/Scripts/zjoa.js",
                         "~/Scripts/custom.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/product/index").Include(
+                        "~/Scripts/ProductIndex.js"));
+
 
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/treegrid").Include(
                         "~/Content/jqwidgets/jqxcore.js",
@@ -69,7 +72,8 @@ namespace ZJOASystem
                         "~/Content/jqwidgets/jqxscrollbar.js",
                         "~/Content/jqwidgets/jqxcombobox.js",
                         "~/Content/jqwidgets/jqxdatetimeinput.js",
-                        "~/Content/jqwidgets/jqxcalendar.js"));
+                        "~/Content/jqwidgets/jqxcalendar.js",
+                        "~/Content/jqwidgets/jqxradiobutton.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/grid").Include(
                         "~/Content/jqwidgets/jqxcore.js",

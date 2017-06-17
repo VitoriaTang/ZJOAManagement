@@ -19,8 +19,26 @@ namespace ZJOASystem.Models
         public static string DELETEPRODUCTBASES_SQL = "DELETE FROM productbases WHERE Number='{0}';";
         public static string INSERTPRODUCTBASES_SQL = " INSERT INTO productbases(Number,Name,ParentNumber) VALUES ('{0}','{1}','{2}');";
 
+        public static string GETNUMBER_BYPARENT_SQL = "SELECT Number FROM productbases WHERE ParentNumber='{0}'";
+
         public static string GETALLPRODUCTLIST_SQL = @"SELECT Id, Name, Description, ProductBaseNumber,YearNumber, BatchNumber, SerialNumber, Status,ProductGuid FROM Products
             WHERE Status<{0} ";
+
+        public static string GET_TOP_PRODUCTLIST_SQL = @"SELECT a.Id, a.Name, a.Description, a.ProductBaseNumber,
+            a.YearNumber, a.BatchNumber, a.SerialNumber, a.Status, a.ProductGuid FROM products a 
+            LEFT JOIN productbases b ON a.ProductBaseNumber=b.Number 
+            WHERE a.Status<{0} AND ( b.ParentNumber is null OR b.ParentNumber='0')";
+
+        public static string GET_PRODUCTLIST_BYPARENTBASENUMBER_SQL = @"SELECT a.Id, a.Name, a.Description, a.ProductBaseNumber,
+            a.YearNumber, a.BatchNumber, a.SerialNumber, a.Status, a.ProductGuid FROM products a 
+            LEFT JOIN productbases b ON a.ProductBaseNumber=b.Number 
+            WHERE a.Status<{0} AND b.ParentNumber ='{1}'";
+
+        public static string GET_PRODUCTLIST_BYNUMBER_SQL = @"SELECT Id, a.Name, a.Description, a.ProductBaseNumber,
+            a.YearNumber, a.BatchNumber, a.SerialNumber, a.Status, a.ProductGuid FROM products a 
+            WHERE a.Status<{0} AND a.ProductBaseNumber ='{1}'";
+
+        public static string GET_PRODUCTBASE_TOP_SQL = @"SELECT Number FROM productbases WHERE ParentNumber ='{0}'";
 
         public static string GETPRODUCT_PARENT_SQL = "SELECT ParentGuid FROM productlists WHERE ProductGuid='{0}'";
         public static string INSERT_PRODUCT_SQL = @"INSERT INTO Products 
@@ -429,6 +447,144 @@ namespace ZJOASystem.Models
             
         }
 
-        
+
+
+        public void SaveProductList(Guid topGuid, List<Guid> childList, List<string> operators, ProductStatus status)
+        {
+            List<KeyValuePair<Guid, Guid>> allResult = new List<KeyValuePair<Guid, Guid>>();
+            string sql = string.Format("SELECT ProductBaseNumber FROM products WHERE ProductGuid='{0}'", topGuid);
+            List<string> result = this.Database.SqlQuery<string>(sql).ToList<string>();
+            string topbaseId = null;
+            if (result != null && result.Count > 0)
+            {
+                topbaseId = result[0];
+            }
+
+            List<KeyValuePair<string, Guid>> baseIds = new List<KeyValuePair<string,Guid>> ();
+            foreach (Guid item in childList)
+            {
+                sql = string.Format("SELECT ProductBaseNumber FROM products WHERE ProductGuid='{0}'", item);
+                result = this.Database.SqlQuery<string>(sql).ToList<string>();
+
+                if (result != null && result.Count > 0)
+                {
+                    baseIds.Add( new KeyValuePair<string,Guid>(result[0], item));
+                }
+            }
+
+
+            ParseChildren(topbaseId, topGuid,ref allResult, ref baseIds);
+
+            if (allResult != null && allResult.Count > 0)
+            {
+                foreach (KeyValuePair<Guid, Guid> item in allResult)
+                {
+
+                    sql = string.Format(INSERT_PRODUCTLIST_SQL, item.Key, item.Value);
+                    this.Database.ExecuteSqlCommand(sql);
+
+                    sql = string.Format("UPDATE products SET Status={0} WHERE ProductGuid='{1}'", Convert.ToInt32(status), item.Value);
+                    this.Database.ExecuteSqlCommand(sql);
+
+                    sql = string.Format("UPDATE products SET Status={0} WHERE ProductGuid='{1}'", Convert.ToInt32(status), item.Key);
+                    this.Database.ExecuteSqlCommand(sql);
+                }
+
+                sql = string.Format("SELECT Concat(ProductBaseNumber,YearNumber,BatchNumber,SerialNumber) as Number FROM products WHERE ProductGuid='{0}'", topGuid);
+                List<string> numbers = this.Database.SqlQuery<string>(sql).ToList<string>();
+
+                Guid newActGuid = Guid.NewGuid();
+                sql = string.Format(INSERT_ACTION_SQL,
+                       numbers[0], newActGuid, Convert.ToInt32(ActionType.Setup), 
+                       DateTime.Now, "");
+                this.Database.ExecuteSqlCommand(sql);
+
+                foreach (string opt in operators)
+                {
+                    string optValue = opt.Trim();
+
+                    if (!string.IsNullOrEmpty(optValue))
+                    {
+                        sql = string.Format(INSERT_ACTION_OPERATOR_SQL,
+                            newActGuid, optValue);
+                        this.Database.ExecuteSqlCommand(sql);
+                    }
+                }
+            }
+
+
+        }
+
+        private void ParseChildren(string parentNumber, Guid parentGuid, ref  List<KeyValuePair<Guid, Guid>> result,
+            ref List<KeyValuePair<string, Guid>> baseIds)
+        {
+            string sql = string.Format(GETNUMBER_BYPARENT_SQL, parentNumber);
+            List<string> childBaseIds = this.Database.SqlQuery<string>(sql).ToList<string>();
+
+            if (childBaseIds == null || childBaseIds.Count == 0)
+            {
+                return;
+            }
+            foreach (KeyValuePair<string, Guid> item in baseIds)
+            {
+                bool exist = false;
+
+                foreach (string childId in childBaseIds)
+                {
+                    if (item.Key.Equals(childId, StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        exist = true;
+                        break;
+                    }
+                }
+
+                if (exist)
+                {
+                    result.Add(new KeyValuePair<Guid, Guid>(item.Value, parentGuid));
+                }
+
+                ParseChildren(item.Key, item.Value, ref result, ref baseIds);
+            }
+
+
+        }
+
+        public void SaveProductStatus(string number, Guid guid, ProductStatus productStatus, ActionType actionType, List<string> operators, string actionComments)
+        {
+            UpdateProductStatus(guid, productStatus);
+
+            Guid actionGuid = Guid.NewGuid();
+            string sql = string.Format(INSERT_ACTION_SQL, number, actionGuid,
+                Convert.ToInt32(actionType), DateTime.Now, actionComments);
+            this.Database.ExecuteSqlCommand(sql);
+
+            if(operators != null && operators.Count > 0){
+                foreach(string oper in operators){
+                   string operValue = oper.Trim();
+
+                   if (!string.IsNullOrEmpty(operValue))
+                   {
+                       sql = string.Format(INSERT_ACTION_OPERATOR_SQL, actionGuid, operValue);
+                       this.Database.ExecuteSqlCommand(sql);
+                   }
+                }
+            }
+        }
+
+        private void UpdateProductStatus(Guid productGuid, ProductStatus status)
+        {
+            string sql = string.Format("UPDATE products SET Status={0} WHERE ProductGuid='{1}'", Convert.ToInt32(status), productGuid);
+            this.Database.ExecuteSqlCommand(sql);
+
+            sql =string.Format( "SELECT ProductGuid FROM productlists WHERE ParentGuid='{0}'", productGuid);
+            List<string> children = this.Database.SqlQuery<string>(sql).ToList<string>();
+            if (children != null && children.Count > 0)
+            {
+                foreach (string childGuid in children)
+                {
+                    UpdateProductStatus(Guid.Parse(childGuid), status);
+                }
+            }
+        }
     }
 }

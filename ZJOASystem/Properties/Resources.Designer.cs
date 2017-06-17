@@ -259,6 +259,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 选择要加入组装的产品.
+        /// </summary>
+        internal static string CHOOSE_CHILD_PRODUCT_SETUP {
+            get {
+                return ResourceManager.GetString("CHOOSE_CHILD_PRODUCT_SETUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 请从列表中选择操作员工（可多选）：.
         /// </summary>
         internal static string CHOOSE_PRODUCT_ACTIONERS {
@@ -304,11 +313,20 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 选择要组装的产品.
+        ///   Looks up a localized string similar to 选择主产品：.
         /// </summary>
         internal static string CHOOSE_PRODUCT_SETUP {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCT_SETUP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 选择要测试的产品：.
+        /// </summary>
+        internal static string CHOOSE_PRODUCT_TEST {
+            get {
+                return ResourceManager.GetString("CHOOSE_PRODUCT_TEST", resourceCulture);
             }
         }
         
@@ -327,6 +345,24 @@ namespace ZJOASystem.Properties {
         internal static string CHOOSE_PRODUCTBASE_LIST {
             get {
                 return ResourceManager.GetString("CHOOSE_PRODUCTBASE_LIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 备注：.
+        /// </summary>
+        internal static string CHOOSE_TEST_COMMENTS {
+            get {
+                return ResourceManager.GetString("CHOOSE_TEST_COMMENTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 检查结果：.
+        /// </summary>
+        internal static string CHOOSE_TEST_STATUS {
+            get {
+                return ResourceManager.GetString("CHOOSE_TEST_STATUS", resourceCulture);
             }
         }
         
@@ -804,6 +840,15 @@ namespace ZJOASystem.Properties {
         internal static string STATUS_QUALIFIED {
             get {
                 return ResourceManager.GetString("STATUS_QUALIFIED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 已组装.
+        /// </summary>
+        internal static string STATUS_SETUP {
+            get {
+                return ResourceManager.GetString("STATUS_SETUP", resourceCulture);
             }
         }
         

@@ -194,6 +194,45 @@ namespace ZJOASystem.Controllers
 
                     this.db.SaveProduct(newItem);
                 }
+
+                string setupValue = "";
+                try
+                {
+                    setupValue = Request.Form.GetValues("product_setup")[0];
+                }
+                catch
+                {
+                    setupValue = string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(setupValue))
+                {
+                    JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                    InnerComplexProduct innerObj = Serializer.Deserialize<InnerComplexProduct>(setupValue);
+
+
+                    this.db.SaveProductList(innerObj.ProductGuid, innerObj.GetChildrenGuidList(), innerObj.GetOperators(), ProductStatus.Setup);
+                }
+
+                string testValue = "";
+                try
+                {
+                    testValue = Request.Form.GetValues("product_test")[0];
+                }
+                catch
+                {
+                    testValue = string.Empty;
+                }
+
+                if (!string.IsNullOrEmpty(testValue))
+                {
+                    JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                    InnerProductAction innerObj = Serializer.Deserialize<InnerProductAction>(testValue);
+
+
+                    this.db.SaveProductStatus(innerObj.Number,innerObj.ProductGuid, 
+                        innerObj.Status, innerObj.ActionType, innerObj.GetOperators(), innerObj.ActionComments);
+                }
                 return View();
             }
             else
@@ -218,6 +257,121 @@ namespace ZJOASystem.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
        
+        #endregion
+
+        #region Setup
+        public JsonResult GetTopProducts()
+        {
+            List<string> productStatus = null;
+            try
+            {
+               string  productStatusText = Request.QueryString["status"];
+               if (!string.IsNullOrEmpty(productStatusText))
+               {
+                   productStatus = new List<string>(productStatusText.Split(','));
+               }
+            }
+            catch
+            {
+                productStatus = null;
+            }
+           
+
+            string sqlQuery = string.Format(ProductDBContext.GET_TOP_PRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled));
+            if (productStatus != null && productStatus.Count > 0)
+            {
+                StringBuilder statusSqlBuilder = new StringBuilder();
+                foreach (string status in productStatus)
+                {
+                    if (statusSqlBuilder.Length > 0)
+                    {
+                        statusSqlBuilder.Append(" OR ");
+                    }
+                    statusSqlBuilder.Append("a.Status=" + status);
+                }
+                if (statusSqlBuilder.Length > 0)
+                {
+                    sqlQuery += string.Format("AND ({0}) ", statusSqlBuilder.ToString());
+                }
+            }
+
+            List<Product> result = this.db.Database.SqlQuery<Product>(sqlQuery).ToList<Product>();
+
+            List<InnerProduct> resultList = new List<InnerProduct>();
+
+            foreach (Product item in result)
+            {
+                InnerProduct innerObj = new InnerProduct(
+                    string.Format("{0}{1}{2}{3}", item.ProductBaseNumber, item.YearNumber, item.BatchNumber, item.SerialNumber),
+                    item.Name, item.Description, item.Status, item.ProductGuid, Guid.Empty);
+                resultList.Add(innerObj);
+            }
+
+            var productList = (from item in resultList
+                               select new
+                               {
+                                   item.Number,
+                                   item.Name,
+                                   item.Description,
+                                   item.StatusText,
+                                   item.ProductGuid
+                               });
+            return Json(productList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetProductsByBaseNumber()
+        {
+            string productBaseNumber = Request.QueryString["baseid"];
+            if (!string.IsNullOrEmpty(productBaseNumber))
+            {
+                productBaseNumber = productBaseNumber.Substring(0, 2);
+            }
+            string productGuid = Request.QueryString["baseguid"];
+
+            if (string.IsNullOrEmpty(productGuid))
+            {
+                return GetTopProducts();
+            }
+            List<InnerProduct> resultList = new List<InnerProduct>();
+
+            GetChildProductsByNumber(productBaseNumber, Guid.Parse(productGuid), ref resultList);
+
+            var productList = (from item in resultList
+                               select new
+                               {
+                                   item.Number,
+                                   item.Name,
+                                   item.Description,
+                                   item.StatusText,
+                                   item.ProductGuid
+                               });
+            return Json(productList, JsonRequestBehavior.AllowGet);
+        }
+
+        private void GetChildProductsByNumber(string baseId, Guid productGuid, ref List<InnerProduct> resultList)
+        {
+            string sqlQuery =string.Format( ProductDBContext.GET_PRODUCTBASE_TOP_SQL, baseId);
+            List<string> result = this.db.Database.SqlQuery<string>(sqlQuery).ToList<string>();
+
+            foreach (string item in result)
+            {
+                sqlQuery = string.Format(ProductDBContext.GET_PRODUCTLIST_BYNUMBER_SQL,
+                    Convert.ToInt32(ProductStatus.Disabled), item);
+                List<Product> productresult = this.db.Database.SqlQuery<Product>(sqlQuery).ToList<Product>();
+
+                foreach (Product pItem in productresult)
+                {
+                    InnerProduct innerObj = new InnerProduct(
+                    string.Format("{0}{1}{2}{3}", pItem.ProductBaseNumber,
+                    pItem.YearNumber, pItem.BatchNumber, pItem.SerialNumber),
+                    pItem.Name, pItem.Description, pItem.Status, pItem.ProductGuid, productGuid);
+                    resultList.Add(innerObj);
+
+                    GetChildProductsByNumber(pItem.ProductBaseNumber,pItem.ProductGuid, ref resultList);
+                }
+                
+            }
+        }
         #endregion
 
 

@@ -158,6 +158,8 @@ namespace ZJOASystem.Models
             {
                 switch (Status)
                 {
+                    case ProductStatus.Setup:
+                        return ResourceReader.GetString("STATUS_SETUP");
                     case ProductStatus.Fixed:
                         return ResourceReader.GetString("STATUS_FIXED");
                     case ProductStatus.Qualified:
@@ -178,6 +180,60 @@ namespace ZJOASystem.Models
         }
     }
 
+    public class InnerProductAction
+    {
+        public Guid ProductGuid { get; set; }
+        public ActionType ActionType { get; set; }
+        public string ActionEmployees { get; set; }
+        public ProductStatus Status { get; set; }
+        public string Number { get; set; }
+        public string ActionComments { get; set; }
+        public List<string> GetOperators()
+        {
+            List<string> result = new List<string>();
+            if (!string.IsNullOrEmpty(ActionEmployees))
+            {
+                string[] items = ActionEmployees.Split(',');
+                foreach (string item in items)
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+    }
+    public class InnerComplexProduct 
+    {
+        public Guid ProductGuid { get; set; }
+        public string ChildItems { get; set; }
+        public string ActionEmployees { get; set; }
+        public List<Guid> GetChildrenGuidList()
+        {
+            List<Guid> result = new List<Guid>();
+            if (!string.IsNullOrEmpty(ChildItems))
+            {
+                string[] items = ChildItems.Split(',');
+                foreach (string item in items)
+                {
+                    result.Add(Guid.Parse(item));
+                }
+            }
+            return result;
+        }
+        public List<string> GetOperators()
+        {
+            List<string> result = new List<string>();
+            if (!string.IsNullOrEmpty(ActionEmployees))
+            {
+                string[] items = ActionEmployees.Split(',');
+                foreach (string item in items)
+                {
+                    result.Add(item);
+                }
+            }
+            return result;
+        }
+    }
     public class InnerProductActions
     {
         public string Name { get; set; }
@@ -246,12 +302,13 @@ namespace ZJOASystem.Models
     public enum ProductStatus
     {
         Unknown = 0,
-        Unqualified = 1,
-        Qualified = 2,
-        Fixed = 3,
-        Packaged = 4,
-        Delievered = 5,
-        Disabled = 6
+        Setup = 1,
+        Unqualified = 2,
+        Qualified = 3,
+        Fixed = 4,
+        Packaged = 5,
+        Delievered = 6,
+        Disabled = 7
         
     }
     public class Action

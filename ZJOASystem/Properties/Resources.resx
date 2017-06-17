@@ -183,6 +183,9 @@
   <data name="CANCELUPLOAD" xml:space="preserve">
     <value>取消上传</value>
   </data>
+  <data name="CHOOSE_CHILD_PRODUCT_SETUP" xml:space="preserve">
+    <value>选择要加入组装的产品</value>
+  </data>
   <data name="CHOOSE_PRODUCTBASE_LIST" xml:space="preserve">
     <value>请选择要制造的产品名类：</value>
   </data>
@@ -202,10 +205,19 @@
     <value>请输入产品标识码：</value>
   </data>
   <data name="CHOOSE_PRODUCT_SETUP" xml:space="preserve">
-    <value>选择要组装的产品</value>
+    <value>选择主产品：</value>
+  </data>
+  <data name="CHOOSE_PRODUCT_TEST" xml:space="preserve">
+    <value>选择要测试的产品：</value>
   </data>
   <data name="CHOOSE_PRODUCT_YEARNUMBER" xml:space="preserve">
     <value>请选择产品年份：</value>
+  </data>
+  <data name="CHOOSE_TEST_COMMENTS" xml:space="preserve">
+    <value>备注：</value>
+  </data>
+  <data name="CHOOSE_TEST_STATUS" xml:space="preserve">
+    <value>检查结果：</value>
   </data>
   <data name="CLOSE" xml:space="preserve">
     <value>关闭</value>
@@ -365,6 +377,9 @@
   </data>
   <data name="STATUS_QUALIFIED" xml:space="preserve">
     <value>检测通过</value>
+  </data>
+  <data name="STATUS_SETUP" xml:space="preserve">
+    <value>已组装</value>
   </data>
   <data name="STATUS_UNQUALIFIED" xml:space="preserve">
     <value>检测未通过</value>
