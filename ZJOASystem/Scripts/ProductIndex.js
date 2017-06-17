@@ -629,6 +629,7 @@ function savePackage() {
     document.searchform.submit();
 }
 
+// save deliever
 function saveDeliever() {
     var items = $("#listBoxA_deliever").jqxListBox('getSelectedItems');
     var selection = "";
