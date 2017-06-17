@@ -1576,17 +1576,7 @@
     <Content Include="Views\Employee\DepartmentDetail.cshtml" />
     <Content Include="Views\Employee\EditDepartment.cshtml" />
     <Content Include="Views\Employee\DepartmentIndex.cshtml" />
-    <Content Include="Views\Shared\_PagerView.cshtml" />
-    <Content Include="Views\Product\Create.cshtml" />
-    <Content Include="Views\Product\Delete.cshtml" />
-    <Content Include="Views\Product\Details.cshtml" />
-    <Content Include="Views\Product\Edit.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
-    <Content Include="Views\Product\Setup.cshtml" />
-    <Content Include="Views\Product\Test.cshtml" />
-    <Content Include="Views\Product\Fix.cshtml" />
-    <Content Include="Views\Product\Package.cshtml" />
-    <Content Include="Views\Product\Deliever.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
   </ItemGroup>
   <ItemGroup>
