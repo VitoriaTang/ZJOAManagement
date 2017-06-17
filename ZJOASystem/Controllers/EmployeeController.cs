@@ -27,90 +27,32 @@ namespace ZJOASystem.Controllers
                 return Redirect("../Account/Login");
             }
         }
-        public ActionResult Index(string searchkey, string index, string sortBy = "Encode", bool decending = false)
+        public ActionResult Index()
         {
             if (Request.IsAuthenticated)
             {
-                if (string.IsNullOrEmpty(index))
-                    index = "1";
-                if (string.IsNullOrEmpty(searchkey))
-                    searchkey = string.Empty;
-                ViewData["hiddensearchkey"] = searchkey;
-
-                List<Employee> totalList = null;
-                switch (sortBy.ToLowerInvariant())
-                {
-                    case "name":
-                        if (!decending)
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderBy(p => p.Name).ToList();
-                            ViewData["namesortorder"] = true;
-                        }
-                        else
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderByDescending(p => p.Name).ToList();
-                            ViewData["namesortorder"] = false;
-                        }
-                        break;
-                    case "encode":
-                        if (!decending)
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderBy(p => p.Encode).ToList();
-                            ViewData["encodesortorder"] = true;
-                        }
-                        else
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderByDescending(p => p.Encode).ToList();
-                            ViewData["encodesortorder"] = false;
-                        }
-                        break;
-                    case "telephone":
-                        if (!decending)
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderBy(p => p.Telephone).ToList();
-                            ViewData["telephonesortorder"] = true;
-                        }
-                        else
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderByDescending(p => p.Telephone).ToList();
-                            ViewData["telephonesortorder"] = false;
-                        }
-                        break;
-                    case "email":
-                        if (!decending)
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderBy(p => p.Email).ToList();
-                            ViewData["emailsortorder"] = true;
-                        }
-                        else
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderByDescending(p => p.Email).ToList();
-                            ViewData["emailsortorder"] = false;
-                        }
-                        break;
-                    default:
-                        if (!decending)
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderBy(p => p.Name).ToList();
-                        }
-                        else
-                        {
-                            totalList = db.Employees.Where(p => p.Name.ToLower().Contains(searchkey.ToLower())).OrderByDescending(p => p.Name).ToList();
-                        }
-                        break;
-                }
-
-                BasePageModel page = new BasePageModel() { SearchKeyWord = searchkey, CurrentIndex = Int32.Parse(index), TotalCount = totalList.Count };
-
-                List<Employee> pageList = totalList.Skip((page.CurrentIndex - 1) * page.PageSize).Take(page.PageSize).ToList();
-                ViewData["pagemodel"] = page;
-
-                return View(pageList);
+                return View();
             }
             else
             {
                 return Redirect("../Account/Login");
             }
+        }
+
+        public JsonResult GetEmployees()
+        {
+           List<Employee> result =  this.db.Employees.ToList<Employee>();
+           
+           var employeeList = (from item in result
+                              select new
+                              {
+                                  item.Id,
+                                  item.Name,
+                                  item.Encode,
+                                  item.Telephone,
+                                  item.Department
+                              });
+           return Json(employeeList, JsonRequestBehavior.AllowGet);
         }
         public ActionResult DepartmentDetail(int? id)
         {

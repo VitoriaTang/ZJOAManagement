@@ -86,7 +86,8 @@ namespace ZJOASystem
                         "~/Content/jqwidgets/jqxgrid.js",
                         "~/Content/jqwidgets/jqxgrid.sort.js",
                         "~/Content/jqwidgets/jqxgrid.pager.js",
-                        "~/Content/jqwidgets/jqxgrid.selection.js"));
+                        "~/Content/jqwidgets/jqxgrid.selection.js",
+                        "~/Content/jqwidgets/jqxmenu.js"));
 
         }
     }

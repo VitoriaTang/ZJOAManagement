@@ -1,6 +1,4 @@
-﻿@model IEnumerable<ZJOASystem.Models.Employee>
-
-@{
+﻿@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -19,54 +17,76 @@
         @Html.Hidden("hiddensearchkey", ViewData["hiddensearchkey"])
     </div>
 </form>
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("姓名", "Index", new { sortBy = "Name", decending = ViewData["namesortorder"], searchkey = ViewData["hiddensearchkey"] })
-            @Html.Hidden("namesortorder", ViewData["namesortorder"])
-        </th>
-        <th>
-            @Html.ActionLink("员工码", "Index", new { sortBy = "Encode", decending = ViewData["encodesortorder"] == "1", searchkey = ViewData["hiddensearchkey"] })
-            @Html.Hidden("encodesortorder", ViewData["encodesortorder"])
-        </th>
-        <th>
-            @Html.ActionLink("联系电话", "Index", new { sortBy = "Telephone", decending = ViewData["telephonesortorder"] == "1", searchkey = ViewData["hiddensearchkey"] })
-            @Html.Hidden("telephonesortorder", ViewData["telephonesortorder"])
-        </th>
-        <th>
-            @Html.ActionLink("电子邮件", "Index", new { sortBy = "Email", decending = ViewData["emailsortorder"] == "1", searchkey = ViewData["hiddensearchkey"] })
-            @Html.Hidden("emailsortorder", ViewData["emailsortorder"])
-        </th>
-        <th>
-            @ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENTLIST")
-        </th>
-        <th></th>
-    </tr>
+<div id="jqxgrid">
+</div>
+@Scripts.Render("~/bundles/jqwidgets/grid")
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Encode)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Telephone)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Email)
-        </td>
-        <td>
-            @ZJOASystem.Controllers.EmployeeController.RenderDepartmentText(item)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-        </td>
-    </tr>
-}
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        // prepare the data
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Id', type:'int'},
+                { name: 'Name', type: 'string' },
+                { name: 'Encode', type: 'string' },
+                { name: 'Telephone', type: 'string' }
+           ],
+            id: 'Id',
+            url: 'GetEmployees'
+        };
 
-</table>
-@Html.Partial("_PagerView", ViewData["pagemodel"])
+        // prepare the data
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        // create Tree Grid
+        $("#jqxgrid").jqxGrid(
+        {
+            width: 800,
+            source: dataAdapter,
+            selectionmode: 'singlerow',
+            sortable: true,
+            pageable: true,
+            autoheight: true,
+            columns: [
+              { text: 'Id', datafield: 'Id', hidden:true },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ENCODE")', datafield: 'Encode', width: 100 },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_NAME")', datafield: 'Name', cellsformat: 'D' },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TELEPHONE")', datafield: 'Telephone', width: 130, cellsformat: 'F2', cellsalign: 'right' },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EDIT")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EDIT")";
+                  },
+                  buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Edit/" + data.Id;
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DETAILS")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DETAILS")";
+                  }, buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Details/" + data.Id;
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DELETE")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DELETE")";
+                  }, buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Delete/"  +data.Id;
+                  }
+              }
+            ]
+        });
+    });
+</script>

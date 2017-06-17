@@ -4,25 +4,29 @@
     ViewBag.Title = "Log in";
 }
 
-<h2>@ViewBag.Title.</h2>
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")</h2>
 <div class="row">
     <div class="col-md-10">
         <section id="loginForm" class="content">
             @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
             {
                 @Html.AntiForgeryToken()
-                <h4>Use a local account to log in.</h4>
+                <h4>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_LABEL")</h4>
                 <hr />
                 @Html.ValidationSummary(true)
                 <div class="form-group">
-                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                    <label class="col-md-2 control-label">
+                        @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_USER")
+                    </label>
                     <div class="col-md-10">
                         @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.UserName)
                     </div>
                 </div>
                 <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <label class="col-md-2 control-label">
+                        @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_PASSWORD")
+                    </label>
                     <div class="col-md-10">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @Html.ValidationMessageFor(m => m.Password)
@@ -32,19 +36,16 @@
                     <div class="col-md-offset-2 col-md-10">
                         <div class="checkbox">
                             @Html.CheckBoxFor(m => m.RememberMe)
-                            @Html.LabelFor(m => m.RememberMe)
+                            <label>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_REMEMBER")</label>
                         </div>
                     </div>
                 </div>
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Log in" class="btn btn-default" />
+                        <input type="submit" value="@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")" class="btn btn-default" />
                     </div>
                 </div>
 
-                <p>
-                    @Html.ActionLink("Register", "Register") if you don't have a local account.
-                </p>
             }
         </section>
     </div>

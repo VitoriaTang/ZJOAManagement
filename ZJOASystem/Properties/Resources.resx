@@ -303,8 +303,20 @@
   <data name="EMPLOYEE_CREATE" xml:space="preserve">
     <value>新建员工记录</value>
   </data>
+  <data name="EMPLOYEE_DELETE" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="EMPLOYEE_DETAILS" xml:space="preserve">
+    <value>详情</value>
+  </data>
+  <data name="EMPLOYEE_EDIT" xml:space="preserve">
+    <value>编辑</value>
+  </data>
   <data name="EMPLOYEE_EMAIL" xml:space="preserve">
     <value>电子邮件</value>
+  </data>
+  <data name="EMPLOYEE_ENCODE" xml:space="preserve">
+    <value>员工码</value>
   </data>
   <data name="EMPLOYEE_NAME" xml:space="preserve">
     <value>姓名</value>
@@ -323,6 +335,18 @@
   </data>
   <data name="LOGIN" xml:space="preserve">
     <value>登录</value>
+  </data>
+  <data name="LOGIN_LABEL" xml:space="preserve">
+    <value>请输入管理员账号：</value>
+  </data>
+  <data name="LOGIN_PASSWORD" xml:space="preserve">
+    <value>登录密码：</value>
+  </data>
+  <data name="LOGIN_REMEMBER" xml:space="preserve">
+    <value>记住账号</value>
+  </data>
+  <data name="LOGIN_USER" xml:space="preserve">
+    <value>登录用户：</value>
   </data>
   <data name="LOGOFF" xml:space="preserve">
     <value>退出系统</value>

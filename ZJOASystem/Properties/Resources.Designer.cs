@@ -619,11 +619,47 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 删除.
+        /// </summary>
+        internal static string EMPLOYEE_DELETE {
+            get {
+                return ResourceManager.GetString("EMPLOYEE_DELETE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 详情.
+        /// </summary>
+        internal static string EMPLOYEE_DETAILS {
+            get {
+                return ResourceManager.GetString("EMPLOYEE_DETAILS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 编辑.
+        /// </summary>
+        internal static string EMPLOYEE_EDIT {
+            get {
+                return ResourceManager.GetString("EMPLOYEE_EDIT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 电子邮件.
         /// </summary>
         internal static string EMPLOYEE_EMAIL {
             get {
                 return ResourceManager.GetString("EMPLOYEE_EMAIL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 员工码.
+        /// </summary>
+        internal static string EMPLOYEE_ENCODE {
+            get {
+                return ResourceManager.GetString("EMPLOYEE_ENCODE", resourceCulture);
             }
         }
         
@@ -678,6 +714,42 @@ namespace ZJOASystem.Properties {
         internal static string LOGIN {
             get {
                 return ResourceManager.GetString("LOGIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 请输入管理员账号：.
+        /// </summary>
+        internal static string LOGIN_LABEL {
+            get {
+                return ResourceManager.GetString("LOGIN_LABEL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 登录密码：.
+        /// </summary>
+        internal static string LOGIN_PASSWORD {
+            get {
+                return ResourceManager.GetString("LOGIN_PASSWORD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 记住账号.
+        /// </summary>
+        internal static string LOGIN_REMEMBER {
+            get {
+                return ResourceManager.GetString("LOGIN_REMEMBER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 登录用户：.
+        /// </summary>
+        internal static string LOGIN_USER {
+            get {
+                return ResourceManager.GetString("LOGIN_USER", resourceCulture);
             }
         }
         

@@ -61,6 +61,13 @@ namespace ZJOASystem.Models
             return builder.ToString();
         }
 
+        public string Department
+        {
+            get
+            {
+                return this.GetDepartmentTexts();
+            }
+        }
         public bool Belongs(int departmentId)
         {
             if (this.Departments == null || Departments.Count == 0)

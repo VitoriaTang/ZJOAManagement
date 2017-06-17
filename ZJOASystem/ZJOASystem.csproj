@@ -185,7 +185,6 @@
     <Compile Include="Models\GridModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MySqlInitializer.cs" />
-    <Compile Include="Models\PageModel.cs" />
     <Compile Include="Models\ProductDBContext.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -1449,6 +1448,7 @@
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.js" />
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.min.css" />
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.min.js" />
+    <Content Include="Content\printtemplate\PrintTemplate_barcode.xml" />
     <Content Include="Content\template\buttons.css" />
     <Content Include="Content\template\calendar.css" />
     <Content Include="Content\template\forms.css" />
