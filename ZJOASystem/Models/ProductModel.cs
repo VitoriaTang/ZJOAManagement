@@ -359,7 +359,7 @@ namespace ZJOASystem.Models
     {
         public string Number { get; set; }
         public ProductStatus Status { get; set; }
-        public string ActionEmployee { get; set; }
+        public string ActionEmployees { get; set; }
         public string ActionComments { get; set; }
         
         public string TrackNumber { get; set; }
@@ -371,21 +371,20 @@ namespace ZJOASystem.Models
         public string Destination { get; set; }
         public Guid ProductGuid { get; set; }
 
-        private List<string> _operators = null;
-        public List<string> Operators
+        public List<string> GetOperators()
         {
-            get
+
+            List<string> _operators = new List<string>();
+            
+            if (!string.IsNullOrEmpty(ActionEmployees))
             {
-                if (_operators == null)
+                string[] items = ActionEmployees.Split(',');
+                foreach (string item in items)
                 {
-                    _operators = new List<string>();
+                    _operators.Add(item);
                 }
-                return _operators;
             }
-            set
-            {
-                _operators = value;
-            }
+            return _operators;
         }
     }
     
@@ -396,5 +395,15 @@ namespace ZJOASystem.Models
         public string ActionComments { get; set; }
         public ProductStatus Status { get; set; }
         public string ActionEmployee { get; set; }
+    }
+
+    public class InnerProductDetails
+    {
+        public string Number { get; set; }
+        public string Description { get; set; }
+        public string Name { get; set; }
+        public string StatusText { get; set; }
+        public Guid ProductGuid { get; set; }
+        public string ActionList { get; set; }
     }
 }

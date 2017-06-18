@@ -240,7 +240,7 @@ namespace ZJOASystem.Controllers
                     InnerProductDelieverInfo innerObj = Serializer.Deserialize<InnerProductDelieverInfo>(delieverValue);
 
                     this.db.SaveProductStatus(innerObj.Number, innerObj.ProductGuid, innerObj.Status,
-                        ActionType.Deliever, innerObj.Operators, innerObj.ActionComments);
+                        ActionType.Deliever, innerObj.GetOperators(), innerObj.ActionComments);
 
                     ProductAddition addition = new ProductAddition();
                     addition.AdditionGuid = Guid.NewGuid();
@@ -425,14 +425,100 @@ namespace ZJOASystem.Controllers
                 productGuid);
             List<Product> result = this.db.Database.SqlQuery<Product>(sql).ToList<Product>();
 
-            var jsonResults = (from item in result
+            List<InnerProductDetails> innerResults = new List<InnerProductDetails>();
+            foreach (Product product in result)
+            {
+                InnerProductDetails item = new InnerProductDetails();
+                item.Number = product.Number;
+                item.ProductGuid = product.ProductGuid;
+                item.Name = product.Name;
+                item.Description = product.Description;
+                
+                string statustext = "";
+                switch(product.Status){
+                    case ProductStatus.Setup:
+                        statustext = ResourceReader.GetString("STATUS_SETUP");
+                        break;
+                    case ProductStatus.Qualified:
+                        statustext = ResourceReader.GetString("STATUS_QUALIFIED");
+                        break;
+                    case ProductStatus.Unqualified:
+                        statustext = ResourceReader.GetString("STATUS_UNQUALIFIED");
+                        break;
+                    case ProductStatus.Fixed:
+                        statustext = ResourceReader.GetString("STATUS_FIXED");
+                        break;
+                    case ProductStatus.Packaged:
+                        statustext = ResourceReader.GetString("STATUS_PACKAGED");
+                        break;
+                    case ProductStatus.Delievered:
+                        statustext = ResourceReader.GetString("STATUS_DELIEVERED");
+                        break;
+                    case ProductStatus.Disabled:
+                        statustext = ResourceReader.GetString("STATUS_DISABLED");
+                        break;
+                }
+                item.StatusText = statustext;
+
+                string sqlActions = string.Format(@"SELECT Id, ActionType, ActionGuid, ActionTime, Comments,ProductNumber FROM Actions 
+                         WHERE ProductNumber='{0}' ORDER BY ActionTime DESC", product.Number);
+
+                List<Models.Action> productActions = this.db.Database.SqlQuery<Models.Action>(sqlActions).ToList<Models.Action>();
+
+                StringBuilder actionBuilder = new StringBuilder();
+                if (productActions != null && productActions.Count >0)
+                {
+                    foreach (Models.Action actItem in productActions)
+                    {
+                        string operatorText = "";
+                        string operatorsql = string.Format(
+                            "SELECT b.Name FROM actionoperators a INNER JOIN employees b on a.EmployeeEncode=b.Encode WHERE a.ActionGuid='{0}'",actItem.ActionGuId) ;
+                        List<string> operatorResult = this.db.Database.SqlQuery<string>(operatorsql).ToList<string>();
+                        if (operatorResult != null && operatorResult.Count > 0)
+                        {
+                            operatorText = string.Join(",", operatorResult.ToArray());
+                        }
+
+                        string actionText = "";
+                        switch (actItem.ActionType)
+                        {
+                            case ActionType.Create:
+                                actionText = ResourceReader.GetString("PRODUCT_CREATE");
+                                break;
+                            case ActionType.Setup:
+                                actionText = ResourceReader.GetString("PRODUCT_SETUP");
+                                break;
+                            case ActionType.Fix:
+                                actionText = ResourceReader.GetString("PRODUCT_FIX");
+                                break;
+                            case ActionType.Test:
+                                actionText = ResourceReader.GetString("PRODUCT_TEST");
+                                break;
+                            case ActionType.Package:
+                                actionText = ResourceReader.GetString("PRODUCT_PACKAGE");
+                                break;
+                            case ActionType.Deliever:
+                                actionText = ResourceReader.GetString("PRODUCT_DELIEVER");
+                                break;
+                        }
+                        actionBuilder.AppendLine(string.Format("<span>{0} {1} {2} {3}</span><br/>",
+                            actItem.ActionTime.ToString("yyyy-MM-dd HH:mm:ss"), actionText, operatorText, actItem.Comments)); 
+                    }
+                }
+
+                item.ActionList = actionBuilder.ToString();
+
+                innerResults.Add(item);
+            }
+            var jsonResults = (from item in innerResults
                              select new
                              {
                                  item.Number,
                                  item.Name,
                                  item.Description,
-                                 item.Status,
-                                 item.ProductGuid
+                                 item.StatusText,
+                                 item.ProductGuid,
+                                 item.ActionList
                              });
             return Json(jsonResults, JsonRequestBehavior.AllowGet);
         }
@@ -468,6 +554,7 @@ namespace ZJOASystem.Controllers
                                });
             return Json(templates, JsonRequestBehavior.AllowGet);
         }
+
         #endregion
     }
 }

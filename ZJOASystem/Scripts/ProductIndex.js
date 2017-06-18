@@ -426,12 +426,47 @@
                              { name: 'Number', type: 'string' },
                              { name: 'Name', type: 'string' },
                              { name: 'Description', type: 'string' },
-                             { name: 'Status', type: 'string' },
-                             { name: 'ProductGuid', type: 'string' }
+                             { name: 'StatusText', type: 'string' },
+                             { name: 'ProductGuid', type: 'string' },
+                             { name: 'ActionList', type: 'string' }
                             ],
                             id: 'ProductGuid',
                             url: 'Product/GetProductDetailByGuid?baseguid=' + item.value
                         };
+
+
+                        var dataAdaptercurrentlist = new $.jqx.dataAdapter(currentlist, {
+                            loadComplete: function () {
+                                // get data records.
+                                var records = dataAdaptercurrentlist.records;
+                                // get the length of the records array.
+                                var length = records.length;
+
+                                if (length > 0) {
+                                    
+                                    var record = records[0];
+                                    var text = "<span>产品名称：" + record.Name + "</span><br/>";
+                                    text += "<span>产品编号：" + record.Number + "</span><br/>";
+                                    if (record.Description.length > 0) {
+                                        text += "<span>产品描述：" + record.Description + "</span><br/>";
+                                    }
+                                    var status = record.StatusText;
+                                    text += "<span>产品状态：" + status + "</span><br/>";
+
+                                    text += "<span>操作记录：</span><br/>";
+                                    text += "<span>" + record.ActionList + "</span>";
+
+                                    $("#productdetail").html(text);
+                                }
+                                
+                            },
+                            loadError: function (jqXHR, status, error) {
+                            },
+                            beforeLoadComplete: function (records) {
+                            }
+                        });
+                        // perform data binding.
+                        dataAdaptercurrentlist.dataBind();
 
                         
                     }

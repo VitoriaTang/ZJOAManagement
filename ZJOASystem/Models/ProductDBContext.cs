@@ -66,7 +66,7 @@ namespace ZJOASystem.Models
         public static string GETACTIONID_SQL = "SELECT Id FROM Actions WHERE Name='{0}'";
 
         public static string GETACTIONS_SQL = @"SELECT Id, ActionType, ActionEmployeeEncode, ActionTime, Comments,ProductEncode FROM Actions 
-            WHERE ProductEncode='{0}' ORDER BY ActionTime DESC";
+            WHERE ProductEncode='{0}' ORDER BY ActionTime DESC"; 
 
         public static string GETACTIONSBYPID_SQL = @"SELECT Id, ActionType, ActionEmployeeId, ActionTime, Comments, ProductGuid FROM Actions 
             WHERE ProductGuid='{0}' ORDER BY ActionTime DESC";
@@ -522,9 +522,12 @@ namespace ZJOASystem.Models
             {
                 return;
             }
-            foreach (KeyValuePair<string, Guid> item in baseIds)
+
+            for (int i = baseIds.Count - 1; i >= 0; i--)
             {
+                KeyValuePair<string, Guid> item = baseIds[i];
                 bool exist = false;
+
 
                 foreach (string childId in childBaseIds)
                 {
@@ -538,11 +541,11 @@ namespace ZJOASystem.Models
                 if (exist)
                 {
                     result.Add(new KeyValuePair<Guid, Guid>(item.Value, parentGuid));
+                    baseIds.Remove(item);
                 }
 
                 ParseChildren(item.Key, item.Value, ref result, ref baseIds);
             }
-
 
         }
 
