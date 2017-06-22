@@ -1,0 +1,42 @@
+﻿@{
+    ViewBag.Title = "Setup";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE")</h2>
+
+
+<!--Upload product list-->
+<div id="customWindow">
+    <div id="customWindowHeader">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT") </span>
+    </div>
+    <div id="customWindowContent" style="overflow: hidden">
+        <div style="margin: 10px">
+            @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT_SETUPUPLOAD"):
+            <div id="jqxFileUpload" style="float: left">
+            </div>
+            <div style="float: right">
+                <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>
+    <button id="importButton">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT")</button>
+    <a style='margin-left: 25px;' target="_blank" href="ExportProductAction?actiontype=5" id='exportButton'>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_EXPORT")</a>
+
+    <br />
+</p>
+<form name="searchform" action="@Url.Action("Package")" method="post">
+
+    <div id="treeGrid">
+    </div>
+</form>
+
+
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
+@Scripts.Render("~/bundles/jqwidgets/dialog")
+@Scripts.Render("~/bundles/product/package")
+

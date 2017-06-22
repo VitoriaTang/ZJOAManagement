@@ -4,10 +4,93 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Web;
+using System.Web.Script.Serialization;
 using ZJOASystem.Controllers;
 
 namespace ZJOASystem.Models
 {
+    public class ActionRecord
+    {
+        public int Id { get; set; }
+        public string ProductNumber { get; set; }
+        public string ProductName { get; set; }
+        public string ParentNumber { get; set; }
+        public ActionType ActionType { get; set; }
+        public DateTime ActionTime { get; set; }
+        public string ActionComments { get; set; }
+        public List<Operator> Operators { get; set; }
+        public string AdditionalInfo { get; set; }
+
+        public string OperatorsText
+        {
+            get
+            {
+                if (this.Operators != null)
+                {
+                    List<string> names = new List<string>();
+                    foreach (Operator item in Operators)
+                    {
+                        names.Add(item.Name);
+                    }
+
+                    return string.Join(";", names.ToArray());
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public string OperatorsEncodeText
+        {
+            get
+            {
+                if (this.Operators != null)
+                {
+                    List<string> encodes = new List<string>();
+                    foreach (Operator item in Operators)
+                    {
+                        encodes.Add(item.Encode);
+                    }
+
+                    return string.Join(";", encodes.ToArray());
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public override string ToString()
+        {
+            JavaScriptSerializer Serializer = new JavaScriptSerializer();
+            return Serializer.Serialize(this);
+        }
+        public static ActionRecord FromString(string json)
+        {
+            JavaScriptSerializer Serializer = new JavaScriptSerializer();
+            ActionRecord innerObj = Serializer.Deserialize<ActionRecord>(json);
+            return innerObj;
+        }
+
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is ActionRecord)
+            {
+                return this.ProductName.Equals(((ActionRecord)obj).ProductName, StringComparison.CurrentCultureIgnoreCase);
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public class Operator{
+        public string Encode{get;set;}
+        public string Name {get;set;}
+    }
     public class ProductBase
     {
         public ProductBase()

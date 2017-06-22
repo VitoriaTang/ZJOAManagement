@@ -55,12 +55,21 @@
                                 <li>
                                     @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCTBASE_LIST"), "ProductList", "Product")
                                 </li>
+
                                 <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DETAIL_LIST"), "Index", "Product")
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP"), "Setup", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TEST"), "Test", "Product")
+                                </li>
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE"), "Package", "Product")
                                 </li>
                             </ul>
                         </li>
-
+                        <li>
+                            <a href="~/Machine/Index"><i class="glyphicon glyphicon-user"></i> @ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_TITLE")</a>
+                        </li>
                     </ul>
                 </div>
             </div>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -33,7 +35,7 @@ namespace ZJOASystem.Controllers
             return builder.ToString();
         }
 
-        public static List<ProductBase> OpenCSV(string csvContent, bool firstLineIsColumn)
+        public static List<ProductBase> OpenCSV(string csvContent)
         {
             if (string.IsNullOrEmpty(csvContent))
             {
@@ -43,47 +45,45 @@ namespace ZJOASystem.Controllers
             List<ProductBase> result = new List<ProductBase>();
             string[] lines = csvContent.Split('\r');
             int numberIndex = 0;
-            int nameIndex = 1;
-            int parentnumberIndex = 2;
-            if (firstLineIsColumn)
+            int nameIndex = -1;
+            int parentnumberIndex = -1;
+
+            string columnList = lines[0];
+            string[] columns = columnList.Split(',');
+            for (int i = 0; i < columns.Length; i++)
             {
-                string columnList = lines[0];
-                string[] columns = columnList.Split(',');
-                for (int i = 0; i < columns.Length; i++)
+                if (columns[i].Equals("Number", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    if (columns[i].Equals("Number", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        numberIndex = i;
-                    }
-                    else if (columns[i].Equals("Name", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        nameIndex = i;
-                    }
-                    else if (columns[i].Equals("ParentNumber", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        parentnumberIndex = i;
-                    }
+                    numberIndex = i;
+                }
+                else if (columns[i].Equals("Name", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    nameIndex = i;
+                }
+                else if (columns[i].Equals("ParentNumber", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    parentnumberIndex = i;
                 }
             }
 
-            int startIndex = firstLineIsColumn ? 1 : 0;
+            int startIndex = 1;
             int columnCount = 3;
 
-            Dictionary< ProductBase, int> tempResultList = new Dictionary< ProductBase, int>();
-            for (int i = startIndex; i < lines.Length; )
+            Dictionary<ProductBase, int> tempResultList = new Dictionary<ProductBase, int>();
+            for (int i = startIndex; i < lines.Length;)
             {
                 string line = lines[i];
                 int nextIndex = i;
                 List<string> tempList = null;
-                List<string> columns = CombineNewLine(line, i, columnCount, ref lines, out nextIndex, ref tempList);
+                List<string> fields = CombineNewLine(line, i, columnCount, ref lines, out nextIndex, ref tempList);
 
-                string number= columns[numberIndex];
-                string parentNumber = Convert.ToString(columns[parentnumberIndex]);
+                string number = fields[numberIndex];
+                string parentNumber = Convert.ToString(fields[parentnumberIndex]);
                 if (string.IsNullOrEmpty(parentNumber))
                 {
                     parentNumber = "0";
                 }
-                ProductBase productItem = new ProductBase(number, columns[nameIndex], parentNumber);
+                ProductBase productItem = new ProductBase(number, fields[nameIndex], parentNumber);
 
                 result.Add(productItem);
                 i = nextIndex;
@@ -146,5 +146,150 @@ namespace ZJOASystem.Controllers
             }
         }
 
+
+        internal static List<ActionRecord> OpenActionRecordCSV(string csvContent)
+        {
+            if (string.IsNullOrEmpty(csvContent))
+            {
+                return null;
+            }
+
+            List<ActionRecord> result = new List<ActionRecord>();
+            string[] lines = csvContent.Split('\r');
+            int numberIndex = -1;
+            int nameIndex = -1;
+            int parentnumberIndex = -1;
+            int actionTypeIndex = -1;
+            int actionTimeIndex = -1;
+            int operatorIndex = -1;
+            int additonalInfoIndex = -1;
+            string columnList = lines[0];
+            string[] columns = columnList.Split(',');
+            for (int i = 0; i < columns.Length; i++)
+            {
+                if (columns[i].Equals("ProductNumber", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numberIndex = i;
+                }
+                else if (columns[i].Equals("ProductName", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    nameIndex = i;
+                }
+                else if (columns[i].Equals("ParentNumber", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    parentnumberIndex = i;
+                }
+                else if (columns[i].Equals("ActionType", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    actionTypeIndex = i;
+                }
+                else if (columns[i].Equals("ActionTime", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    actionTimeIndex = i;
+                }
+                else if (columns[i].Equals("Operators", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    operatorIndex = i;
+                }
+                else if (columns[i].Equals("AdditionalInfo", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    additonalInfoIndex = i;
+                }
+            }
+
+            int startIndex = 1;
+
+            // We will not consider the \r\n cases
+            for (int i = startIndex; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                line = line.TrimStart('\n');
+                if(string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                string[] fields = line.Split(',');
+
+                string name = fields[nameIndex];
+                string number = fields[numberIndex];
+                string parentNumber = (parentnumberIndex == -1) ? null : fields[parentnumberIndex];
+                string actionType = fields[actionTypeIndex];
+                string actionTime = fields[actionTimeIndex];
+                string actionComments = "Import from CSV file";
+                string operators = fields[operatorIndex];
+
+                ActionRecord recordItem = new ActionRecord();
+                recordItem.ProductName = name;
+                recordItem.ProductNumber = number;
+                recordItem.ParentNumber = parentNumber;
+                if (additonalInfoIndex != -1)
+                {
+                    recordItem.AdditionalInfo = fields[additonalInfoIndex];
+                }
+                int actionTypeValue = 0;
+                int.TryParse(actionType, out actionTypeValue);
+                recordItem.ActionType = (ActionType)actionTypeValue;
+                DateTime timeValue = DateTime.Now;
+                if (!DateTime.TryParse(actionTime, out timeValue))
+                {
+                    timeValue = DateTime.Now;
+                }
+                recordItem.ActionTime = timeValue;
+                recordItem.ActionComments = actionComments;
+
+                if (!string.IsNullOrEmpty(operators))
+                {
+                    recordItem.Operators = new List<Operator>();
+                    string[] operatorsArray = operators.Split(';');
+                    foreach (string optValue in operatorsArray)
+                    {
+                        string optEncode = optValue.Trim();
+                        if (!string.IsNullOrEmpty(optEncode))
+                        {
+                            Operator optObj = new Operator();
+                            optObj.Encode = optEncode;
+
+                            recordItem.Operators.Add(optObj);
+                        }
+                    }
+                }
+
+                result.Add(recordItem);
+            }
+
+            return result;
+        }
+
+        internal static string SaveActionRecordCSV(List<ActionRecord> data)
+        {
+            string filepath = ConfigurationManager.AppSettings["outputFolder"];
+            filepath = filepath + Guid.NewGuid().ToString() + ".csv";
+            using (FileStream stream = File.OpenWrite(filepath))
+            {
+
+                StringBuilder sb = new StringBuilder();
+
+                String header = "ProductNumber,ProductName,ParentNumber,ActionType,ActionTime,Operators";
+                sb.AppendLine(header);
+
+                if (data != null && data.Count > 0)
+                {
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        ActionRecord item = data[i];
+                        string itemText = string.Join(",", item.ProductNumber, item.ProductName, item.ParentNumber, Convert.ToInt32(item.ActionType), item.ActionTime.ToString("yyyyMMdd HH:mm:ss"), item.OperatorsEncodeText);
+                        sb.AppendLine(itemText);
+                    }
+
+                    byte[] bytes = Encoding.GetEncoding("UTF-8").GetBytes(sb.ToString());
+
+                    stream.Write(bytes, 0, bytes.Length);
+
+                    stream.Close();
+                }
+            }
+
+            return filepath;
+        }
     }
 }

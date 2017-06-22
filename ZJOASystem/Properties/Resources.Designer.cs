@@ -790,6 +790,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 设备管理.
+        /// </summary>
+        internal static string MACHINE_TITLE {
+            get {
+                return ResourceManager.GetString("MACHINE_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 确定.
         /// </summary>
         internal static string OK {
@@ -885,6 +894,15 @@ namespace ZJOASystem.Properties {
         internal static string PRODUCT_IMPORT {
             get {
                 return ResourceManager.GetString("PRODUCT_IMPORT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 导入组装数据.
+        /// </summary>
+        internal static string PRODUCT_IMPORT_SETUPUPLOAD {
+            get {
+                return ResourceManager.GetString("PRODUCT_IMPORT_SETUPUPLOAD", resourceCulture);
             }
         }
         

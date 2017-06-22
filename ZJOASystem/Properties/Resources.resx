@@ -360,6 +360,9 @@
   <data name="LOGOFF" xml:space="preserve">
     <value>退出系统</value>
   </data>
+  <data name="MACHINE_TITLE" xml:space="preserve">
+    <value>设备管理</value>
+  </data>
   <data name="OK" xml:space="preserve">
     <value>确定</value>
   </data>
@@ -395,6 +398,9 @@
   </data>
   <data name="PRODUCT_IMPORT" xml:space="preserve">
     <value>导入产品清单</value>
+  </data>
+  <data name="PRODUCT_IMPORT_SETUPUPLOAD" xml:space="preserve">
+    <value>导入组装数据</value>
   </data>
   <data name="PRODUCT_IMPORT_UPLOAD" xml:space="preserve">
     <value>上传产品清单文件</value>

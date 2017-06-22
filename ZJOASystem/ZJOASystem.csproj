@@ -1533,6 +1533,9 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\ProductIndex.js" />
+    <Content Include="Scripts\ProductPackage.js" />
+    <Content Include="Scripts\ProductSetup.js" />
+    <Content Include="Scripts\ProductTest.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\stats.js" />
@@ -1589,6 +1592,9 @@
     <Content Include="Views\Employee\DepartmentIndex.cshtml" />
     <Content Include="Views\Product\Index.cshtml" />
     <Content Include="Views\Product\ProductList.cshtml" />
+    <Content Include="Views\Product\Setup.cshtml" />
+    <Content Include="Views\Product\Test.cshtml" />
+    <Content Include="Views\Product\Package.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

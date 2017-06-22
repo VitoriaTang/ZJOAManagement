@@ -112,7 +112,34 @@ namespace ZJOASystem.Controllers
                                });
             return Json(productList, JsonRequestBehavior.AllowGet);
         }
+        [HttpPost]
+        public ActionResult Import()
+        {
+            if (Request.IsAuthenticated)
+            {
+                if (Request.Files != null && Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+                    using (var inputStream = file.InputStream)
+                    {
+                        StreamReader reader = new StreamReader(inputStream);
+                        string allText = reader.ReadToEnd();
+                        reader.Close();
 
+                        List<ProductBase> items = CSVHelper.OpenCSV(allText);
+                        foreach (ProductBase item in items)
+                        {
+                            db.SaveProductBase(item, false);
+                        }
+                    }
+                }
+                return RedirectToAction("../Product/ProductList");
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
         #endregion
 
         #region Index page
@@ -553,6 +580,174 @@ namespace ZJOASystem.Controllers
                                    item.Path
                                });
             return Json(templates, JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+
+        #region Setup
+        [HttpPost]
+        public ActionResult ImportProductAction()
+        {
+            if (Request.IsAuthenticated)
+            {
+                int actionType = Convert.ToInt32(Request.QueryString["actiontype"]);
+
+                if (Request.Files != null && Request.Files.Count > 0)
+                {
+                    var file = Request.Files[0];
+                    using (var inputStream = file.InputStream)
+                    {
+                        StreamReader reader = new StreamReader(inputStream);
+                        string allText = reader.ReadToEnd();
+                        reader.Close();
+
+                        List<ActionRecord> items = CSVHelper.OpenActionRecordCSV(allText);
+                        List<ActionRecord> newItems = new List<ActionRecord>();
+                        newItems.AddRange(items);
+                        foreach (ActionRecord item in items)
+                        {
+                            GetChildren(ref newItems, item);
+                        }
+
+                        foreach (ActionRecord item in newItems)
+                        {
+                            db.SaveActionRecord(item);
+                        }
+                    }
+                }
+                if (actionType == Convert.ToInt32(ActionType.Setup))
+                {
+                    return RedirectToAction("../Product/Setup");
+                }
+                else if (actionType == Convert.ToInt32(ActionType.Test))
+                {
+                    return RedirectToAction("../Product/Test");
+                }
+                else
+                {
+                    return RedirectToAction("../Product/Setup");
+                }
+
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
+
+        private void GetChildren(ref List<ActionRecord> items, ActionRecord item)
+        {
+            string sqlQuery = string.Format("SELECT * FROM ( {0} ) tmp WHERE tmp.ParentNumber='{1}'",
+                ProductDBContext.GET_PRODUCTACTIONS,  item.ProductNumber);
+
+            List<ActionRecord> children = this.db.Database.SqlQuery<ActionRecord>(sqlQuery).ToList<ActionRecord>();
+            if (children != null && children.Count > 0)
+            {
+                foreach (ActionRecord child in children)
+                {
+                    if (!items.Contains(child))
+                    {
+                        child.ActionType = item.ActionType;
+                        child.Operators = item.Operators;
+                        items.Add(child);
+
+                        GetChildren(ref items, child);
+                    }
+                }
+            }
+        }
+
+        public FileResult ExportProductAction()
+        {
+            int actionType = Convert.ToInt32(Request.QueryString["actiontype"]); 
+            
+            string sqlQuery = ProductDBContext.GET_PRODUCTACTIONS + string.Format("  WHERE a.ActionType={0};", actionType);
+
+            List<ActionRecord> result = this.db.Database.SqlQuery<ActionRecord>(sqlQuery).ToList<ActionRecord>();
+
+            foreach (ActionRecord item in result)
+            {
+                string selectOpt = "SELECT Operator From action_operators WHERE ActionId=" + item.Id;
+                List<string> operators = this.db.Database.SqlQuery<string>(selectOpt).ToList<string>();
+
+                item.Operators = new List<Operator>();
+                foreach (string optEncode in operators)
+                {
+                    Operator optObj = new Operator();
+                    optObj.Encode = optEncode;
+                    item.Operators.Add(optObj);
+                }
+            }
+            String filePath = CSVHelper.SaveActionRecordCSV(result);
+            string contentType = "application/csv";
+            return File(filePath, contentType, string.Format("ProductActions_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss")));
+        }
+        public ActionResult Setup()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
+
+        public JsonResult GetActionRecords()
+        {
+            int actionType = Convert.ToInt32( Request.QueryString["actiontype"] ); 
+            string sqlQuery = ProductDBContext.GET_PRODUCTACTIONS + string.Format("  WHERE a.ActionType={0};", actionType);
+
+            List<ActionRecord> result = this.db.Database.SqlQuery<ActionRecord>(sqlQuery).ToList<ActionRecord>();
+            foreach (ActionRecord item in result)
+            {
+                sqlQuery = string.Format(ProductDBContext.GET_ACTION_OPERATORS, item.Id);
+                List<Operator> operators = this.db.Database.SqlQuery<Operator>(sqlQuery).ToList<Operator>();
+
+                item.Operators = operators;
+            }
+
+            var productList = (from item in result
+                               select new
+                               {
+                                   item.ProductNumber,
+                                   item.ProductName,
+                                   item.ParentNumber,
+                                   item.ActionTime,
+                                   item.ActionComments,
+                                   item.OperatorsText
+                               });
+            return Json(productList, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region Test
+        public ActionResult Test()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
+
+        #endregion
+
+        #region Package
+        public ActionResult Package()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
         }
 
         #endregion

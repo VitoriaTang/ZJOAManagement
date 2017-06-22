@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -97,6 +99,21 @@ namespace ZJOASystem.Models
         public static string INSERTADDITION_SQL = @"INSERT INTO ProductAdditions(AdditionGuid, TrackNumber, Sender, Receiver, 
             SenderTelephone, ReceiverTelephone, Departure, Destination, ProductGuid) 
             VALUES ('{0}', '{1}', '{2}','{3}','{4}','{5}','{6}', '{7}','{8}')";
+
+
+
+        public static string GET_PRODUCTACTIONS = @"SELECT  a.Id as Id, Concat(b.ProductBaseNumber,b.YearNumber, b.BatchNumber, b.SerialNumber) as ProductNumber, 
+                b.Name as ProductName, Concat(c.ProductBaseNumber,c.YearNumber, c.BatchNumber, c.SerialNumber) as ParentNumber, 
+                a.ActionTime, a.ActionComments, a.ActionType, d.Content
+                FROM product_actions a 
+	                Inner Join products b on a.ProductId=b.Id 
+                    Left Join products c on b.ParentId=c.Id
+                    Left Join action_additionals d on a.AdditionalId=d.Id";
+
+        public static string GET_ACTION_OPERATORS = @"SELECT b.Encode, b.Name 
+                FROM action_operators a INNER JOIN employees b ON a.Operator=b.Encode
+                WHERE a.ActionId={0}";
+
         public ProductDBContext()
             : base("name=DefaultConnection")
         {
@@ -585,6 +602,23 @@ namespace ZJOASystem.Models
                     UpdateProductStatus(Guid.Parse(childGuid), status);
                 }
             }
+        }
+
+
+        internal void SaveActionRecord(ActionRecord item)
+        {
+            string sql ="";
+            if (item.AdditionalInfo == null)
+            {
+                sql = string.Format("CALL proc_insert_productaction ('{0}', '{1}' ,'{2}', {3}, '{4}','{5}','{6}', null)",
+                  item.ProductNumber, item.ParentNumber, item.ProductName, Convert.ToInt32(item.ActionType), item.ActionTime, item.ActionComments, item.OperatorsEncodeText);
+            }
+            else
+            {
+                sql = string.Format("CALL proc_insert_productaction ('{0}', '{1}' ,'{2}', {3}, '{4}','{5}','{6}', '{7}')",
+                  item.ProductNumber, item.ParentNumber, item.ProductName, Convert.ToInt32(item.ActionType), item.ActionTime, item.ActionComments, item.OperatorsEncodeText, item.AdditionalInfo);
+            }
+            this.Database.ExecuteSqlCommand(sql);
         }
     }
 }
