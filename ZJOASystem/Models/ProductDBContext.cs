@@ -104,11 +104,16 @@ namespace ZJOASystem.Models
 
         public static string GET_PRODUCTACTIONS = @"SELECT  a.Id as Id, Concat(b.ProductBaseNumber,b.YearNumber, b.BatchNumber, b.SerialNumber) as ProductNumber, 
                 b.Name as ProductName, Concat(c.ProductBaseNumber,c.YearNumber, c.BatchNumber, c.SerialNumber) as ParentNumber, 
-                a.ActionTime, a.ActionComments, a.ActionType, d.Content
+                a.ActionTime, a.ActionComments, a.ActionType, d.Content as AdditionalInfo
                 FROM product_actions a 
 	                Inner Join products b on a.ProductId=b.Id 
                     Left Join products c on b.ParentId=c.Id
                     Left Join action_additionals d on a.AdditionalId=d.Id";
+
+        public static string GET_PRODUCTS_WITHPARENT = @"SELECT  a.Id as Id, Concat(a.ProductBaseNumber,a.YearNumber, a.BatchNumber, a.SerialNumber) as Number, 
+                a.Name as Name, Concat(b.ProductBaseNumber,b.YearNumber, b.BatchNumber, b.SerialNumber) as ParentNumber
+                FROM products a 
+                    Left Join products b on a.ParentId=b.Id";
 
         public static string GET_ACTION_OPERATORS = @"SELECT b.Encode, b.Name 
                 FROM action_operators a INNER JOIN employees b ON a.Operator=b.Encode

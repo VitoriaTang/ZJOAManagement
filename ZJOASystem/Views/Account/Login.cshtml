@@ -2,51 +2,120 @@
 
 @{
     ViewBag.Title = "Log in";
+    Layout = null;
 }
 
-<h2>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")</h2>
-<div class="row">
-    <div class="col-md-10">
-        <section id="loginForm" class="content">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                <h4>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_LABEL")</h4>
-                <hr />
-                @Html.ValidationSummary(true)
-                <div class="form-group">
-                    <label class="col-md-2 control-label">
-                        @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_USER")
-                    </label>
-                    <div class="col-md-10">
-                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.UserName)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-2 control-label">
-                        @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_PASSWORD")
-                    </label>
-                    <div class="col-md-10">
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password)
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <div class="checkbox">
-                            @Html.CheckBoxFor(m => m.RememberMe)
-                            <label>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_REMEMBER")</label>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")" class="btn btn-default" />
-                    </div>
-                </div>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <style type="text/css">
+        .linear {
+            width: 50%;
+            height: 30px;
+            FILTER: progid:DXImageTransform.Microsoft.Gradient(gradientType=1,startColorStr=#EFF2F6, endColorStr=#F2F2F3); /*IE*/
+            background: -moz-linear-gradient(left,#EFF2F6,#F2F2F3); /*火狐*/
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%,from(#EFF2F6), to(#F2F2F3)); /*谷歌*/
+        }
+    </style>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/zjoa")
 
-            }
-        </section>
+</head>
+<body>
+    <div class="header">
+        <div class="container" style="margin-left:25px;">
+            <div class="row">
+                <div class="col-md-5">
+                    <!-- Logo -->
+                    <div class="logo">
+                        <h1>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName"), "Index", "Home", null, new { @class = "logo" })</h1>
+                    </div>
+
+                </div>
+                <div>
+                    @Html.Partial("_LoginPartial")
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="page-content">
+        <table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"  class="linear">
+            <tr>
+                <td align="center" valign="top">
+                    <table style="width: 1077px;" border="0" cellspacing="0" cellpadding="0" align="center">
+                        <tr>
+                            <td><div style="background-image: url(../Content/images/bk1.png); width: 777px; height: 514px;"></div></td>
+                            <td>
+                                <div style=" width: 300px; ">
+                                    <section id="loginForm" class="content">
+                                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <h4>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_LABEL")</h4>
+                                            @Html.ValidationSummary(true)
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" style="width:100px">
+                                                    @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_USER")
+                                                </label>
+                                                <div class="col-md-8">
+                                                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(m => m.UserName)
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label class="col-md-2 control-label" style="width:100px">
+                                                    @ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_PASSWORD")
+                                                </label>
+                                                <div class="col-md-8">
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
+                                                    @Html.ValidationMessageFor(m => m.Password)
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="col-md-10" style="margin-left:30px">
+                                                    <div class="checkbox">
+                                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                                        <label>@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN_REMEMBER")</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div style="width: 93%; text-align: right;">
+                                                    <input type="submit" value="@ZJOASystem.Controllers.ResourceReader.GetString("LOGIN")" class="btn btn-default" />
+                                                </div>
+                                            </div>
+
+                                        }
+                                    </section>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <footer>
+        <div class="container">
+
+            <div class="copy text-center">
+                Copyright 2017 @ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName")
+            </div>
+
+        </div>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+

@@ -46,7 +46,7 @@
                         <li>
                             <a href="~/Employee/Index"><i class="glyphicon glyphicon-user"></i> @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TITLE")</a>
                         </li>
-                        <li class="submenu">
+                        <li class="submenu" >
                             <a href="#">
                                 <i class="glyphicon glyphicon-barcode"></i> @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")
                                 <span class="caret pull-right"></span>
@@ -64,6 +64,10 @@
                                 </li>
                                 <li>
                                     @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE"), "Package", "Product")
+                                </li>
+
+                                <li>
+                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER"), "Deliever", "Product")
                                 </li>
                             </ul>
                         </li>

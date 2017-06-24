@@ -638,20 +638,27 @@ namespace ZJOASystem.Controllers
         private void GetChildren(ref List<ActionRecord> items, ActionRecord item)
         {
             string sqlQuery = string.Format("SELECT * FROM ( {0} ) tmp WHERE tmp.ParentNumber='{1}'",
-                ProductDBContext.GET_PRODUCTACTIONS,  item.ProductNumber);
+                ProductDBContext.GET_PRODUCTS_WITHPARENT, item.ProductNumber);
 
-            List<ActionRecord> children = this.db.Database.SqlQuery<ActionRecord>(sqlQuery).ToList<ActionRecord>();
+            List<InnerProductBase> children = this.db.Database.SqlQuery<InnerProductBase>(sqlQuery).ToList<InnerProductBase>();
             if (children != null && children.Count > 0)
             {
-                foreach (ActionRecord child in children)
+                foreach (InnerProductBase child in children)
                 {
-                    if (!items.Contains(child))
+                    ActionRecord childRecord = new ActionRecord();
+                    childRecord.ProductNumber = child.Number;
+                    childRecord.ProductName = child.Name;
+                    childRecord.ParentNumber = child.ParentNumber;
+                    childRecord.Operators = item.Operators;
+                    childRecord.ActionComments = item.ActionComments;
+                    childRecord.ActionTime = item.ActionTime;
+                    childRecord.ActionType = item.ActionType;
+                    childRecord.AdditionalInfo = item.AdditionalInfo;
+                    if (!items.Contains(childRecord))
                     {
-                        child.ActionType = item.ActionType;
-                        child.Operators = item.Operators;
-                        items.Add(child);
+                        items.Add(childRecord);
 
-                        GetChildren(ref items, child);
+                        GetChildren(ref items, childRecord);
                     }
                 }
             }
@@ -678,7 +685,9 @@ namespace ZJOASystem.Controllers
                     item.Operators.Add(optObj);
                 }
             }
-            String filePath = CSVHelper.SaveActionRecordCSV(result);
+
+            bool needAdditonalInfo = (actionType == Convert.ToInt32(ActionType.Deliever));
+            String filePath = CSVHelper.SaveActionRecordCSV(result, needAdditonalInfo);
             string contentType = "application/csv";
             return File(filePath, contentType, string.Format("ProductActions_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss")));
         }
@@ -716,7 +725,8 @@ namespace ZJOASystem.Controllers
                                    item.ParentNumber,
                                    item.ActionTime,
                                    item.ActionComments,
-                                   item.OperatorsText
+                                   item.OperatorsText,
+                                   item.AdditionalInfo
                                });
             return Json(productList, JsonRequestBehavior.AllowGet);
         }
@@ -739,6 +749,21 @@ namespace ZJOASystem.Controllers
 
         #region Package
         public ActionResult Package()
+        {
+            if (Request.IsAuthenticated)
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
+
+        #endregion
+
+        #region Deliever
+        public ActionResult Deliever()
         {
             if (Request.IsAuthenticated)
             {

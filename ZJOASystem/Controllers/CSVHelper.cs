@@ -260,7 +260,7 @@ namespace ZJOASystem.Controllers
             return result;
         }
 
-        internal static string SaveActionRecordCSV(List<ActionRecord> data)
+        internal static string SaveActionRecordCSV(List<ActionRecord> data, bool needExportAdditonal)
         {
             string filepath = ConfigurationManager.AppSettings["outputFolder"];
             filepath = filepath + Guid.NewGuid().ToString() + ".csv";
@@ -270,6 +270,10 @@ namespace ZJOASystem.Controllers
                 StringBuilder sb = new StringBuilder();
 
                 String header = "ProductNumber,ProductName,ParentNumber,ActionType,ActionTime,Operators";
+                if (needExportAdditonal)
+                {
+                    header += ",AdditionalInfo";
+                }
                 sb.AppendLine(header);
 
                 if (data != null && data.Count > 0)
@@ -278,6 +282,11 @@ namespace ZJOASystem.Controllers
                     {
                         ActionRecord item = data[i];
                         string itemText = string.Join(",", item.ProductNumber, item.ProductName, item.ParentNumber, Convert.ToInt32(item.ActionType), item.ActionTime.ToString("yyyyMMdd HH:mm:ss"), item.OperatorsEncodeText);
+
+                        if (needExportAdditonal)
+                        {
+                            itemText += "," + item.AdditionalInfo;
+                        }
                         sb.AppendLine(itemText);
                     }
 

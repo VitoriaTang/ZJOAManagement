@@ -13,8 +13,15 @@ namespace ZJOASystem.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Role = CurrentRole();
-            return View();
+            if (Request.IsAuthenticated)
+            {
+                ViewBag.Role = CurrentRole();
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/Login");
+            }
         }
 
         public ActionResult About()

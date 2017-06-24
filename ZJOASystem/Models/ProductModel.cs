@@ -143,6 +143,8 @@ namespace ZJOASystem.Models
         public string Name { get; set; }
         public string ParentNumber { get; set; }
     }
+
+
     public class Product
     {
         public int Id { get; set; }

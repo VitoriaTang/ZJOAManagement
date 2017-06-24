@@ -46,7 +46,18 @@ namespace ZJOASystem
             bundles.Add(new ScriptBundle("~/bundles/product/package").Include(
                         "~/Scripts/ProductPackage.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/product/deliever").Include(
+                        "~/Scripts/ProductDeliever.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/jqwidgets/tree").Include(
+                        "~/Content/jqwidgets/jqxcore.js",
+                        "~/Content/jqwidgets/jqxdata.js",
+                        "~/Content/jqwidgets/jqxbuttons.js",
+                        "~/Content/jqwidgets/jqxscrollbar.js",
+                        "~/Content/jqwidgets/jqxtree.js",
+                        "~/Content/jqwidgets/jqxexpander.js"));
+
+           
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/treegrid").Include(
                         "~/Content/jqwidgets/jqxcore.js",
                         "~/Content/jqwidgets/jqxdata.js",
