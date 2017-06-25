@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_TITLE")</h2>
+
+
+<!--Upload machine list-->
+<div id="customWindow">
+    <div id="customWindowHeader">
+        <span id="captureContainer" style="float: left">@ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_IMPORT") </span>
+    </div>
+    <div id="customWindowContent" style="overflow: hidden">
+        <div style="margin: 10px">
+            @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_MACHINE_UPLOAD"):
+            <div id="jqxFileUpload" style="float: left">
+            </div>
+            <div style="float: right">
+                <input type="button" value="@ZJOASystem.Controllers.ResourceReader.GetString("CLOSE")" id="closeButton" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<p>
+    <button id="importButton">@ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_IMPORT")</button>
+    <a style='margin-left: 25px;' target="_blank" href="ExportProductAction?actiontype=3" id='exportButton'>@ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_EXPORT")</a>
+
+    <br />
+</p>
+<div id="treeGrid">
+</div>
+<form name="searchform" action="@Url.Action("Index")" method="post">
+    <br/>
+   
+</form>
+
+
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
+@Scripts.Render("~/bundles/jqwidgets/dialog")
+@Scripts.Render("~/bundles/machine/index")
+
+
+

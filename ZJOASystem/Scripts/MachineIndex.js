@@ -8,7 +8,7 @@
         position: { x: 280, y: 190 },
         initContent: function () {
             $('#closeButton').jqxButton({ width: '80px' });
-            $('#jqxFileUpload').jqxFileUpload({ width: 300, uploadUrl: 'ImportProductAction?actiontype=5', fileInputName: 'fileToUpload', multipleFilesUpload: false });
+            $('#jqxFileUpload').jqxFileUpload({ width: 300, uploadUrl: 'ImportMachines', fileInputName: 'fileToUpload', multipleFilesUpload: false });
         }
     });
 
@@ -31,21 +31,14 @@
     {
         dataType: "json",
         dataFields: [
-            { name: 'ProductNumber', type: 'string' },
-            { name: 'ProductName', type: 'string' },
-            { name: 'ParentNumber', type: 'string' },
-            { name: 'ActionTime', type: 'date' },
-            { name: 'ActionComments', type: 'string' },
-            { name: 'OperatorsText', type: 'string' },
-            { name: 'BoxNumberName', type: 'string' }
+            { name: 'Encode', type: 'string' },
+            { name: 'Name', type: 'string' },
+            { name: 'AssignTime', type: 'date' },
+            { name: 'AssignComments', type: 'string' },
+            { name: 'UsersNameText', type: 'string' }
         ],
-        hierarchy:
-        {
-            keyDataField: { name: 'ProductNumber' },
-            parentDataField: { name: 'ParentNumber' }
-        },
-        id: 'ProductNumber',
-        url: 'GetActionRecords?actiontype=5'
+        id: 'Encode',
+        url: 'GetMachineRecords'
     };
 
     // prepare the data
@@ -65,19 +58,19 @@
         filterable: true,
         columns: [
             {
-                text: '编号', datafield: 'ProductNumber', width: 100
+                text: '设备编号', datafield: 'Encode', width: 100
             },
             {
-                text: '名称', datafield: 'ProductName', width: 150
+                text: '名称', datafield: 'Name', width: 150
             },
             {
-                text: '操作时间', datafield: 'ActionTime', width: 100, cellsFormat: 'd',
+                text: '分配时间', datafield: 'AssignTime', width: 100, cellsFormat: 'd',
             },
             {
-                text: '操作者', datafield: 'OperatorsText', width: 150
+                text: '使用者', datafield: 'UsersNameText', width: 150
             },
             {
-                text: '装箱信息', datafield: 'BoxNumberName' 
+                text: '备注', datafield: 'AssignComments'
             }
         ]
     });

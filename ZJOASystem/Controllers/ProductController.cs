@@ -654,6 +654,9 @@ namespace ZJOASystem.Controllers
                     childRecord.ActionTime = item.ActionTime;
                     childRecord.ActionType = item.ActionType;
                     childRecord.AdditionalInfo = item.AdditionalInfo;
+                    childRecord.BoxNumber = item.BoxNumber;
+                    childRecord.BoxName = item.BoxName;
+
                     if (!items.Contains(childRecord))
                     {
                         items.Add(childRecord);
@@ -687,7 +690,8 @@ namespace ZJOASystem.Controllers
             }
 
             bool needAdditonalInfo = (actionType == Convert.ToInt32(ActionType.Deliever));
-            String filePath = CSVHelper.SaveActionRecordCSV(result, needAdditonalInfo);
+            bool needBox = (actionType == Convert.ToInt32(ActionType.Package));
+            String filePath = CSVHelper.SaveActionRecordCSV(result, needAdditonalInfo,needBox);
             string contentType = "application/csv";
             return File(filePath, contentType, string.Format("ProductActions_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss")));
         }
@@ -726,7 +730,8 @@ namespace ZJOASystem.Controllers
                                    item.ActionTime,
                                    item.ActionComments,
                                    item.OperatorsText,
-                                   item.AdditionalInfo
+                                   item.AdditionalInfo,
+                                   item.BoxNumberName
                                });
             return Json(productList, JsonRequestBehavior.AllowGet);
         }

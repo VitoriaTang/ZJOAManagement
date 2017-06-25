@@ -8,12 +8,8 @@
 <p>
     @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_CREATE"), "Create")
 </p>
-<form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index", new {index="1" })" method="post">
+<form class="navbar-form navbar-right" name="searchform" action="@Url.Action("Index")" method="post">
     <div class="input-group">
-        <input type="text" id="searchkey" name="searchkey" class="form-control" placeholder="Search..." />
-            <span class="btn input-group-addon" onclick="document.searchform.submit();">
-                <span class="glyphicon  glyphicon-search"></span>
-            </span>
         @Html.Hidden("hiddensearchkey", ViewData["hiddensearchkey"])
     </div>
 </form>
@@ -50,6 +46,10 @@
             sortable: true,
             pageable: true,
             autoheight: true,
+            pagerButtonsCount: 20,
+            columnsResize: true,
+            sortable: true,
+            filterable: true,
             columns: [
               { text: 'Id', datafield: 'Id', hidden:true },
               { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ENCODE")', datafield: 'Encode', width: 100 },

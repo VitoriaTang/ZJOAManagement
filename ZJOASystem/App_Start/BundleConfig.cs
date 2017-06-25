@@ -49,6 +49,9 @@ namespace ZJOASystem
             bundles.Add(new ScriptBundle("~/bundles/product/deliever").Include(
                         "~/Scripts/ProductDeliever.js"));
 
+            bundles.Add(new ScriptBundle("~/bundles/machine/index").Include(
+                        "~/Scripts/MachineIndex.js"));
+
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/tree").Include(
                         "~/Content/jqwidgets/jqxcore.js",
                         "~/Content/jqwidgets/jqxdata.js",
@@ -107,6 +110,8 @@ namespace ZJOASystem
                         "~/Content/jqwidgets/jqxgrid.sort.js",
                         "~/Content/jqwidgets/jqxgrid.pager.js",
                         "~/Content/jqwidgets/jqxgrid.selection.js",
+                        "~/Content/jqwidgets/jqxgrid.columnsresize.js",
+                        "~/Content/jqwidgets/jqxgrid.filter.js",
                         "~/Content/jqwidgets/jqxmenu.js"));
 
         }

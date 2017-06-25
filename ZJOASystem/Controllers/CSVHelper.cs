@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -66,16 +67,15 @@ namespace ZJOASystem.Controllers
                 }
             }
 
-            int startIndex = 1;
-            int columnCount = 3;
-
-            Dictionary<ProductBase, int> tempResultList = new Dictionary<ProductBase, int>();
-            for (int i = startIndex; i < lines.Length;)
+            for (int i = 1; i < lines.Length;i++)
             {
                 string line = lines[i];
-                int nextIndex = i;
-                List<string> tempList = null;
-                List<string> fields = CombineNewLine(line, i, columnCount, ref lines, out nextIndex, ref tempList);
+                line = line.TrimStart('\n');
+                if (string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                string[] fields = line.Split(',');
 
                 string number = fields[numberIndex];
                 string parentNumber = Convert.ToString(fields[parentnumberIndex]);
@@ -86,7 +86,6 @@ namespace ZJOASystem.Controllers
                 ProductBase productItem = new ProductBase(number, fields[nameIndex], parentNumber);
 
                 result.Add(productItem);
-                i = nextIndex;
             }
 
             return result;
@@ -163,6 +162,7 @@ namespace ZJOASystem.Controllers
             int actionTimeIndex = -1;
             int operatorIndex = -1;
             int additonalInfoIndex = -1;
+            int boxIndex = -1;
             string columnList = lines[0];
             string[] columns = columnList.Split(',');
             for (int i = 0; i < columns.Length; i++)
@@ -194,6 +194,10 @@ namespace ZJOASystem.Controllers
                 else if (columns[i].Equals("AdditionalInfo", StringComparison.CurrentCultureIgnoreCase))
                 {
                     additonalInfoIndex = i;
+                }
+                else if (columns[i].Equals("Box", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    boxIndex = i;
                 }
             }
 
@@ -229,14 +233,15 @@ namespace ZJOASystem.Controllers
                 int actionTypeValue = 0;
                 int.TryParse(actionType, out actionTypeValue);
                 recordItem.ActionType = (ActionType)actionTypeValue;
-                DateTime timeValue = DateTime.Now;
-                if (!DateTime.TryParse(actionTime, out timeValue))
-                {
-                    timeValue = DateTime.Now;
-                }
+                DateTime timeValue = GetDatetime(actionTime, "yyyyMMdd HH:mm:ss");
+                
                 recordItem.ActionTime = timeValue;
                 recordItem.ActionComments = actionComments;
 
+                if (boxIndex > -1)
+                {
+                    recordItem.BoxNumber = fields[boxIndex];
+                }
                 if (!string.IsNullOrEmpty(operators))
                 {
                     recordItem.Operators = new List<Operator>();
@@ -257,10 +262,10 @@ namespace ZJOASystem.Controllers
                 result.Add(recordItem);
             }
 
-            return result;
+            return result; 
         }
 
-        internal static string SaveActionRecordCSV(List<ActionRecord> data, bool needExportAdditonal)
+        internal static string SaveActionRecordCSV(List<ActionRecord> data, bool needExportAdditonal, bool needBoxInfo)
         {
             string filepath = ConfigurationManager.AppSettings["outputFolder"];
             filepath = filepath + Guid.NewGuid().ToString() + ".csv";
@@ -270,6 +275,10 @@ namespace ZJOASystem.Controllers
                 StringBuilder sb = new StringBuilder();
 
                 String header = "ProductNumber,ProductName,ParentNumber,ActionType,ActionTime,Operators";
+                if (needBoxInfo)
+                {
+                    header += ",Box";
+                }
                 if (needExportAdditonal)
                 {
                     header += ",AdditionalInfo";
@@ -282,7 +291,10 @@ namespace ZJOASystem.Controllers
                     {
                         ActionRecord item = data[i];
                         string itemText = string.Join(",", item.ProductNumber, item.ProductName, item.ParentNumber, Convert.ToInt32(item.ActionType), item.ActionTime.ToString("yyyyMMdd HH:mm:ss"), item.OperatorsEncodeText);
-
+                        if (needBoxInfo)
+                        {
+                            itemText += "," + item.BoxNumber;
+                        }
                         if (needExportAdditonal)
                         {
                             itemText += "," + item.AdditionalInfo;
@@ -300,5 +312,145 @@ namespace ZJOASystem.Controllers
 
             return filepath;
         }
+
+        internal static List<MachineRecord> OpenMachineRecordCSV(string csvContent)
+        {
+            if (string.IsNullOrEmpty(csvContent))
+            {
+                return null;
+            }
+
+            List<MachineRecord> result = new List<MachineRecord>();
+            string[] lines = csvContent.Split('\r');
+            int numberIndex = -1;
+            int nameIndex = -1;
+            int assignTypeIndex = -1;
+            int assignTimeIndex = -1;
+            int userIndex = -1;
+            string columnList = lines[0];
+            string[] columns = columnList.Split(',');
+            for (int i = 0; i < columns.Length; i++)
+            {
+                if (columns[i].Equals("Number", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    numberIndex = i;
+                }
+                else if (columns[i].Equals("Name", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    nameIndex = i;
+                }
+                else if (columns[i].Equals("AssignType", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    assignTypeIndex = i;
+                }
+                else if (columns[i].Equals("AssignTime", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    assignTimeIndex = i;
+                }
+                else if (columns[i].Equals("Users", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    userIndex = i;
+                }
+            }
+
+            int startIndex = 1;
+
+            // We will not consider the \r\n cases
+            for (int i = startIndex; i < lines.Length; i++)
+            {
+                string line = lines[i];
+                line = line.TrimStart('\n');
+                if (string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                string[] fields = line.Split(',');
+
+                string name = fields[nameIndex];
+                string number = fields[numberIndex];
+                string assignType = fields[assignTypeIndex];
+                string assignTime = fields[assignTimeIndex];
+                string assignComments = "Import from CSV file";
+                string users = fields[userIndex];
+
+                MachineRecord recordItem = new MachineRecord();
+                recordItem.Name = name;
+                recordItem.Encode = number;
+                int assignTypeValue = 0;
+                int.TryParse(assignType, out assignTypeValue);
+                recordItem.AssignType = (AssignType)assignTypeValue;
+                DateTime timeValue = GetDatetime(assignTime, "yyyyMMdd HH:mm:ss");
+                recordItem.AssignTime = timeValue;
+                recordItem.AssignComments = assignComments;
+
+                if (!string.IsNullOrEmpty(users))
+                {
+                    recordItem.Users = new List<Operator>();
+                    string[] operatorsArray = users.Split(';');
+                    foreach (string optValue in operatorsArray)
+                    {
+                        string optEncode = optValue.Trim();
+                        if (!string.IsNullOrEmpty(optEncode))
+                        {
+                            Operator optObj = new Operator();
+                            optObj.Encode = optEncode;
+
+                            recordItem.Users.Add(optObj);
+                        }
+                    }
+                }
+
+                result.Add(recordItem);
+            }
+
+            return result;
+        }
+
+        private static DateTime GetDatetime(string timeString, string timeFormat)
+        {
+            DateTime timeValue = DateTime.Now;
+            IFormatProvider formatProvider = CultureInfo.CurrentCulture;
+            if (!DateTime.TryParseExact(timeString,timeFormat , formatProvider, DateTimeStyles.AssumeLocal, out timeValue))
+            {
+                timeValue = DateTime.Now;
+            }
+            return timeValue;
+        }
+
+        internal static string SaveMachineRecordCSV(List<MachineRecord> data)
+        {
+            string filepath = ConfigurationManager.AppSettings["outputFolder"];
+            filepath = filepath + Guid.NewGuid().ToString() + ".csv";
+            using (FileStream stream = File.OpenWrite(filepath))
+            {
+
+                StringBuilder sb = new StringBuilder();
+
+                String header = "Number,Name,AssignType,AssignTime,Users";
+              
+                sb.AppendLine(header);
+
+                if (data != null && data.Count > 0)
+                {
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        MachineRecord item = data[i];
+                        string itemText = string.Join(",", item.Encode, item.Name,  Convert.ToInt32(item.AssignType), item.AssignTime.ToString("yyyyMMdd HH:mm:ss"), item.UsersEncodeText);
+
+                      
+                        sb.AppendLine(itemText);
+                    }
+
+                    byte[] bytes = Encoding.GetEncoding("UTF-8").GetBytes(sb.ToString());
+
+                    stream.Write(bytes, 0, bytes.Length);
+
+                    stream.Close();
+                }
+            }
+
+            return filepath;
+        }
+
     }
 }

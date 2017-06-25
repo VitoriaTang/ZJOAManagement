@@ -172,6 +172,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\HtmlHelperExtensions.cs" />
+    <Compile Include="Controllers\MachineController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ResourceReader.cs" />
     <Compile Include="Global.asax.cs">
@@ -184,6 +185,7 @@
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\GridModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\MachineDBContext.cs" />
     <Compile Include="Models\MachineModel.cs" />
     <Compile Include="Models\MySqlInitializer.cs" />
     <Compile Include="Models\PrintTemplateModels.cs" />
@@ -1532,6 +1534,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MachineIndex.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\ProductIndex.js" />
     <Content Include="Scripts\ProductPackage.js" />
@@ -1551,7 +1554,6 @@
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>
-    <Content Include="SQLs\procedure.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1599,9 +1601,11 @@
     <Content Include="Views\Product\Test.cshtml" />
     <Content Include="Views\Product\Package.cshtml" />
     <Content Include="Views\Product\Deliever.cshtml" />
+    <Content Include="Views\Machine\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="SQLs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

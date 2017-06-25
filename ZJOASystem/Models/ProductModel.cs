@@ -20,6 +20,8 @@ namespace ZJOASystem.Models
         public string ActionComments { get; set; }
         public List<Operator> Operators { get; set; }
         public string AdditionalInfo { get; set; }
+        public string BoxNumber { get; set; }
+        public string BoxName { get; set; }
 
         public string OperatorsText
         {
@@ -59,6 +61,14 @@ namespace ZJOASystem.Models
                 {
                     return "";
                 }
+            }
+        }
+
+        public string BoxNumberName
+        {
+            get
+            {
+                return string.Format("{0}({1})", BoxName, BoxNumber);
             }
         }
         public override string ToString()

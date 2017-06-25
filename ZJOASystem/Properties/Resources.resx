@@ -360,8 +360,35 @@
   <data name="LOGOFF" xml:space="preserve">
     <value>退出系统</value>
   </data>
+  <data name="MACHINE_ASSIGNCOMMENTS" xml:space="preserve">
+    <value>备注</value>
+  </data>
+  <data name="MACHINE_ASSIGNTIME" xml:space="preserve">
+    <value>设备分配时间</value>
+  </data>
+  <data name="MACHINE_BORROW" xml:space="preserve">
+    <value>设备分配</value>
+  </data>
+  <data name="MACHINE_EXPORT" xml:space="preserve">
+    <value>设备数据导出</value>
+  </data>
+  <data name="MACHINE_IMPORT" xml:space="preserve">
+    <value>设备数据导入</value>
+  </data>
+  <data name="MACHINE_NAME" xml:space="preserve">
+    <value>设备名称</value>
+  </data>
+  <data name="MACHINE_NUMBER" xml:space="preserve">
+    <value>设备编号</value>
+  </data>
+  <data name="MACHINE_RETURN" xml:space="preserve">
+    <value>设备归还</value>
+  </data>
   <data name="MACHINE_TITLE" xml:space="preserve">
     <value>设备管理</value>
+  </data>
+  <data name="MACHINE_USERS" xml:space="preserve">
+    <value>使用者</value>
   </data>
   <data name="OK" xml:space="preserve">
     <value>确定</value>
@@ -407,6 +434,9 @@
   </data>
   <data name="PRODUCT_LIST" xml:space="preserve">
     <value>清单</value>
+  </data>
+  <data name="PRODUCT_MACHINE_UPLOAD" xml:space="preserve">
+    <value>上传</value>
   </data>
   <data name="PRODUCT_NAME" xml:space="preserve">
     <value>产品名称</value>

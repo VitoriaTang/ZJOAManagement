@@ -790,11 +790,92 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 备注.
+        /// </summary>
+        internal static string MACHINE_ASSIGNCOMMENTS {
+            get {
+                return ResourceManager.GetString("MACHINE_ASSIGNCOMMENTS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备分配时间.
+        /// </summary>
+        internal static string MACHINE_ASSIGNTIME {
+            get {
+                return ResourceManager.GetString("MACHINE_ASSIGNTIME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备分配.
+        /// </summary>
+        internal static string MACHINE_BORROW {
+            get {
+                return ResourceManager.GetString("MACHINE_BORROW", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备数据导出.
+        /// </summary>
+        internal static string MACHINE_EXPORT {
+            get {
+                return ResourceManager.GetString("MACHINE_EXPORT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备数据导入.
+        /// </summary>
+        internal static string MACHINE_IMPORT {
+            get {
+                return ResourceManager.GetString("MACHINE_IMPORT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备名称.
+        /// </summary>
+        internal static string MACHINE_NAME {
+            get {
+                return ResourceManager.GetString("MACHINE_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备编号.
+        /// </summary>
+        internal static string MACHINE_NUMBER {
+            get {
+                return ResourceManager.GetString("MACHINE_NUMBER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设备归还.
+        /// </summary>
+        internal static string MACHINE_RETURN {
+            get {
+                return ResourceManager.GetString("MACHINE_RETURN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 设备管理.
         /// </summary>
         internal static string MACHINE_TITLE {
             get {
                 return ResourceManager.GetString("MACHINE_TITLE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 使用者.
+        /// </summary>
+        internal static string MACHINE_USERS {
+            get {
+                return ResourceManager.GetString("MACHINE_USERS", resourceCulture);
             }
         }
         
@@ -921,6 +1002,15 @@ namespace ZJOASystem.Properties {
         internal static string PRODUCT_LIST {
             get {
                 return ResourceManager.GetString("PRODUCT_LIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 上传.
+        /// </summary>
+        internal static string PRODUCT_MACHINE_UPLOAD {
+            get {
+                return ResourceManager.GetString("PRODUCT_MACHINE_UPLOAD", resourceCulture);
             }
         }
         

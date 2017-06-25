@@ -104,10 +104,12 @@ namespace ZJOASystem.Models
 
         public static string GET_PRODUCTACTIONS = @"SELECT  a.Id as Id, Concat(b.ProductBaseNumber,b.YearNumber, b.BatchNumber, b.SerialNumber) as ProductNumber, 
                 b.Name as ProductName, Concat(c.ProductBaseNumber,c.YearNumber, c.BatchNumber, c.SerialNumber) as ParentNumber, 
-                a.ActionTime, a.ActionComments, a.ActionType, d.Content as AdditionalInfo
+                a.ActionTime, a.ActionComments, a.ActionType, d.Content as AdditionalInfo,
+                Concat(bo.ProductBaseNumber,bo.YearNumber, bo.BatchNumber, bo.SerialNumber) as BoxNumber, bo.Name as BoxName
                 FROM product_actions a 
 	                Inner Join products b on a.ProductId=b.Id 
                     Left Join products c on b.ParentId=c.Id
+                    Left Join products bo on b.BoxId=bo.Id
                     Left Join action_additionals d on a.AdditionalId=d.Id";
 
         public static string GET_PRODUCTS_WITHPARENT = @"SELECT  a.Id as Id, Concat(a.ProductBaseNumber,a.YearNumber, a.BatchNumber, a.SerialNumber) as Number, 
@@ -612,17 +614,18 @@ namespace ZJOASystem.Models
 
         internal void SaveActionRecord(ActionRecord item)
         {
-            string sql ="";
-            if (item.AdditionalInfo == null)
-            {
-                sql = string.Format("CALL proc_insert_productaction ('{0}', '{1}' ,'{2}', {3}, '{4}','{5}','{6}', null)",
-                  item.ProductNumber, item.ParentNumber, item.ProductName, Convert.ToInt32(item.ActionType), item.ActionTime, item.ActionComments, item.OperatorsEncodeText);
-            }
-            else
-            {
-                sql = string.Format("CALL proc_insert_productaction ('{0}', '{1}' ,'{2}', {3}, '{4}','{5}','{6}', '{7}')",
-                  item.ProductNumber, item.ParentNumber, item.ProductName, Convert.ToInt32(item.ActionType), item.ActionTime, item.ActionComments, item.OperatorsEncodeText, item.AdditionalInfo);
-            }
+            string sql = string.Format("CALL proc_insert_productaction ('{0}', '{1}' ,'{2}', {3}, '{4}','{5}','{6}','{7}', '{8}','{9}')",
+                  item.ProductNumber, 
+                  item.ParentNumber, 
+                  item.ProductName, 
+                  Convert.ToInt32(item.ActionType), 
+                  item.ActionTime,
+                  string.IsNullOrEmpty(item.ActionComments)? "":item.ActionComments,
+                  string.IsNullOrEmpty(item.BoxNumber) ? "" : item.BoxNumber,
+                  string.IsNullOrEmpty(item.BoxName) ? "" : item.BoxName,
+                  string.IsNullOrEmpty(item.AdditionalInfo) ? "" : item.AdditionalInfo, 
+                  item.OperatorsEncodeText);
+            
             this.Database.ExecuteSqlCommand(sql);
         }
     }
