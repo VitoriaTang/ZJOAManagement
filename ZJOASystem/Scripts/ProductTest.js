@@ -62,6 +62,7 @@
         columnsResize: true,
         sortable: true,
         filterable: true,
+        exportSettings: { fileName: null, collapsedRecords: false, recordsInView: true },
         columns: [
             {
                 text: '编号', datafield: 'ProductNumber', width: 100
@@ -79,5 +80,77 @@
                 text: '备注', datafield: 'ActionComments'
             }
         ]
+    });
+
+    var printTemplateSource =
+  {
+      dataType: "json",
+      dataFields: [
+          { name: 'Name', type: 'string' },
+          { name: 'Content', type: 'string' }
+      ],
+      id: 'Name',
+      url: 'GetPrintTemplate'
+  };
+
+    var printTemplateDataAdapter = new $.jqx.dataAdapter(printTemplateSource);
+    $("#jqxcombobox").jqxDropDownList({
+        source: printTemplateDataAdapter,
+        selectedIndex: 0,
+        width: '200',
+        height: '25',
+        displayMember: "Name",
+        valueMember: "Content"
+    });
+
+    $("#printButton").jqxButton({ width: '100', height: '25' });
+
+    isIE = function () { //ie?
+        if (!!window.ActiveXObject || "ActiveXObject" in window)
+            return true;
+        else
+            return false;
+    };
+    String2XML = function (xmlString) {
+        // for IE
+        if (isIE()) {
+            var xmlobject = new ActiveXObject("Microsoft.XMLDOM");
+            xmlobject.async = "false";
+            xmlobject.loadXML(xmlString);
+            return xmlobject;
+        }
+            // for other browsers
+        else {
+            var parser = new DOMParser();
+            var xmlobject = parser.parseFromString(xmlString, "text/xml");
+            return xmlobject;
+        }
+    }
+    $("#printButton").click(function () {
+        var printItem = $("#jqxcombobox").jqxDropDownList('getSelectedItem');
+
+        if (printItem && printItem != null) {
+            var printContent = printItem.value;
+            var gridContent = $("#treeGrid").jqxTreeGrid('exportData', 'xml');
+
+            var xml = String2XML(gridContent);
+            var xsl = String2XML(printContent);
+
+            var newWindow = window.open('', '', 'width=800, height=500, menubar=yes, resizable=yes, scrollbars=yes');
+
+            if (isIE()) {
+                var ex = xml.transformNode(xsl);
+                newWindow.document.write(ex);
+            }
+            else {
+                var xsltProcessor = new XSLTProcessor();
+                xsltProcessor.importStylesheet(xsl);
+                newWindow.document = xsltProcessor.transformToFragment(xml, newWindow.document);
+            }
+
+            newWindow.document.close();
+
+        }
+
     });
 });

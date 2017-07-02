@@ -64,11 +64,12 @@ namespace ZJOASystem
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/treegrid").Include(
                         "~/Content/jqwidgets/jqxcore.js",
                         "~/Content/jqwidgets/jqxdata.js",
+                        "~/Content/jqwidgets/jqxdatatable.js",
                         "~/Content/jqwidgets/jqxbuttons.js",
                         "~/Content/jqwidgets/jqxscrollbar.js",
                         "~/Content/jqwidgets/jqxlistbox.js",
                         "~/Content/jqwidgets/jqxdropdownlist.js",
-                        "~/Content/jqwidgets/jqxdatatable.js",
+                        "~/Content/jqwidgets/jqxdata.export.js",
                         "~/Content/jqwidgets/jqxtreegrid.js",
                         "~/Content/jqwidgets/jqxtooltip.js",
                         "~/Content/jqwidgets/jqxinput.js"));
@@ -96,7 +97,8 @@ namespace ZJOASystem
                         "~/Content/jqwidgets/jqxcombobox.js",
                         "~/Content/jqwidgets/jqxdatetimeinput.js",
                         "~/Content/jqwidgets/jqxcalendar.js",
-                        "~/Content/jqwidgets/jqxradiobutton.js"));
+                        "~/Content/jqwidgets/jqxradiobutton.js",
+                        "~/Content/jqwidgets/jqxlinkbutton.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/jqwidgets/grid").Include(
                         "~/Content/jqwidgets/jqxcore.js",
@@ -108,10 +110,13 @@ namespace ZJOASystem
                         "~/Content/jqwidgets/jqxdropdownlist.js",
                         "~/Content/jqwidgets/jqxgrid.js",
                         "~/Content/jqwidgets/jqxgrid.sort.js",
+                        "~/Content/jqwidgets/jqxgrid.edit.js",
                         "~/Content/jqwidgets/jqxgrid.pager.js",
                         "~/Content/jqwidgets/jqxgrid.selection.js",
                         "~/Content/jqwidgets/jqxgrid.columnsresize.js",
                         "~/Content/jqwidgets/jqxgrid.filter.js",
+                        "~/Content/jqwidgets/jqxdata.export.js",
+                        "~/Content/jqwidgets/jqxgrid.export.js",
                         "~/Content/jqwidgets/jqxmenu.js"));
 
         }

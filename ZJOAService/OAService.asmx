@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="C#" CodeBehind="OAService.asmx.cs" Class="ZJOAService.Service1" %>

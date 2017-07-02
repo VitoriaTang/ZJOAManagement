@@ -10,12 +10,16 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using ZJOASystem.Models;
 using System.Web.Security;
+using System.Text;
+using System.Web.Script.Serialization;
 
 namespace ZJOASystem.Controllers
 {
     [Authorize]
     public class AccountController : Controller
     {
+        private ApplicationDbContext db = new ApplicationDbContext();
+
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -67,7 +71,7 @@ namespace ZJOASystem.Controllers
 
         //
         // GET: /Account/Register
-        [AllowAnonymous]
+        [Authorize(Roles = "Admin")]
         public ActionResult Register()
         {
             return View();
@@ -323,6 +327,138 @@ namespace ZJOASystem.Controllers
             base.Dispose(disposing);
         }
 
+        [Authorize(Roles = "Admin")]
+        public ActionResult UserRoles()
+        {
+            return View();
+        }
+
+        //
+        // POST: /Account/UserRoles
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public ActionResult UserRoles(string request)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    string formData = Request.Form.GetValues("hiddenData")[0];
+                    JavaScriptSerializer Serializer = new JavaScriptSerializer();
+                    List<InnerUserRoles> innerObj = Serializer.Deserialize<List<InnerUserRoles>>(formData);
+
+                    List<ApplicationUser> allusers = this.db.Users.ToList<ApplicationUser>();
+                    List<string> deleteUsers = new List<string>();
+
+                    Dictionary<string, InnerUserRoles> innerList = new Dictionary<string, InnerUserRoles>();
+                    foreach (InnerUserRoles role in innerObj)
+                    {
+                        innerList.Add(role.UserName, role);
+                    }
+
+
+                    for (int i = allusers.Count - 1; i >= 0; i--)
+                    {
+                        ApplicationUser userobj = allusers[i];
+                        if (!innerList.ContainsKey(userobj.UserName))
+                        {
+                            this.db.Database.ExecuteSqlCommand(string.Format("DELETE FROM aspnetusers WHERE UserName='{0}'", userobj.UserName));
+                        }
+                    }
+
+                    foreach (InnerUserRoles role in innerObj)
+                    {
+
+                        ApplicationUser userobj = UserManager.FindByName<ApplicationUser>(role.UserName);
+                        if (userobj == null)
+                        {
+                            var user = new ApplicationUser();
+                            user.UserName = role.UserName;
+                            user.Email = "";
+
+                            string password = role.UserName;
+                            string encypwd = FormsAuthentication.HashPasswordForStoringInConfigFile(password, "md5");
+                            user.EncPassword = encypwd;
+
+                            var chkUser = UserManager.Create(user, encypwd);
+
+                            if (chkUser.Succeeded)
+                            {
+                                List<string> rolenames = role.GetRoles();
+                                foreach (string rolename in rolenames)
+                                {
+                                    var result1 = UserManager.AddToRole(user.Id, rolename);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            List<IdentityUserRole> currentroles =  userobj.Roles.ToList<IdentityUserRole>();
+                            for(int i=currentroles.Count-1; i>=0; i--){
+                                UserManager.RemoveFromRole(userobj.Id, currentroles[i].Role.Name);
+                            }
+                            List<string> rolenames = role.GetRoles();
+                            foreach (string rolename in rolenames)
+                            {
+                                var result1 = UserManager.AddToRole(userobj.Id, rolename.TrimStart().TrimEnd());
+                            }
+                        }
+                    }
+
+                    return RedirectToAction("UserRoles");
+                }
+                catch
+                {
+                    // do nothing
+                }
+            }
+            return View();
+        }
+
+        public JsonResult GetRoles()
+        {
+            List<IdentityRole> roles = db.Roles.ToList<IdentityRole>();
+
+            var roleList = (from item in roles
+                               select new
+                               {
+                                   item.Name
+                                   
+                               });
+            return Json(roleList, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetUsers()
+        {
+            List<ApplicationUser> users = db.Users.ToList<ApplicationUser>();
+
+            List<InnerUserRoles> result = new List<InnerUserRoles>();
+            foreach (ApplicationUser user in users)
+            {
+                InnerUserRoles item = new InnerUserRoles();
+                item.UserName = user.UserName;
+                List<IdentityUserRole> userroles =  user.Roles.ToList<IdentityUserRole>();
+                StringBuilder builder = new StringBuilder();
+                foreach (IdentityUserRole role in userroles)
+                {
+                    if (builder.Length > 0)
+                    {
+                        builder.Append(",");
+                    }
+                    builder.Append(role.Role.Name);
+                }
+                item.Roles = builder.ToString();
+                result.Add(item);
+            }
+            var roleList = (from item in result
+                            select new
+                            {
+                                item.UserName,
+                                item.Roles
+
+                            });
+            return Json(roleList, JsonRequestBehavior.AllowGet);
+        }
         #region Helpers
         // Used for XSRF protection when adding external logins
         private const string XsrfKey = "XsrfId";

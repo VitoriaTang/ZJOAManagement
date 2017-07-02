@@ -16,6 +16,18 @@ namespace ZJOASystem
             CreateRolesandUsers();
         }
 
+        public string[] RolesList = {"Admin", "组装组", "装箱组","检测组","发货组" };
+
+        private void CreateRole(RoleManager<IdentityRole> roleManager, string roleName)
+        {
+            if (!roleManager.RoleExists(roleName))
+            {
+                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+
+                role.Name = roleName;
+                roleManager.Create(role);
+            }
+        }
         private void CreateRolesandUsers()
         {
             ApplicationDbContext context = new ApplicationDbContext();
@@ -24,13 +36,14 @@ namespace ZJOASystem
 
             var UserManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
-            if (!roleManager.RoleExists("Admin"))
+            for (int i = 0; i < RolesList.Length; i++)
             {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
+                CreateRole(roleManager, RolesList[i]);
+            }
 
-                role.Name = "Admin";
-                roleManager.Create(role);
-
+            ApplicationUser adminUser = UserManager.FindByName<ApplicationUser>("admin");
+            if (adminUser == null)
+            {
                 var user = new ApplicationUser();
                 user.UserName = "admin";
                 user.Email = "";
@@ -45,23 +58,6 @@ namespace ZJOASystem
                 {
                     var result1 = UserManager.AddToRole(user.Id, "Admin");
                 }
-            }
-
-            if (!roleManager.RoleExists("Manager"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-
-                role.Name = "Manager";
-                roleManager.Create(role);
-
-            }
-
-            if (!roleManager.RoleExists("Employee"))
-            {
-                var role = new Microsoft.AspNet.Identity.EntityFramework.IdentityRole();
-
-                role.Name = "Employee";
-                roleManager.Create(role);
             }
         }
     }

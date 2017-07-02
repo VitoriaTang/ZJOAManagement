@@ -184,6 +184,7 @@
     <Compile Include="Models\EmployeeDBContext.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\GridModel.cs" />
+    <Compile Include="Models\IdentityFactoryOptions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MachineDBContext.cs" />
     <Compile Include="Models\MachineModel.cs" />
@@ -1536,6 +1537,7 @@
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Scripts\MachineIndex.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\print.js" />
     <Content Include="Scripts\ProductIndex.js" />
     <Content Include="Scripts\ProductPackage.js" />
     <Content Include="Scripts\ProductSetup.js" />
@@ -1602,6 +1604,7 @@
     <Content Include="Views\Product\Package.cshtml" />
     <Content Include="Views\Product\Deliever.cshtml" />
     <Content Include="Views\Machine\Index.cshtml" />
+    <Content Include="Views\Account\UserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

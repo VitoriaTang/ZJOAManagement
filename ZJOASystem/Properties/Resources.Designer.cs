@@ -889,6 +889,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 打印.
+        /// </summary>
+        internal static string PRINTBUTTON {
+            get {
+                return ResourceManager.GetString("PRINTBUTTON", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 产品操作记录.
         /// </summary>
         internal static string PRODUCT_ACTIONLIST {
@@ -1182,6 +1191,42 @@ namespace ZJOASystem.Properties {
         internal static string UPLOADFILE {
             get {
                 return ResourceManager.GetString("UPLOADFILE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 系统用户管理.
+        /// </summary>
+        internal static string URSESROLES {
+            get {
+                return ResourceManager.GetString("URSESROLES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 用户名.
+        /// </summary>
+        internal static string USER_NAME {
+            get {
+                return ResourceManager.GetString("USER_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 角色.
+        /// </summary>
+        internal static string USER_ROLES {
+            get {
+                return ResourceManager.GetString("USER_ROLES", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 设置.
+        /// </summary>
+        internal static string USERSETTINGS {
+            get {
+                return ResourceManager.GetString("USERSETTINGS", resourceCulture);
             }
         }
     }

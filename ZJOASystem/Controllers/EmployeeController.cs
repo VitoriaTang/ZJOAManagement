@@ -152,6 +152,7 @@ namespace ZJOASystem.Controllers
             }
         }
         // GET: /Employee/Create
+        [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
             if (Request.IsAuthenticated)
@@ -282,6 +283,7 @@ namespace ZJOASystem.Controllers
         }
 
         // GET: /Employee/Edit/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Edit(int? id)
         {
             if (Request.IsAuthenticated)
@@ -353,6 +355,7 @@ namespace ZJOASystem.Controllers
         }
 
         // GET: /Employee/Delete/5
+        [Authorize(Roles = "Admin")]
         public ActionResult Delete(int? id)
         {
             if (Request.IsAuthenticated)

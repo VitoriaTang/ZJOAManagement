@@ -9,6 +9,10 @@
         <li class="bannerlink">
             @Html.ActionLink("你好 " + User.Identity.GetUserName() + "!", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "bannerlink" })
         </li>
+
+        <li class="bannerlink">
+            @Html.ActionLink("角色", "UserRoles", "Account", routeValues: null, htmlAttributes: new { id = User.Identity.GetUserName() })
+        </li>
         <li class="bannerlink">
             <a href="javascript:document.getElementById('logoutForm').submit()"><i class="glyphicon glyphicon-log-out"></i>@ZJOASystem.Controllers.ResourceReader.GetString("LOGOFF")</a>
         </li>

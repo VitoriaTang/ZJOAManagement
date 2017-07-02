@@ -26,7 +26,8 @@
 <p>
     <button id="importButton">@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_IMPORT")</button>
     <a style='margin-left: 25px;' target="_blank" href="ExportProductAction?actiontype=3" id='exportButton'>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_EXPORT")</a>
-
+    <div id="jqxcombobox" style="float: left;"></div>
+    <button id="printButton" style="margin-left: 25px;">@ZJOASystem.Controllers.ResourceReader.GetString("PRINTBUTTON")</button>
     <br />
 </p>
 <form name="searchform" action="@Url.Action("Test")" method="post">
@@ -35,8 +36,8 @@
     </div>
 </form>
 
-
-@Scripts.Render("~/bundles/jqwidgets/treegrid")
 @Scripts.Render("~/bundles/jqwidgets/dialog")
+@Scripts.Render("~/bundles/jqwidgets/editor")
+@Scripts.Render("~/bundles/jqwidgets/treegrid")
 @Scripts.Render("~/bundles/product/test")
 

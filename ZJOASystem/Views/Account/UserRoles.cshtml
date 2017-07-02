@@ -1,0 +1,150 @@
+﻿@{
+    ViewBag.Title = "Users roles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("URSESROLES")</h2>
+
+<hr />
+
+<form name="searchform" action="@Url.Action("UserRoles")" method="post">
+
+    <div id="jqxgrid">
+    </div>
+    @Html.Hidden("hiddenData", ViewData["hiddenData"])
+</form>
+<button id="updateButton">保存</button>
+
+@Scripts.Render("~/bundles/jqwidgets/editor")
+@Scripts.Render("~/bundles/jqwidgets/grid")
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        // prepare the data
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'UserName', type: 'string' },
+                { name: 'Roles', type: 'string' }
+            ],
+            id: 'UserName',
+            url: 'GetUsers'
+        };
+
+        // prepare the data
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+
+        var rolessource =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Name', type: 'string' }
+            ],
+            id: 'Name',
+            url: 'GetRoles'
+        };
+
+        // prepare the data
+
+        var rolesdataAdapter = new $.jqx.dataAdapter(rolessource);
+
+        var generaterow = function (i) {
+            var row = {};
+            row["UserName"] = "user1";
+            row["Roles"] = "";
+            return row;
+        }
+        // create Tree Grid
+        $("#jqxgrid").jqxGrid(
+        {
+            width: 800,
+            source: dataAdapter,
+            selectionmode: 'singlerow',
+            sortable: true,
+            pageable: true,
+            autoheight: true,
+            pagerButtonsCount: 20,
+            columnsResize: true,
+            sortable: true,
+            filterable: true,
+            editmode: 'dblclick',
+            editable: true,
+            showtoolbar: true,
+            rendertoolbar: function (toolbar) {
+                var me = this;
+                var container = $("<div style='margin: 5px;'></div>");
+                toolbar.append(container);
+                container.append('<input id="addrowbutton" type="button" value="新增用户" />');
+                container.append('<input style="margin-left: 5px;" id="deleterowbutton" type="button" value="删除选择的用户" />');
+                $("#addrowbutton").jqxButton();
+                $("#deleterowbutton").jqxButton();
+
+                // create new row.
+                $("#addrowbutton").on('click', function () {
+                    var datarow = generaterow();
+                    var commit = $("#jqxgrid").jqxGrid('addrow', null, datarow);
+                });
+
+                // delete row.
+                $("#deleterowbutton").on('click', function () {
+                    var selectedrowindex = $("#jqxgrid").jqxGrid('getselectedrowindex');
+                    var rowscount = $("#jqxgrid").jqxGrid('getdatainformation').rowscount;
+                    if (selectedrowindex >= 0 && selectedrowindex < rowscount) {
+                        var id = $("#jqxgrid").jqxGrid('getrowid', selectedrowindex);
+                        var commit = $("#jqxgrid").jqxGrid('deleterow', id);
+                    }
+                });
+            },
+            columns: [
+              { text: 'UserName', datafield: 'UserName', width: 200 , columntype:'textbox'},
+              {
+                  text: 'Roles', datafield: 'Roles', columntype: 'combobox',
+                  createeditor: function (row, column, editor) {
+                      editor.jqxComboBox({ autoDropDownHeight: true, source: rolesdataAdapter, multiSelect: true, promptText: "请选择:", displayMember: 'Name', valueMember: 'Name' });
+                  },
+                  // update the editor's value before saving it.
+                  cellvaluechanging: function (row, column, columntype, oldvalue, newvalue) {
+                      // return the old value, if the new value is empty.
+                      if (newvalue == "") return oldvalue;
+                  },
+                  initeditor: function (row, cellvalue, editor, celltext, pressedChar) {
+                      var cellRoles = cellvalue.split(",");
+
+                      $.each(cellRoles, function (index) {
+                          var selectedItemValue = cellRoles[index];
+                          editor.jqxComboBox('selectItem', selectedItemValue);
+                      });
+                  },
+                  geteditorvalue: function (row, cellvalue, editor) {
+                      // return the editor's value.
+                      var items = editor.jqxComboBox('getSelectedItems');
+                      var selectedItems = "";
+                      $.each(items, function (index) {
+                          selectedItems += this.label;
+                          if (items.length - 1 != index) {
+                              selectedItems += ", ";
+                          }
+                      });
+                      return selectedItems;
+                  }
+              }
+            ]
+        });
+
+
+        $("#updateButton").jqxButton({ width: '200', height: '25' });
+
+        $("#updateButton").on('click', function () {
+            var hiddenData = document.getElementById("hiddenData");
+            var gridContent = $("#jqxgrid").jqxGrid('exportdata', 'json');
+
+            hiddenData.value = gridContent;
+            document.searchform.submit();
+        });
+
+    });
+</script>
+

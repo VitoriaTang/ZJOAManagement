@@ -387,6 +387,7 @@ namespace ZJOASystem.Controllers
             string contentType = "application/csv";
             return File(filePath, contentType, string.Format("ProductActions_{0}.csv", DateTime.Now.ToString("yyyyMMddHHmmss")));
         }
+        [Authorize(Roles = "Admin,组装组")]
         public ActionResult Setup()
         {
             if (Request.IsAuthenticated)
@@ -400,7 +401,7 @@ namespace ZJOASystem.Controllers
         }
 
         public JsonResult GetActionRecords()
-        {
+        { 
             int actionType = Convert.ToInt32( Request.QueryString["actiontype"] ); 
             string sqlQuery = ProductDBContext.GET_PRODUCTACTIONS + string.Format("  WHERE a.ActionType={0};", actionType);
 
@@ -423,13 +424,14 @@ namespace ZJOASystem.Controllers
                                    item.ActionComments,
                                    item.OperatorsText,
                                    item.AdditionalInfo,
-                                   item.BoxNumberName
+                                   item.BoxNumber
                                });
             return Json(productList, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
         #region Test
+        [Authorize(Roles = "Admin,检测组")]
         public ActionResult Test()
         {
             if (Request.IsAuthenticated)
@@ -445,6 +447,7 @@ namespace ZJOASystem.Controllers
         #endregion
 
         #region Package
+        [Authorize(Roles = "Admin,装箱组")]
         public ActionResult Package()
         {
             if (Request.IsAuthenticated)
@@ -460,6 +463,7 @@ namespace ZJOASystem.Controllers
         #endregion
 
         #region Deliever
+        [Authorize(Roles = "Admin,发货组")]
         public ActionResult Deliever()
         {
             if (Request.IsAuthenticated)
@@ -472,6 +476,47 @@ namespace ZJOASystem.Controllers
             }
         }
 
+        #endregion
+
+        #region Print
+        public JsonResult GetPrintTemplate()
+        {
+            List<PrintTemplate> result = new List<PrintTemplate>(); 
+
+            string filepath = ConfigurationManager.AppSettings["printTemplateFolder"];
+
+            string[] files = Directory.GetFiles(filepath, "*.xsl");
+
+            if (files != null && files.Length > 0)
+            {
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string fullPath = files[i];
+                    FileInfo fileinfo = new FileInfo(fullPath);
+                    if (fileinfo.Exists)
+                    {
+                        PrintTemplate item = new PrintTemplate();
+                        item.Name = fileinfo.Name.Substring(0, fileinfo.Name.Length-4);
+                        item.Path = fileinfo.FullName;
+
+                        string content = System.IO.File.ReadAllText(fileinfo.FullName, Encoding.UTF8);
+
+                        item.Content = content;
+
+                        result.Add(item);
+                    }
+                }
+
+            }
+
+            var templates = (from item in result
+                             select new
+                             {
+                                 item.Name,
+                                 item.Content
+                             });
+            return Json(templates, JsonRequestBehavior.AllowGet); 
+        }
         #endregion
     }
 }
