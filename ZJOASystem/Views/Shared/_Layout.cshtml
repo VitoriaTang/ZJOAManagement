@@ -2,105 +2,133 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>@ViewBag.Title - My ASP.NET Application</title>
-
     @Styles.Render("~/Content/css")
-    @Scripts.Render("~/bundles/modernizr")
+   
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/zjoa")
+    <script type="text/javascript">
+        function clickMenu(menuName) {
+            var menuItem = document.getElementById(menuName);
 
+            if (menuItem) {
+                menuItem.setAttribute("class", "active");
+            }
+        }
+    </script>
 </head>
 <body>
+    <!-- WRAPPER -->
+    <div id="wrapper">
 
-    <div class="header">
-        <div class="container" style="margin-left:25px;">
-            <div class="row">
-                <div class="col-md-5">
-                    <!-- Logo -->
-                    <div class="logo">
-                        <h1>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName"), "Index", "Home", null, new { @class = "logo" })</h1>
-                    </div>
-
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="brand">
+                <h1>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName"), "Index", "Home", null, new { @class = "logo" })</h1>
+            </div>
+            <div class="container-fluid">
+                <div class="navbar-btn">
+                    <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
                 </div>
+               
                 <div>
-                    @Html.Partial("_LoginPartial")
+                     @Html.Partial("_LoginPartial")
+                </div>
+               
+            </div>
+        </nav>
+        <!-- END NAVBAR -->
+        <div class="header">
+            <div class="container" style="margin-left:25px;">
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <!-- Logo -->
+                        <div class="logo">
+                            <h1>@Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName"), "Index", "Home", null, new { @class = "logo" })</h1>
+                        </div>
+
+                    </div>
+                    <div>
+                        @Html.Partial("_LoginPartial")
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="page-content">
-        <div class="row">
-            <div class="col-md-2">
-                <div class="sidebar content-box" style="display: block;">
+        <!-- LEFT SIDEBAR -->
+        <div id="sidebar-nav" class="sidebar">
+            <div class="sidebar-scroll">
+                <nav>
                     <ul class="nav">
-                        <!-- Main menu -->
                         <li>
-                            <a href="~/HOME/Index"><i class="glyphicon glyphicon-home"></i> @ZJOASystem.Controllers.ResourceReader.GetString("HOME_TITLE")</a>
+                            <a id="menuIndex" href="~/HOME/Index"><i class="lnr lnr-home"></i><span>@ZJOASystem.Controllers.ResourceReader.GetString("HOME_TITLE")</span></a>
                         </li>
                         <li>
-                            <a href="~/Employee/DepartmentIndex"><i class="glyphicon glyphicon-globe"></i> @ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_TITLE")</a>
+                            <a id="menuDepartment" href="~/Employee/DepartmentIndex"><i class="glyphicon glyphicon-globe"></i> <span>@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_TITLE")</span></a>
                         </li>
                         <li>
-                            <a href="~/Employee/Index"><i class="glyphicon glyphicon-user"></i> @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TITLE")</a>
+                            <a id="menuEmployee" href="~/Employee/Index"><i class="glyphicon glyphicon-user"></i> <span>@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TITLE")</span></a>
                         </li>
-                        <li class="submenu" >
-                            <a href="#">
-                                <i class="glyphicon glyphicon-barcode"></i> @ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")
-                                <span class="caret pull-right"></span>
+                        <li>
+                            <a id="menuProduct" href="#subPages" data-toggle="collapse" class="collapsed">
+                                <i class="glyphicon glyphicon-barcode"></i> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TITLE")</span>
+                                <i class="icon-submenu lnr lnr-chevron-left"></i>
                             </a>
-                            <ul>
-                                <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCTBASE_LIST"), "ProductList", "Product")
-                                </li>
-
-                                <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP"), "Setup", "Product")
-                                </li>
-                                <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TEST"), "Test", "Product")
-                                </li>
-                                <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE"), "Package", "Product")
-                                </li>
-
-                                <li>
-                                    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER"), "Deliever", "Product")
-                                </li>
-                            </ul>
+                            <div id="subPages" class="collapse ">
+                                <ul class="nav">
+                                    <li>
+                                        <a id="menuProductList" href="~/Product/ProductList"> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCTBASE_LIST")</span></a>
+                                    </li>
+                                    <li>
+                                        <a id="menuProductSetup" href="~/Product/Setup"> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_SETUP")</span></a>
+                                    </li>
+                                    <li>
+                                        <a id="menuProductTest" href="~/Product/Test"> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_TEST")</span></a>
+                                    </li>
+                                    <li>
+                                        <a id="menuProductPackage" href="~/Product/Package"> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_PACKAGE")</span></a>
+                                    </li>
+                                    <li>
+                                        <a id="menuProductDeliever" href="~/Product/Deliever"> <span>@ZJOASystem.Controllers.ResourceReader.GetString("PRODUCT_DELIEVER")</span></a>
+                                    </li>
+                                </ul>
+                            </div>
                         </li>
                         <li>
-                            <a href="~/Machine/Index"><i class="glyphicon glyphicon-credit-card"></i> @ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_TITLE")</a>
+                            <a id="menuMachine" href="~/Machine/Index"><i class="glyphicon glyphicon-credit-card"></i> <span>@ZJOASystem.Controllers.ResourceReader.GetString("MACHINE_TITLE")</span></a>
                         </li>
                     </ul>
-                </div>
-            </div>
-            <div class="col-md-10">
-                <div class="row" style="padding-left:10px">
-                    <div class="col-md-10">
-                        @RenderBody()
-                    </div>
-
-                </div>
-
-
+                </nav>
             </div>
         </div>
+        <!-- END LEFT SIDEBAR -->
+        <!-- MAIN -->
+        <div class="main">
+            <!-- MAIN CONTENT -->
+            <div class="main-content">
+                <div class="container-fluid">
+                    @RenderBody()
+
+                </div>
+            </div>
+            <!-- END MAIN CONTENT -->
+        </div>
+        <!-- END MAIN -->
+        <div class="clearfix"></div>
+        <footer>
+            <div class="container-fluid">
+                <p class="copyright">&copy; 2017 @ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName")</p>
+            </div>
+        </footer>
+
     </div>
+    <!-- END WRAPPER -->
 
-    <footer>
-        <div class="container">
-
-            <div class="copy text-center">
-                Copyright 2017 @ZJOASystem.Controllers.ResourceReader.GetString("ApplicationName")
-            </div>
-
-        </div>
-    </footer>
-
-
-    @RenderSection("scripts", required: false)
+    
+    
 </body>
 </html>

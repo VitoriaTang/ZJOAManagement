@@ -35,7 +35,10 @@
     <div id="treeGrid">
     </div>
 </form>
-
+<script type="text/javascript">
+    document.getElementById("menuProduct").click();
+    document.getElementById("menuProduct").setAttribute("class", "active");
+</script>
 @Scripts.Render("~/bundles/jqwidgets/dialog")
 @Scripts.Render("~/bundles/jqwidgets/editor")
 @Scripts.Render("~/bundles/jqwidgets/treegrid")

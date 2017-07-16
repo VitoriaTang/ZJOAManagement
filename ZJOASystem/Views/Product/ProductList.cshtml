@@ -44,7 +44,10 @@
 </p>
 @Scripts.Render("~/bundles/jqwidgets/dialog")
 @Scripts.Render("~/bundles/jqwidgets/treegrid")
-
+<script type="text/javascript">
+    document.getElementById("menuProduct").click();
+    document.getElementById("menuProduct").setAttribute("class", "active");
+</script>
 <script type="text/javascript">
     $(document).ready(function () {
         $('#customWindow').jqxWindow({

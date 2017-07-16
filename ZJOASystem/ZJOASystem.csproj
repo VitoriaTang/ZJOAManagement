@@ -220,6 +220,14 @@
     <Content Include="Content\bootstrap\js\bootstrap.js" />
     <Content Include="Content\bootstrap\js\bootstrap.min.js" />
     <Content Include="Content\bootstrap\js\npm.js" />
+    <Content Include="Content\chartist\css\chartist-custom.css" />
+    <Content Include="Content\chartist\css\chartist.css" />
+    <Content Include="Content\chartist\css\chartist.min.css" />
+    <Content Include="Content\chartist\js\chartist.js" />
+    <Content Include="Content\chartist\js\chartist.min.js" />
+    <Content Include="Content\font-awesome\css\font-awesome.css" />
+    <Content Include="Content\font-awesome\css\font-awesome.min.css" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\code.png" />
     <Content Include="Content\images\department.png" />
     <Content Include="Content\images\employee.png" />
@@ -227,6 +235,14 @@
     <Content Include="Content\images\home_white.png" />
     <Content Include="Content\images\menu.png" />
     <Content Include="Content\images\object.png" />
+    <Content Include="Content\jquery-slimscroll\jquery.slimscroll.js" />
+    <Content Include="Content\jquery-slimscroll\jquery.slimscroll.min.js" />
+    <Content Include="Content\jquery.easy-pie-chart\angular.easypiechart.js" />
+    <Content Include="Content\jquery.easy-pie-chart\angular.easypiechart.min.js" />
+    <Content Include="Content\jquery.easy-pie-chart\easypiechart.js" />
+    <Content Include="Content\jquery.easy-pie-chart\easypiechart.min.js" />
+    <Content Include="Content\jquery.easy-pie-chart\jquery.easypiechart.js" />
+    <Content Include="Content\jquery.easy-pie-chart\jquery.easypiechart.min.js" />
     <Content Include="Content\jqwidgets\globalization\globalize.culture.cs-CZ.js" />
     <Content Include="Content\jqwidgets\globalization\globalize.culture.de-DE.js" />
     <Content Include="Content\jqwidgets\globalization\globalize.culture.en-CA.js" />
@@ -659,6 +675,8 @@
     <Content Include="Content\jqwidgets\styles\jqx.ui-sunny.css" />
     <Content Include="Content\jqwidgets\styles\jqx.web.css" />
     <Content Include="Content\jqwidgets\styles\jqx.windowsphone.css" />
+    <Content Include="Content\linearicons\fonts\Linearicons-Free.svg" />
+    <Content Include="Content\linearicons\style.css" />
     <Content Include="Content\plugins\bootstrap-slider\bootstrap-slider.js" />
     <Content Include="Content\plugins\bootstrap-slider\slider.css" />
     <Content Include="Content\plugins\bootstrap-wysihtml5\bootstrap3-wysihtml5.all.js" />
@@ -1461,7 +1479,10 @@
     <Content Include="Content\printtemplate\PrintTemplate_barcode.xml" />
     <Content Include="Content\template\buttons.css" />
     <Content Include="Content\template\calendar.css" />
+    <Content Include="Content\template\demo.css" />
     <Content Include="Content\template\forms.css" />
+    <Content Include="Content\template\klorofil-common.js" />
+    <Content Include="Content\template\main.css" />
     <Content Include="Content\template\stats.css" />
     <Content Include="Content\template\styles.css" />
     <Content Include="favicon.ico" />
@@ -1518,6 +1539,19 @@
     <Content Include="Content\jqwidgets\styles\images\sunny\Thumbs.db" />
     <Content Include="Content\jqwidgets\styles\images\Thumbs.db" />
     <Content Include="Content\jqwidgets\styles\Thumbs.db" />
+    <Content Include="Content\chartist\css\chartist-custom.css.map" />
+    <Content Include="Content\chartist\map\chartist.css.map" />
+    <Content Include="Content\chartist\map\chartist.min.js.map" />
+    <Content Include="Content\chartist\scss\chartist.scss" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="Content\linearicons\fonts\Linearicons-Free.eot" />
+    <Content Include="Content\linearicons\fonts\Linearicons-Free.ttf" />
+    <Content Include="Content\linearicons\fonts\Linearicons-Free.woff" />
+    <Content Include="Content\linearicons\fonts\Linearicons-Free.woff2" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -754,7 +754,7 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 登录密码：.
+        ///   Looks up a localized string similar to 密码：.
         /// </summary>
         internal static string LOGIN_PASSWORD {
             get {
@@ -772,7 +772,7 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 登录用户：.
+        ///   Looks up a localized string similar to 用户：.
         /// </summary>
         internal static string LOGIN_USER {
             get {

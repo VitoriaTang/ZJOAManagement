@@ -21,12 +21,20 @@ namespace ZJOASystem
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Content/bootstrap/js/bootstrap.js",
-                      "~/Scripts/respond.js"));
+                      "~/Scripts/respond.js",
+                      "~/Content/template/klorofil-common.js",
+                      "~/Content/jquery-slimscroll/jquery.slimscroll.min.js",
+                      "~/Content/jquery.easy-pie-chart/jquery.easypiechart.min.js",
+                      "~/Content/chartist/js/chartist.min.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap/css/bootstrap.min.css",
                       "~/Content/bootstrap/css/bootstrap-responsive.css",
-                      "~/Content/template/styles.css",
+                      "~/Content/font-awesome/css/font-awesome.min.css",
+                      "~/Content/linearicons/style.css",
+                      "~/Content/chartist/css/chartist-custom.css",
+                      "~/Content/template/main.css",
+                      "~/Content/template/demo.css",
                       "~/Content/jqwidgets/styles/jqx.base.css",
                       "~/Content/jqwidgets/styles/jqx.darkblue.css"));
 

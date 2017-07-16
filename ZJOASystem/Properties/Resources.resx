@@ -349,13 +349,13 @@
     <value>请输入管理员账号：</value>
   </data>
   <data name="LOGIN_PASSWORD" xml:space="preserve">
-    <value>登录密码：</value>
+    <value>密码：</value>
   </data>
   <data name="LOGIN_REMEMBER" xml:space="preserve">
     <value>记住账号</value>
   </data>
   <data name="LOGIN_USER" xml:space="preserve">
-    <value>登录用户：</value>
+    <value>用户：</value>
   </data>
   <data name="LOGOFF" xml:space="preserve">
     <value>退出系统</value>

@@ -40,7 +40,7 @@ namespace ZJOASystem.Controllers
         }
 
         public JsonResult GetEmployees()
-        {
+        { 
            List<Employee> result =  this.db.Employees.ToList<Employee>();
            
            var employeeList = (from item in result
