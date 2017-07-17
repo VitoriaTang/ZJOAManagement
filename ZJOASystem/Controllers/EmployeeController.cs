@@ -27,6 +27,34 @@ namespace ZJOASystem.Controllers
                 return Redirect("../Account/Login");
             }
         }
+
+        [HttpPost]
+        public ActionResult DepartmentIndex(string request)
+        {
+            if (Request.IsAuthenticated)
+            {
+                string deleteItem = "";
+                try
+                {
+                    deleteItem = Request.Form.GetValues("hiddenDelete")[0];
+                }
+                catch
+                {
+                    deleteItem = "";
+                }
+
+                if (!string.IsNullOrEmpty(deleteItem))
+                {
+                    string sql = string.Format("DELETE FROM departments WHERE Id={0} ", deleteItem);
+                    this.db.Database.ExecuteSqlCommand(sql);
+                }
+                return View();
+            }
+            else
+            {
+                return Redirect("../Account/Login");
+            }
+        }
         public ActionResult Index()
         {
             if (Request.IsAuthenticated)
@@ -54,6 +82,32 @@ namespace ZJOASystem.Controllers
                               });
            return Json(employeeList, JsonRequestBehavior.AllowGet);
         }
+
+        /// <summary>
+        /// Get: Product/GetProductBases
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetDepartmentList()
+        {
+            List<Department> result = this.db.Departments.ToList<Department>();
+
+            foreach (Department item in result)
+            {
+                if (item.ParentId == 0)
+                {
+                    item.ParentId = -1;
+                }
+            }
+            var departmentList = (from item in result
+                                  select new { 
+                                      item.Id,
+                                      item.ParentId,
+                                      item.Name
+                                  });
+
+            return Json(departmentList, JsonRequestBehavior.AllowGet);
+        }
+
         public ActionResult DepartmentDetail(int? id)
         {
             if (Request.IsAuthenticated)
@@ -601,5 +655,15 @@ namespace ZJOASystem.Controllers
             return MvcHtmlString.Create(builder.ToString());
         }
 
+
+        public static int EmployeeCount
+        {
+            get
+            {
+                EmployeeDBContext db = new EmployeeDBContext();
+                List<Employee> all = db.Employees.ToList<Employee>();
+                return all.Count;
+            }
+        }
     }
 }

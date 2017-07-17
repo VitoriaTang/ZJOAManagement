@@ -96,22 +96,7 @@ namespace ZJOASystem.Models
             modelBuilder.Entity<Action>().Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
         }
 
-        private List<Product> _innerList = null;
-        public List<ZJOASystem.Models.Product> Products
-        {
-            get
-            {
-                if (_innerList == null)
-                {
-                    string sqlQuery = string.Format( GETALLPRODUCTLIST_SQL, Convert.ToInt32(ProductStatus.Disabled));
-                    _innerList = this.Database.SqlQuery<Product>(sqlQuery).ToList<Product>();
-                }
-                return _innerList;
-            }
-        }
-
         
-
         public List<ProductAddition> GetProductAddition(Guid productGuid)
         {
             string sqlcmd = string.Format(GETADDITION_SQL, productGuid);

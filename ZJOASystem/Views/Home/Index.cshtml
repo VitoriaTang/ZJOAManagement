@@ -2,31 +2,82 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>紫珺办公系统</h1>
-    <p class="lead">办公系统提供系统办公自动化的管理，包含员工管理、部门管理、产品管理等。</p>
-    
-</div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>员工管理</h2>
-        <p>
-            提供新增员工,编辑员工基本信息以及指定员工部门的功能。
-        </p>
-        <p><a class="btn btn-default" href="~/Employee/Index">管理 &raquo;</a></p>
+<!-- OVERVIEW -->
+<div class="panel panel-headline">
+    <div class="panel-heading">
+        <h1 class="panel-title" style="font-size:36px">紫珺办公系统</h1>
+        <p class="panel-subtitle">办公系统提供系统办公自动化的管理，包含员工管理、部门管理、产品管理以及设备管理等。</p>
+        <p class="panel-subtitle">如有任何关于系统的使用上的问题，请参考使用帮助指南。</p>
     </div>
-    <div class="col-md-4">
-        <h2>部门管理</h2>
-        <p>提供部门树形管理,新增部门,编辑部门基本信息的功能。</p>
-        <p><a class="btn btn-default" href="~/Department/Index">管理 &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>产品管理</h2>
-        <p>提供产品部件管理,包含有制造、组装、测试、维修、装箱和发货的管理。</p>
-        <p><a class="btn btn-default" href="~/Product/ProductList">管理 &raquo;</a></p>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-address-book"></i></span>
+                    <p>
+                        <span class="number">@ZJOASystem.Controllers.EmployeeController.EmployeeCount</span>
+                        <span class="title">员工</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-shopping-bag"></i></span>
+                    <p>
+                        <span class="number">@ZJOASystem.Controllers.ProductController.ProductCount</span>
+                        <span class="title">产品</span>
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="metric">
+                    <span class="icon"><i class="fa fa-eye"></i></span>
+                    <p>
+                        <span class="number">@ZJOASystem.Controllers.MachineController.MachineCount</span>
+                        <span class="title">设备</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="weekly-summary">
+                    <span class="number" style="font-size:24px"><i class="fa fa-user"></i> 员工管理</span>
+                    <span class="info-label">提供新增员工,编辑员工基本信息以及指定员工部门的功能。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="weekly-summary">
+                    <span class="number" style="font-size:24px"><i class="fa fa-user-circle"></i> 部门管理</span>
+                    <span class="info-label">提供部门树形管理,新增部门,编辑部门基本信息的功能。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="weekly-summary">
+                    <span class="number" style="font-size:24px"><i class="fa fa-shopping-bag"></i> 产品管理</span>
+                    <span class="info-label">提供产品部件管理,包含有制造、组装、测试、装箱和发货的管理。</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <div class="weekly-summary ">
+                    <span class="number" style="font-size:24px"><i class="fa fa-eye"></i> 设备管理</span>
+                    <span class="info-label">提供对设备的分发管理。</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+<!-- END OVERVIEW -->
 <script type="text/javascript">
     clickMenu("menuIndex");
 </script>

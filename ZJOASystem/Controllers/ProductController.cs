@@ -518,5 +518,16 @@ namespace ZJOASystem.Controllers
             return Json(templates, JsonRequestBehavior.AllowGet); 
         }
         #endregion
+
+        public static int ProductCount
+        {
+            get
+            {
+                ProductDBContext db = new ProductDBContext();
+                List<int> result = db.Database.SqlQuery<int>("select count(id) from products").ToList<int>();
+
+                return result[0];
+            }
+        }
     }
 }

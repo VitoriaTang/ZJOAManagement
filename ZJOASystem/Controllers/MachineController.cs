@@ -116,5 +116,16 @@ namespace ZJOASystem.Controllers
         }
 
        #endregion
+
+        public static int MachineCount
+        {
+            get
+            {
+                MachineDBContext db = new MachineDBContext();
+                string sql = "SELECT COUNT(Encode) FROM machines";
+                List<int> result = db.Database.SqlQuery<int>(sql).ToList<int>();
+                return result[0];
+            }
+        }
     }
 }

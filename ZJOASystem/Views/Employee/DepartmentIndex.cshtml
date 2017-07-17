@@ -4,15 +4,96 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+@Scripts.Render("~/bundles/jqwidgets/tree")
+@Scripts.Render("~/bundles/jqwidgets/editor")
 <h2>@ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_TITLE")</h2>
 
-<p>
-    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("DEPARTMENT_CREATE"), "CreateDepartment")
-</p>
-<div>
-    @ZJOASystem.Controllers.EmployeeController.RenderDepartmentTree()
+<form name="mainform" action="@Url.Action("DepartmentIndex")" method="post" style="width:400px;">
+
+    <div class=" input-group">
+
+        @Html.Hidden("hiddenDelete", ViewData["hiddenDelete"])
+    </div>
+</form>
+<div style='float: left;'>
+    <a  href="~/Employee/CreateDepartment" id='linkButtonAdd'>新建</a>      
+   
+    <input type="button" id='buttonDelete' value="删除" />
+    <input type="button" id='buttonEdit' value="编辑" />
 </div>
+<br/>
+<p>
+    <div id='jqxTree'>
+    </div>
+</p>
 <script type="text/javascript">
-    clickMenu("menuDepartment");
+        clickMenu("menuDepartment");
 </script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        $("#linkButtonAdd").jqxLinkButton({ width: '100', height: '25' });
+        $('#buttonDelete').jqxButton({ height: '25px', width: '100px', disabled: true });
+        $('#buttonEdit').jqxButton({ height: '25px', width: '100px', disabled: true });
+
+        // Delete 
+        $('#buttonDelete').click(function () {
+            var selectedItem = $('#jqxTree').jqxTree('selectedItem');
+            if (selectedItem != null) {
+                var r = confirm("确认删除部门-"+selectedItem.label+"吗?")
+                if (r == true) {
+                    // removes the selected item. The last parameter determines whether to refresh the Tree or not.
+                    // If you want to use the 'removeItem' method in a loop, set the last parameter to false and call the 'render' method after the loop.
+                    $('#jqxTree').jqxTree('removeItem', selectedItem.element, false);
+                    document.getElementById("hiddenDelete").value = selectedItem.value;
+                    document.mainform.submit();
+                }
+            }
+        });
+
+        // Edit 
+        $('#buttonEdit').click(function () {
+            var selectedItem = $('#jqxTree').jqxTree('selectedItem');
+            if (selectedItem != null) {
+                var id = selectedItem.value;
+                var href = "/Employee/EditDepartment/" + id;
+                window.location.href = href;
+                
+            }
+        });
+        // prepare the data
+        var source =
+        {
+            datatype: "json",
+            datafields: [
+                { name: 'Id' },
+                { name: 'ParentId' },
+                { name: 'Name' }
+            ],
+            id: 'Id',
+            url: 'GetDepartmentList'
+        };
+        // create data adapter.
+        var dataAdapter = new $.jqx.dataAdapter(source,
+           {
+               loadComplete: function () {
+                   var records = dataAdapter.getRecordsHierarchy('Id', 'ParentId', 'items', [{ name: 'Name', map: 'label' }, { name: 'Id', map: 'value' }]);
+
+                   $('#jqxTree').jqxTree({ source: records, width: '300px' });
+               }
+           });
+        // perform Data Binding.
+        dataAdapter.dataBind();
+        
+        $('#jqxTree').on('select', function (event) {
+            var args = event.args;
+            var item = $('#jqxTree').jqxTree('getItem', args.element);
+            
+            if (item != null) {
+                $('#buttonDelete').jqxButton({ disabled: false });
+                $('#buttonEdit').jqxButton({ disabled: false });
+            }
+        });
+    });
+</script>
+
