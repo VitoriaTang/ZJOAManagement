@@ -130,6 +130,96 @@
             return xmlobject;
         }
     }
+
+    function Map() {
+        this.keys = new Array();
+        this.data = new Array();
+
+        this.set = function (key, value) {
+            if (this.data[key] == null) {
+                this.keys.push(value);
+            }
+            this.data[key] = value;
+        };
+        
+        this.get = function (key) {
+            return this.data[key];
+        };
+        
+        this.remove = function (key) {
+            this.keys.remove(key);
+            this.data[key] = null;
+        };
+        
+        this.isEmpty = function () {
+            return this.keys.length == 0;
+        };
+        
+        this.size = function () {
+            return this.keys.length;
+        };
+    }
+
+    createXmlElement = function (xmlDoc, map, key, parentElement) {
+        var newEle = xmlDoc.createElement(key);
+        parentElement.appendChild(newEle);
+
+        var value = map.get(key.toLowerCase());
+
+        newEle.text = value;
+
+    }
+    addExternalInfoXML = function (xmlDoc) {
+
+        var nodeList = xmlDoc.getElementsByTagName("table");
+        for (var i = 0; i < nodeList.length; i++) {
+            var childrenRows = nodeList[i].childNodes;
+
+            for (var n = 0; n < childrenRows.length; n++) {
+                var rowEle = childrenRows[n];
+
+                var addrContent = "";
+                var addrInfoNodes = rowEle.getElementsByTagName("AdditionalInfo");
+                if (addrInfoNodes.length > 0) {
+                    addrContent = (isIE()) ? addrInfoNodes[0].text : addrInfoNodes[0].nodeValue;
+                }
+
+                var contentArray = addrContent.split("|");
+
+                var map = new Map();
+                if (contentArray.length > 0) {
+                    for (var i = 0; i < contentArray.length; i++) {
+                        var text = contentArray[i];
+                        if (text.length > 0 && text.indexOf("=") >= 0) {
+                            var keyvaluelist = text.split("=");
+                            if (keyvaluelist.length > 1) {
+                                map.set(keyvaluelist[0].toLowerCase(), keyvaluelist[1]);
+                            }
+                        }
+
+                    }
+                }
+
+               
+                var extraInfoEle = xmlDoc.createElement('ExtraInfo');
+                rowEle.appendChild(extraInfoEle);
+
+                createXmlElement(xmlDoc, map, "Sender", extraInfoEle);
+                createXmlElement(xmlDoc, map, "SenderTelephone", extraInfoEle);
+                createXmlElement(xmlDoc, map, "SenderCompany", extraInfoEle);
+                createXmlElement(xmlDoc, map, "SenderAddress", extraInfoEle);
+                createXmlElement(xmlDoc, map, "SenderPost", extraInfoEle);
+
+                createXmlElement(xmlDoc, map, "Receiver", extraInfoEle);
+                createXmlElement(xmlDoc, map, "ReceiverTelephone", extraInfoEle);
+                createXmlElement(xmlDoc, map, "ReceiverCompany", extraInfoEle);
+                createXmlElement(xmlDoc, map, "ReceiverAddress", extraInfoEle);
+                createXmlElement(xmlDoc, map, "ReceiverPost", extraInfoEle);
+
+                
+            }
+        }
+    }
     $("#printButton").click(function () {
         var printItem = $("#jqxcombobox").jqxDropDownList('getSelectedItem');
 
@@ -139,6 +229,7 @@
 
             var xml = String2XML(gridContent);
             var xsl = String2XML(printContent);
+            addExternalInfoXML(xml);
 
             var newWindow = window.open('', '', 'width=800, height=500, menubar=yes, resizable=yes, scrollbars=yes');
 

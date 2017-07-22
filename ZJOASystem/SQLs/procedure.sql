@@ -91,14 +91,15 @@ BEGIN
 			Update products set BoxId = boxId  where Id=productId; 
         End if;
 
-		Insert Into product_actions ( ProductId, ActionType, ActionTime, ActionComments) Values (productId, actionType,actiontime, actioncomments) ;
-		select max(Id) from product_actions into idval;
-
+		
         Set additonalId = 0;
         if additionalText is not null and additionalText<>'' then
 			INSERT INTO action_additionals (Content) VALUES (additionalText);
             select max(Id) from action_additionals into additonalId ;
         end if;
+
+		Insert Into product_actions ( ProductId, ActionType, ActionTime, ActionComments, AdditionalId) Values (productId, actionType,actiontime, actioncomments, additonalId) ;
+		select max(Id) from product_actions into idval;
 
         SELECT LENGTH(operators) - LENGTH(REPLACE(operators, ';', '')) + 1 into commaCount;
 

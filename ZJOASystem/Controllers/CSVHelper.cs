@@ -221,7 +221,7 @@ namespace ZJOASystem.Controllers
                 string actionTime = fields[actionTimeIndex];
                 string actionComments = "Import from CSV file";
                 string operators = fields[operatorIndex];
-
+                
                 ActionRecord recordItem = new ActionRecord();
                 recordItem.ProductName = name;
                 recordItem.ProductNumber = number;

@@ -132,6 +132,7 @@
             var printContent = printItem.value;
             var gridContent = $("#treeGrid").jqxTreeGrid('exportData', 'xml');
             
+            
             var xml = String2XML( gridContent);
             var xsl = String2XML( printContent);
 
