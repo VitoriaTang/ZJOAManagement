@@ -20,7 +20,7 @@ namespace ZJOASystem.Controllers
             }
             else
             {
-                return Redirect("/Account/Login");
+                return Redirect("~/Account/Login");
             }
         }
 

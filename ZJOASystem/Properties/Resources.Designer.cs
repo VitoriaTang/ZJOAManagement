@@ -592,6 +592,15 @@ namespace ZJOASystem.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 部门电话.
+        /// </summary>
+        internal static string DEPARTMENT_TELEPHONE {
+            get {
+                return ResourceManager.GetString("DEPARTMENT_TELEPHONE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to 部门管理.
         /// </summary>
         internal static string DEPARTMENT_TITLE {
@@ -633,6 +642,15 @@ namespace ZJOASystem.Properties {
         internal static string EMPLOYEE {
             get {
                 return ResourceManager.GetString("EMPLOYEE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 地址.
+        /// </summary>
+        internal static string EMPLOYEE_ADDRESS {
+            get {
+                return ResourceManager.GetString("EMPLOYEE_ADDRESS", resourceCulture);
             }
         }
         

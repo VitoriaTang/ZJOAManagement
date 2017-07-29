@@ -184,7 +184,6 @@
     <Compile Include="Models\EmployeeDBContext.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
     <Compile Include="Models\GridModel.cs" />
-    <Compile Include="Models\IdentityFactoryOptions.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\MachineDBContext.cs" />
     <Compile Include="Models\MachineModel.cs" />
@@ -202,11 +201,6 @@
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Include="Service References\OAService\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -228,6 +222,7 @@
     <Content Include="Content\font-awesome\css\font-awesome.css" />
     <Content Include="Content\font-awesome\css\font-awesome.min.css" />
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\images\bk1.png" />
     <Content Include="Content\images\code.png" />
     <Content Include="Content\images\department.png" />
     <Content Include="Content\images\employee.png" />
@@ -1476,7 +1471,6 @@
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.js" />
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.min.css" />
     <Content Include="Content\plugins\timepicker\bootstrap-timepicker.min.js" />
-    <Content Include="Content\printtemplate\PrintTemplate_barcode.xml" />
     <Content Include="Content\template\buttons.css" />
     <Content Include="Content\template\calendar.css" />
     <Content Include="Content\template\demo.css" />
@@ -1552,6 +1546,7 @@
     <Content Include="Content\linearicons\fonts\Linearicons-Free.ttf" />
     <Content Include="Content\linearicons\fonts\Linearicons-Free.woff" />
     <Content Include="Content\linearicons\fonts\Linearicons-Free.woff2" />
+    <None Include="Properties\PublishProfiles\ZJOASystem.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -1583,13 +1578,6 @@
     <Content Include="Scripts\tables.js" />
     <Content Include="Scripts\zjoa.js" />
     <Content Include="Scripts\_references.js" />
-    <None Include="Service References\OAService\OAService.disco" />
-    <None Include="Service References\OAService\configuration91.svcinfo" />
-    <None Include="Service References\OAService\configuration.svcinfo" />
-    <None Include="Service References\OAService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1615,18 +1603,11 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <None Include="Service References\OAService\OAService.wsdl" />
-    <Content Include="Service References\OAService\ZJOASystem.OAService.GetDepartmentsResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\OAService\ZJOASystem.OAService.HelloWorldResponse.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
     <Content Include="Views\Employee\Create.cshtml" />
     <Content Include="Views\Employee\Delete.cshtml" />
     <Content Include="Views\Employee\Details.cshtml" />
     <Content Include="Views\Employee\Edit.cshtml" />
-    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\EmployeeIndex.cshtml" />
     <Content Include="Views\Employee\CreateDepartment.cshtml" />
     <Content Include="Views\Employee\DepartmentDetail.cshtml" />
     <Content Include="Views\Employee\EditDepartment.cshtml" />
@@ -1641,8 +1622,7 @@
     <Content Include="Views\Account\UserRoles.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
-    <Folder Include="SQLs\" />
+    <Folder Include="App_Data\SQLs\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -1656,12 +1636,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\OAService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

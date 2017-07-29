@@ -13,7 +13,7 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_NAME") 
         </dt>
 
         <dd>
@@ -21,7 +21,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Telephone)
+            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TELEPHONE")
         </dt>
 
         <dd>
@@ -29,7 +29,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Email)
+            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EMAIL")
         </dt>
 
         <dd>
@@ -37,7 +37,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Address)
+            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ADDRESS")
         </dt>
 
         <dd>
@@ -50,7 +50,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="@ZJOASystem.Controllers.ResourceReader.GetString("DELETE")" class="btn btn-default" /> |
-            @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "Index")
+            @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "EmployeeIndex")
         </div>
     }
 </div>

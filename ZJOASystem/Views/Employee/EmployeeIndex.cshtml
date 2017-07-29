@@ -1,0 +1,94 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TITLE")</h2>
+
+<p>
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_CREATE"), "Create")
+</p>
+<form class="navbar-form navbar-right" name="searchform" action="@Url.Action("EmployeeIndex")" method="post">
+    <div class="input-group">
+        @Html.Hidden("hiddensearchkey", ViewData["hiddensearchkey"])
+    </div>
+</form>
+<div id="jqxgrid">
+</div>
+@Scripts.Render("~/bundles/jqwidgets/grid")
+<script type="text/javascript">
+    clickMenu("menuEmployee");
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+       
+        // prepare the data
+        var source =
+        {
+            dataType: "json",
+            dataFields: [
+                { name: 'Id', type:'int'},
+                { name: 'Name', type: 'string' },
+                { name: 'Encode', type: 'string' },
+                { name: 'Telephone', type: 'string' }
+           ],
+            id: 'Id',
+            url: 'GetEmployees'
+        };
+
+        // prepare the data
+
+        var dataAdapter = new $.jqx.dataAdapter(source);
+        // create Tree Grid
+        $("#jqxgrid").jqxGrid(
+        {
+            width: 800,
+            source: dataAdapter,
+            selectionmode: 'singlerow',
+            sortable: true,
+            pageable: true,
+            autoheight: true,
+            pagerButtonsCount: 20,
+            columnsResize: true,
+            sortable: true,
+            filterable: true,
+            columns: [
+              { text: 'Id', datafield: 'Id', hidden:true },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ENCODE")', datafield: 'Encode', width: 100 },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_NAME")', datafield: 'Name', cellsformat: 'D' },
+              { text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TELEPHONE")', datafield: 'Telephone', width: 130, cellsformat: 'F2', cellsalign: 'right' },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EDIT")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EDIT")";
+                  },
+                  buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Edit/" + data.Id;
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DETAILS")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DETAILS")";
+                  }, buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Details/" + data.Id;
+                  }
+              },
+              {
+                  text: '@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DELETE")', columntype: 'button', width: 80,
+                  cellsrenderer: function () {
+                      return "@ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_DELETE")";
+                  }, buttonclick: function (row) {
+                      // open the popup window when the user clicks a button.
+                      var data = $('#jqxgrid').jqxGrid('getrowdata', row);
+                      window.location.href = "Delete/"  +data.Id;
+                  }
+              }
+            ]
+        });
+    });
+</script>

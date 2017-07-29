@@ -19,7 +19,7 @@
         @Html.HiddenFor(model => model.Id)
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            @Html.Label(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_NAME"), new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Name)
                 @Html.ValidationMessageFor(model => model.Name)
@@ -28,7 +28,7 @@
 
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Encode, new { @class = "control-label col-md-2" })
+           @Html.Label(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ENCODE"), new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Encode)
                 @Html.ValidationMessageFor(model => model.Encode)
@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Telephone, new { @class = "control-label col-md-2" })
+           @Html.Label(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TELEPHONE"), new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Telephone)
                 @Html.ValidationMessageFor(model => model.Telephone)
@@ -44,7 +44,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
+            @Html.Label(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EMAIL"), new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Email)
                 @Html.ValidationMessageFor(model => model.Email)
@@ -52,7 +52,7 @@
         </div>
 
         <div class="form-group">
-            @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
+            @Html.Label(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ADDRESS"), new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.Address)
                 @Html.ValidationMessageFor(model => model.Address)
@@ -74,7 +74,7 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "EmployeeIndex")
 </div>
 
 @section Scripts {

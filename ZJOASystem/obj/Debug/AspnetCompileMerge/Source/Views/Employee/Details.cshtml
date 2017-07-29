@@ -12,7 +12,7 @@
 	<hr />
     <dl class="dl-horizontal">
         <dt>
-            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_NAME") 
+            @Html.DisplayNameFor(model => model.Name)
         </dt>
 
         <dd>
@@ -20,14 +20,14 @@
         </dd>
 
         <dt>
-            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ENCODE")
+            @Html.DisplayNameFor(model => model.Encode)
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.Encode)
         </dd>
         <dt>
-            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_TELEPHONE")
+            @Html.DisplayNameFor(model => model.Telephone)
         </dt>
 
         <dd>
@@ -35,7 +35,7 @@
         </dd>
 
         <dt>
-            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_EMAIL")
+            @Html.DisplayNameFor(model => model.Email)
         </dt>
 
         <dd>
@@ -43,7 +43,7 @@
         </dd>
 
         <dt>
-            @ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_ADDRESS")
+            @Html.DisplayNameFor(model => model.Address)
         </dt>
 
         <dd>
@@ -61,5 +61,5 @@
 </div>
 <p>
     @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EDIT"), "Edit", new { id = Model.Id }) |
-    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "EmployeeIndex")
+    @Html.ActionLink(ZJOASystem.Controllers.ResourceReader.GetString("EMPLOYEE_RETURNLIST"), "Index")
 </p>

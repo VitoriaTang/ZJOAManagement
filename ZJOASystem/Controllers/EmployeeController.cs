@@ -55,7 +55,7 @@ namespace ZJOASystem.Controllers
                 return Redirect("../Account/Login");
             }
         }
-        public ActionResult Index()
+        public ActionResult EmployeeIndex()
         {
             if (Request.IsAuthenticated)
             {
@@ -259,7 +259,7 @@ namespace ZJOASystem.Controllers
                     }
                     db.Employees.Add(employee);
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("EmployeeIndex");
 
                 }
 
@@ -398,7 +398,7 @@ namespace ZJOASystem.Controllers
                     }
                     db.Entry(employee).State = EntityState.Modified;
                     db.SaveChanges();
-                    return RedirectToAction("Index");
+                    return RedirectToAction("EmployeeIndex");
                 }
                 return View(employee);
             }
@@ -441,7 +441,7 @@ namespace ZJOASystem.Controllers
                 Employee employee = db.Employees.Find(id);
                 db.Employees.Remove(employee);
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction("EmployeeIndex");
             }
             else
             {

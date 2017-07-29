@@ -297,6 +297,9 @@
   <data name="DEPARTMENT_RETURNLIST" xml:space="preserve">
     <value>返回部门列表</value>
   </data>
+  <data name="DEPARTMENT_TELEPHONE" xml:space="preserve">
+    <value>部门电话</value>
+  </data>
   <data name="DEPARTMENT_TITLE" xml:space="preserve">
     <value>部门管理</value>
   </data>
@@ -308,6 +311,9 @@
   </data>
   <data name="EMPLOYEE" xml:space="preserve">
     <value>员工</value>
+  </data>
+  <data name="EMPLOYEE_ADDRESS" xml:space="preserve">
+    <value>地址</value>
   </data>
   <data name="EMPLOYEE_CREATE" xml:space="preserve">
     <value>新建员工记录</value>
